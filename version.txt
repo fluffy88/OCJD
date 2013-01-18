@@ -1,0 +1,5 @@
+jdk-7u11-windows-x64
+
+Windows 7 64-bit
+
+eclipse-java-juno-SR1-win32-x86_64
