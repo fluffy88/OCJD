@@ -1,0 +1,12 @@
+Create *.io package
+	- Keeps the main Data.java class clean.
+	- Puts all the complex reading and writing to the DB into one place.
+
+Read full DB into memory
+	- Improves read performance drastically.
+	- Makes future code changes simpler as data look ups are done on a Java collection.
+	
+Made Data.java a Singleton
+	- Data.java is the class exposed by the server to give clients access to the database info. 
+	  The server should only have one instance of this class as all clients should go through
+	  this singleton to read or write to the Database to maintain database integrity.

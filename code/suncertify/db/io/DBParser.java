@@ -3,12 +3,16 @@ package suncertify.db.io;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-import suncertify.model.DataModel;
+import suncertify.model.Contractor;
 
 public class DBParser {
 
-	public void get() {
+	public List<Contractor> get() {
+		List<Contractor> contractors = new LinkedList<Contractor>();
 		try (RandomAccessFile is = new RandomAccessFile("db-2x2.db", "r")) {
 
 			// headers
@@ -36,9 +40,11 @@ public class DBParser {
 			// data
 			is.seek(startOfRecords);
 			while (is.getFilePointer() != is.length()) {
-				int flag = is.readShort();
+				byte[] bytes = new byte[2];
+				is.read(bytes);
 
-				DataModel modelItem = new DataModel();
+				Contractor modelItem = new Contractor();
+				modelItem.setDeleted(Arrays.toString(bytes));
 				modelItem.setName(readString(is, fieldLengths[0]));
 				modelItem.setLocation(readString(is, fieldLengths[1]));
 				modelItem.setSpecialities(readString(is, fieldLengths[2]));
@@ -46,7 +52,7 @@ public class DBParser {
 				modelItem.setRate(readString(is, fieldLengths[4]));
 				modelItem.setOwner(readString(is, fieldLengths[5]));
 
-				System.out.println(modelItem);
+				contractors.add(modelItem);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -56,6 +62,7 @@ public class DBParser {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		return contractors;
 	}
 
 	private String readString(RandomAccessFile is, int n) throws IOException {

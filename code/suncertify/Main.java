@@ -1,6 +1,9 @@
 package suncertify;
 
-import suncertify.db.io.DBParser;
+import java.util.Arrays;
+
+import suncertify.db.Data;
+import suncertify.db.RecordNotFoundException;
 
 public class Main {
 
@@ -8,8 +11,14 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DBParser parser = new DBParser();
+		Data data = Data.INSTANCE;
 
-		parser.get();
+		try {
+			String[] contractor = data.read(2);
+			System.out.println(Arrays.toString(contractor));
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

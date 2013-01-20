@@ -1,11 +1,30 @@
 package suncertify.db;
 
-public class Data implements DBMain {
+import java.util.List;
+
+import suncertify.db.io.DBParser;
+import suncertify.model.Contractor;
+
+/**
+ * Singleton class to access the Database.
+ * 
+ * @author Sean
+ * 
+ */
+public enum Data implements DBMain {
+
+	INSTANCE;
+
+	private DBParser parser = new DBParser();
+	private List<Contractor> contractors = parser.get();
+
+	// parser.get();
 
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		Contractor record = contractors.get(recNo);
+		return record.getRecord();
 	}
 
 	@Override
