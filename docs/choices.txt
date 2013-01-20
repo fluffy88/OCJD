@@ -10,3 +10,12 @@ Made Data.java a Singleton
 	- Data.java is the class exposed by the server to give clients access to the database info. 
 	  The server should only have one instance of this class as all clients should go through
 	  this singleton to read or write to the Database to maintain database integrity.
+
+RMI
+	- RMI add some initial 'setup' complexity, but after setup reduces complexity.
+	- Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
+
+Main.java
+	- Reads command line flag and passes off to specific application.
+	- Keeps main start class clean with single purpose.
+	- Makes it very simple to have Non-networked & Networked modes.
