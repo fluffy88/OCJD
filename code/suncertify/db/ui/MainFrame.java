@@ -1,6 +1,5 @@
 package suncertify.db.ui;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 
@@ -12,7 +11,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.JTableHeader;
 
 public class MainFrame extends JFrame {
 
@@ -20,7 +21,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 		this.setTitle("Simple example");
-		this.setSize(600, 300);
+		this.setSize(800, 600);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -52,7 +53,6 @@ public class MainFrame extends JFrame {
 
 	private void createSearchArea() {
 		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(100, 100));
 		panel.setBorder(BorderFactory.createEtchedBorder());
 		this.getContentPane().add(panel);
 
@@ -71,13 +71,10 @@ public class MainFrame extends JFrame {
 		panel.setBorder(BorderFactory.createEtchedBorder());
 		this.getContentPane().add(panel);
 
-		JLabel label = new JLabel("S'up World!!");
-		panel.add(label);
+		JTable table = new JTable(10, 6);
+		panel.add(table);
 
-		JTextField name = new JTextField(5);
-		panel.add(name);
-
-		JButton button = new JButton("Click me?");
-		panel.add(button);
+		JTableHeader tableHeader = new JTableHeader();
+		table.setTableHeader(tableHeader);
 	}
 }
