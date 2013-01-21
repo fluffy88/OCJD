@@ -1,17 +1,30 @@
 package suncertify.db;
 
+/**
+ * Exception thrown when a specified record cannot be found. When an attempt to
+ * find a particular record fails or the record does not exist then a
+ * RecordNotFoundException is thrown.
+ * 
+ * @author Seán Dunne
+ * 
+ */
 public class RecordNotFoundException extends Exception {
 
-	/**
-	 * 	TODO: NEED TO LOOK INTO HOW TO SERIALIZE AN OBJECT
-	 */
 	private static final long serialVersionUID = 2823045322464184130L;
-	
+
+	/**
+	 * Constructs a RecordNotFoundException with no specified detail message.
+	 */
 	public RecordNotFoundException() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public RecordNotFoundException(String desc) {
-		// TODO Auto-generated constructor stub
+	/**
+	 * Constructs a RecordNotFoundException with the specified detail message.
+	 * 
+	 * @param message
+	 *            the detail message
+	 */
+	public RecordNotFoundException(String message) {
+		super(message);
 	}
 }
