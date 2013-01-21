@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
+import suncertify.db.ui.MainFrame;
 
 public class Client implements Application {
 
@@ -17,6 +18,8 @@ public class Client implements Application {
 		try {
 			Registry registry = LocateRegistry.getRegistry();
 			DBMain data = (DBMain) registry.lookup("Remote Database Server");
+
+			new MainFrame();
 
 			System.out.println("Client:");
 			System.out.println(Arrays.toString(data.read(0)));

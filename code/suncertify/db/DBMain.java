@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
  * This interface describes how a client can access the database records. A
  * class that provides database access must implement this interface.
  * 
- * @author Sean Dunne
+ * @author Seán Dunne
  * 
  */
 public interface DBMain extends Remote {
