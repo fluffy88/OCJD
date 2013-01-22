@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -77,7 +78,7 @@ public class SearchPanel extends JPanel {
 				}
 				tableModel.fireTableStructureChanged();
 
-			} catch (RecordNotFoundException e1) {
+			} catch (RecordNotFoundException | RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
