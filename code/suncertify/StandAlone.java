@@ -1,6 +1,5 @@
 package suncertify;
 
-import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import javax.swing.SwingUtilities;
@@ -24,7 +23,7 @@ public class StandAlone implements Application {
 		try {
 			System.out.println("StandAlone:");
 			System.out.println(Arrays.toString(dataService.read(0)));
-		} catch (RemoteException | RecordNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
