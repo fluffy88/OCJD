@@ -7,23 +7,23 @@ import javax.swing.SwingUtilities;
 
 import suncertify.db.Data;
 import suncertify.db.RecordNotFoundException;
-import suncertify.db.ui.MainFrame;
+import suncertify.db.ui.ClientUI;
 
 public class StandAlone implements Application {
 
 	@Override
 	public void start() {
-		Data data = Data.INSTANCE;
+		final Data dataService = Data.INSTANCE;
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				MainFrame jFrame = new MainFrame();
+				ClientUI jFrame = new ClientUI(dataService);
 			}
 		});
 
 		try {
 			System.out.println("StandAlone:");
-			System.out.println(Arrays.toString(data.read(0)));
+			System.out.println(Arrays.toString(dataService.read(0)));
 		} catch (RemoteException | RecordNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
