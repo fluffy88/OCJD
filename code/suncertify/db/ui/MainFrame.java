@@ -1,9 +1,13 @@
 package suncertify.db.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,9 +15,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.JTableHeader;
+import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame {
 
@@ -21,7 +26,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 		this.setTitle("Simple example");
-		this.setSize(800, 600);
+		this.setSize(900, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -33,7 +38,9 @@ public class MainFrame extends JFrame {
 	private void initUIElements() {
 		createMenuBar();
 
-		this.getContentPane().setLayout(new GridLayout(2, 1));
+		BoxLayout layout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
+		this.getContentPane().setLayout(layout);
+		this.getContentPane().add(Box.createVerticalStrut(10));
 		createSearchArea();
 		createTableArea();
 	}
@@ -52,29 +59,56 @@ public class MainFrame extends JFrame {
 	}
 
 	private void createSearchArea() {
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createEtchedBorder());
+		JPanel panel = new JPanel(new GridLayout(2, 7, 10, 1));
+		panel.setMaximumSize(new Dimension(800, 100));
+		panel.setBorder(BorderFactory.createTitledBorder("Search"));
 		this.getContentPane().add(panel);
 
-		JLabel label = new JLabel("S'up World!!");
-		panel.add(label);
+		JLabel nameLabel = new JLabel("Name:");
+		JTextField nameField = new JTextField(10);
+		JLabel cityLabel = new JLabel("City:");
+		JTextField cityField = new JTextField(10);
+		JLabel workLabel = new JLabel("Type of Work:");
+		JTextField workField = new JTextField(10);
+		JLabel staffLabel = new JLabel("Number of Staff:");
+		JTextField staffField = new JTextField(10);
+		JLabel chargeLabel = new JLabel("Hourly Charge:");
+		JTextField chargeField = new JTextField(10);
+		JLabel customerLabel = new JLabel("Customer:");
+		JTextField customerField = new JTextField(10);
 
-		JTextField name = new JTextField(5);
-		panel.add(name);
+		panel.add(nameLabel);
+		panel.add(cityLabel);
+		panel.add(workLabel);
+		panel.add(staffLabel);
+		panel.add(chargeLabel);
+		panel.add(customerLabel);
 
-		JButton button = new JButton("Click me?");
+		panel.add(new JLabel());
+
+		panel.add(nameField);
+		panel.add(cityField);
+		panel.add(workField);
+		panel.add(staffField);
+		panel.add(chargeField);
+		panel.add(customerField);
+
+		JButton button = new JButton("Search");
 		panel.add(button);
 	}
 
 	private void createTableArea() {
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createEtchedBorder());
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(15, 10, 10, 10));
 		this.getContentPane().add(panel);
 
-		JTable table = new JTable(10, 6);
-		panel.add(table);
+		String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge", "Customer holding this record" };
+		Object[][] fakeData = new Object[][] { { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" },
+				{ "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" } };
 
-		JTableHeader tableHeader = new JTableHeader();
-		table.setTableHeader(tableHeader);
+		JTable table = new JTable(fakeData, columnNames);
+		table.setFillsViewportHeight(true);
+		JScrollPane scrollPane = new JScrollPane(table);
+		panel.add(scrollPane, BorderLayout.CENTER);
 	}
 }
