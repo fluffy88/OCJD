@@ -7,12 +7,12 @@ Read full DB into memory
 	- Makes future code changes simpler as data look ups are done on a Java collection.
 	
 Made Data.java a Singleton
-	- Data.java is the class exposed by the server to give clients access to the database info. 
+	- Data.java is the class exposed by the server to give clients access to the database info.
 	  The server should only have one instance of this class as all clients should go through
 	  this singleton to read or write to the Database to maintain database integrity.
 
 RMI
-	- RMI add some initial 'setup' complexity, but after setup reduces complexity.
+	- RMI adds some initial 'setup' complexity, but after setup reduces code complexity.
 	- Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
 
 Main.java
@@ -22,3 +22,14 @@ Main.java
 	
 ClientUI.java
 	- Single class with sole responsibility to create a new JFrame for the client application.
+	- Makes Application extensible, as new pages can be created & added easily.
+	
+UI Components, JPanels
+	- Extend JPanel for each Client area.
+	- This keeps each UI components separate, easily maintained, easily replaced.
+
+Injection.java
+	- A very basic Dependency Injection framework.
+	- Allows clean and simple access to objects that need to be accessed from multiple classes.
+	- Removes complicated passing of objects that's hard to follow.
+
