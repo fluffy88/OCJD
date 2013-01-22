@@ -11,6 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import suncertify.Injection;
+import suncertify.db.DBMain;
+import suncertify.db.RecordNotFoundException;
+
 public class SearchPanel extends JPanel {
 
 	private static final long serialVersionUID = 8203310258095403940L;
@@ -62,7 +66,21 @@ public class SearchPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			DBMain dataService = (DBMain) Injection.instance.get("DataService");
+			SearchResultsTableModel tableModel = (SearchResultsTableModel) Injection.instance.get("SearchResultsModel");
+			tableModel.clearData();
+			try {
+				for (int i = 0; i < 5; i++) {
+					String[] record = dataService.read(i);
 
+					tableModel.add(record);
+				}
+				tableModel.fireTableStructureChanged();
+
+			} catch (RecordNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}

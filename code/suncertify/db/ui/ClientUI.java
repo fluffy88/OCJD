@@ -8,15 +8,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import suncertify.Injection;
 import suncertify.db.DBMain;
 
 public class ClientUI extends JFrame {
 
 	private static final long serialVersionUID = 4914465385167890566L;
-	private final DBMain dataService;
 
-	public ClientUI(DBMain data) {
-		this.dataService = data;
+	public ClientUI(DBMain dataService) {
+		Injection.instance.add("DataService", dataService);
 
 		this.setTitle("Simple example");
 		this.setSize(900, 500);

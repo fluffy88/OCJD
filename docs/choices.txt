@@ -19,3 +19,6 @@ Main.java
 	- Reads command line flag and passes off to specific application.
 	- Keeps main start class clean with single purpose.
 	- Makes it very simple to have Non-networked & Networked modes.
+	
+ClientUI.java
+	- Single class with sole responsibility to create a new JFrame for the client application.

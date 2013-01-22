@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableColumn;
+
+import suncertify.Injection;
 
 public class SearchResultsPanel extends JPanel {
 
@@ -23,6 +24,7 @@ public class SearchResultsPanel extends JPanel {
 
 	private void createTableArea() {
 		final SearchResultsTableModel tableModel = new SearchResultsTableModel();
+		Injection.instance.add("SearchResultsModel", tableModel);
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);
@@ -35,7 +37,7 @@ public class SearchResultsPanel extends JPanel {
 	}
 
 	private void setColumnWidth(int idx, int width) {
-		TableColumn column = this.table.getColumnModel().getColumn(idx);
-		column.setPreferredWidth(width);
+		// TableColumn column = this.table.getColumnModel().getColumn(idx);
+		// column.setPreferredWidth(width);
 	}
 }

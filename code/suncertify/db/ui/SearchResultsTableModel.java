@@ -1,5 +1,7 @@
 package suncertify.db.ui;
 
+import java.util.ArrayList;
+
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -9,8 +11,20 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge", "Customer holding this record" };
 
-	private Object[][] data = new Object[][] { { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" },
-			{ "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" } };
+	private ArrayList<Object[]> data = new ArrayList<Object[]>();
+
+	// { { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, {
+	// "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" },
+	// { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, {
+	// "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" } };
+
+	public void clearData() {
+		data.clear();
+	}
+
+	public void add(String[] record) {
+		data.add(record);
+	}
 
 	@Override
 	public String getColumnName(int column) {
@@ -20,23 +34,23 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public int getRowCount() {
 		if (data != null) {
-			return data.length;
+			return data.size();
 		}
 		return 0;
 	}
 
 	@Override
 	public int getColumnCount() {
-		if (data != null && data.length > 0) {
-			return data[0].length;
+		if (data != null && data.size() > 0) {
+			return data.get(0).length;
 		}
 		return 0;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (data != null && rowIndex < data.length) {
-			return data[rowIndex][columnIndex];
+		if (data != null && rowIndex < data.size()) {
+			return data.get(rowIndex)[columnIndex];
 		}
 
 		return "";
@@ -49,7 +63,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		data[row][col] = value;
+		data.get(row)[col] = value;
 		fireTableCellUpdated(row, col);
 	}
 
