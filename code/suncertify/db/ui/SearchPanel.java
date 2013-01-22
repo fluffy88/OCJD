@@ -2,6 +2,8 @@ package suncertify.db.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -52,7 +54,16 @@ public class SearchPanel extends JPanel {
 		this.add(customerField);
 
 		JButton button = new JButton("Search");
+		button.addActionListener(new SearchButtonListener());
 		this.add(button);
 	}
 
+	class SearchButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+		}
+
+	}
 }

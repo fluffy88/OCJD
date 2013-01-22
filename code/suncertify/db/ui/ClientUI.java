@@ -2,12 +2,11 @@ package suncertify.db.ui;
 
 import java.awt.event.KeyEvent;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 import suncertify.db.DBMain;
 
@@ -31,24 +30,20 @@ public class ClientUI extends JFrame {
 	private void initUIElements() {
 		createMenuBar();
 
-		BoxLayout layout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
-		this.getContentPane().setLayout(layout);
-		this.getContentPane().add(Box.createVerticalStrut(10));
-		this.getContentPane().add(new SearchPanel());
-		this.getContentPane().add(new SearchResultsPanel());
+		final JPanel panel = new SearchPage();
+		this.getContentPane().add(panel);
 	}
 
 	private void createMenuBar() {
-		JMenuBar menuBar = new JMenuBar();
+		final JMenuBar menuBar = new JMenuBar();
 		this.setJMenuBar(menuBar);
 
-		JMenu fileMenu = new JMenu("File");
+		final JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(fileMenu);
 
-		JMenuItem exit = new JMenuItem("Exit");
+		final JMenuItem exit = new JMenuItem("Exit");
 		exit.setMnemonic(KeyEvent.VK_E);
 		fileMenu.add(exit);
 	}
-
 }

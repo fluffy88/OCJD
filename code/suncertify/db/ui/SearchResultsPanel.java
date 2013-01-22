@@ -22,7 +22,9 @@ public class SearchResultsPanel extends JPanel {
 	}
 
 	private void createTableArea() {
-		this.table = new JTable(new SearchResultsTableModel());
+		final SearchResultsTableModel tableModel = new SearchResultsTableModel();
+
+		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);
 		this.setColumnWidth(3, 50);
 		this.setColumnWidth(4, 50);
