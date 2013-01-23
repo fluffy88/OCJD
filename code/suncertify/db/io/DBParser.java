@@ -3,16 +3,13 @@ package suncertify.db.io;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import suncertify.model.Contractor;
-
 public class DBParser {
 
-	public List<Contractor> get() {
-		List<Contractor> contractors = new LinkedList<Contractor>();
+	public List<String[]> get() {
+		List<String[]> contractors = new LinkedList<String[]>();
 		try (RandomAccessFile is = new RandomAccessFile("db-2x2.db", "r")) {
 
 			// headers
@@ -43,14 +40,14 @@ public class DBParser {
 				byte[] bytes = new byte[2];
 				is.read(bytes);
 
-				Contractor modelItem = new Contractor();
-				modelItem.setDeleted(Arrays.toString(bytes));
-				modelItem.setName(readString(is, fieldLengths[0]));
-				modelItem.setLocation(readString(is, fieldLengths[1]));
-				modelItem.setSpecialities(readString(is, fieldLengths[2]));
-				modelItem.setSize(readString(is, fieldLengths[3]));
-				modelItem.setRate(readString(is, fieldLengths[4]));
-				modelItem.setOwner(readString(is, fieldLengths[5]));
+				// TODO: IF IS DELETED RECORD: Arrays.toString(bytes)
+				String[] modelItem = new String[6];
+				modelItem[0] = readString(is, fieldLengths[0]);
+				modelItem[1] = readString(is, fieldLengths[1]);
+				modelItem[2] = readString(is, fieldLengths[2]);
+				modelItem[3] = readString(is, fieldLengths[3]);
+				modelItem[4] = readString(is, fieldLengths[4]);
+				modelItem[5] = readString(is, fieldLengths[5]);
 
 				contractors.add(modelItem);
 			}
@@ -68,6 +65,6 @@ public class DBParser {
 	private String readString(RandomAccessFile is, int n) throws IOException {
 		byte[] bytes = new byte[n];
 		is.read(bytes);
-		return new String(bytes, "US-ASCII");
+		return new String(bytes, "US-ASCII").trim();
 	}
 }

@@ -5,7 +5,12 @@ Create *.io package
 Read full DB into memory
 	- Improves read performance drastically.
 	- Makes future code changes simpler as data look ups are done on a Java collection.
-	
+
+DB records as String[]
+	- Could use a model
+	- String[] makes the DBParser.java more generic and transportable.
+	- If DB scheme ever changes, no need to change how the DB is read, only UI and server updates.
+
 Made Data.java a Singleton
 	- Data.java is the class exposed by the server to give clients access to the database info.
 	  The server should only have one instance of this class as all clients should go through
@@ -33,3 +38,11 @@ Injection.java
 	- Allows clean and simple access to objects that need to be accessed from multiple classes.
 	- Removes complicated passing of objects that's hard to follow.
 
+Data#find()
+	- Made search case insensitive.
+	- Makes use of application simpler & faster with less learning curve.
+	
+Data#read()
+	- Does not return actual result, returns a copy.
+	- This stops the Standalone application UI from modifying the cache indirectly.
+	- All read/modifications of the cache are to be handled through Data.java and will be synchronized. 
