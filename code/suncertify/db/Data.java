@@ -1,12 +1,11 @@
 package suncertify.db;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import suncertify.db.io.DBParser;
-import suncertify.model.Contractor;
 
 /**
  * Singleton class to access the Database.
@@ -19,9 +18,7 @@ public class Data implements DBMain {
 	public static final Data INSTANCE = new Data();
 
 	private DBParser parser = new DBParser();
-	private List<Contractor> contractors = parser.get();
-
-	private CopyOnWriteArrayList<Contractor> syncContractors = new CopyOnWriteArrayList<>(contractors);
+	private List<String[]> contractors = parser.get();
 
 	private List<WriteLock> locks = new ArrayList<WriteLock>();
 
@@ -30,14 +27,10 @@ public class Data implements DBMain {
 
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
-		if (recNo < 0) {
-			throw new IllegalArgumentException("The record number cannot be negative.");
-		}
-		if (contractors.size() > recNo) {
-			Contractor contractor = contractors.get(recNo);
-			return contractor.getRecord();
-		}
-		throw new RecordNotFoundException("No record found for record number: " + recNo);
+		checkRecordNumber(recNo);
+
+		String[] contractor = contractors.get(recNo);
+		return Arrays.copyOf(contractor, contractor.length);
 	}
 
 	@Override
@@ -54,8 +47,30 @@ public class Data implements DBMain {
 
 	@Override
 	public int[] find(String[] criteria) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> results = new ArrayList<Integer>();
+		for (int n = 0; n < contractors.size(); n++) {
+			boolean match = true;
+			for (int i = 0; i < criteria.length; i++) {
+				if (criteria[i] != null) {
+					String record = contractors.get(n)[i].toLowerCase();
+					String recordTest = criteria[i].toLowerCase();
+					if (!record.startsWith(recordTest)) {
+						match = false;
+					}
+				}
+			}
+
+			if (match) {
+				results.add(n);
+			}
+		}
+
+		int[] intResults = new int[results.size()];
+		for (int i = 0; i < results.size(); i++) {
+			intResults[i] = results.get(i);
+		}
+
+		return intResults;
 	}
 
 	@Override
