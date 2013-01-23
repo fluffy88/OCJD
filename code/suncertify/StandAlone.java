@@ -1,11 +1,8 @@
 package suncertify;
 
-import java.util.Arrays;
-
 import javax.swing.SwingUtilities;
 
 import suncertify.db.Data;
-import suncertify.db.RecordNotFoundException;
 import suncertify.db.ui.ClientUI;
 
 public class StandAlone implements Application {
@@ -16,17 +13,10 @@ public class StandAlone implements Application {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				ClientUI jFrame = new ClientUI(dataService);
+				new ClientUI(dataService);
 			}
 		});
 
-		try {
-			System.out.println("StandAlone:");
-			System.out.println(Arrays.toString(dataService.read(0)));
-		} catch (RecordNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }
