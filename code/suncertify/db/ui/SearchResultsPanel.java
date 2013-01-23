@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import suncertify.Injection;
 
@@ -23,13 +25,13 @@ public class SearchResultsPanel extends JPanel {
 	}
 
 	private void createTableArea() {
-		final SearchResultsTableModel tableModel = new SearchResultsTableModel();
+		final TableModel tableModel = new SearchResultsTableModel();
 		Injection.instance.add("SearchResultsModel", tableModel);
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);
-		this.setColumnWidth(3, 50);
-		this.setColumnWidth(4, 50);
+		this.setColumnWidth(3, 20);
+		this.setColumnWidth(4, 20);
 		this.setColumnWidth(5, 120);
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
@@ -37,7 +39,8 @@ public class SearchResultsPanel extends JPanel {
 	}
 
 	private void setColumnWidth(int idx, int width) {
-		// TableColumn column = this.table.getColumnModel().getColumn(idx);
-		// column.setPreferredWidth(width);
+		// TODO when TableModel data is empty we get null here....
+		TableColumn column = this.table.getColumnModel().getColumn(idx);
+		column.setPreferredWidth(width);
 	}
 }
