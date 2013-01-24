@@ -67,9 +67,10 @@ public class DataTest {
 		assertThat(afterRec[5], is(equalTo(origRec[5])));
 	}
 
-	@Test
-	public void testDelete() {
-		fail("Not yet implemented");
+	@Test(expected = RecordNotFoundException.class)
+	public void testDelete() throws RecordNotFoundException {
+		dataService.delete(2);
+		dataService.read(2);
 	}
 
 	@Test

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import suncertify.db.io.DBParser;
+import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
 
 /**
@@ -67,11 +68,14 @@ public class Data implements DBMain {
 
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
+		checkRecordNumber(recNo);
 
-		char s = 0x8000;
-		short y = 00;
+		boolean succeeded = dbWriter.delete(recNo);
 
+		// TODO if database failed, roll back cache and handle error
+		if (succeeded) {
+			contractors.set(recNo, new String[DBSchema.NUMBER_OF_FIELDS]);
+		}
 	}
 
 	@Override
@@ -143,6 +147,10 @@ public class Data implements DBMain {
 		}
 		if (contractors.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
+		}
+		String[] record = contractors.get(recNo);
+		if (record[0] == null) {
+			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
 	}
 }

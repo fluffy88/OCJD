@@ -13,6 +13,10 @@ public class DBSchema {
 	public static final int NUM_BYTES_FIELD_HEADER_NUM_BYTES = 2;
 	public static final int NUM_BYTES_FIELD_LENGTH = 2;
 
+	// Deleted Flags
+	public static final int RECORD_VALID = 00;
+	public static final int RECORD_DELETED = 0x8000;
+
 	// File Headers - Values
 	public static int MAGIC_COOKIE;
 	public static int START_OF_RECORDS;

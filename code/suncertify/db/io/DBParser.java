@@ -53,21 +53,20 @@ public class DBParser {
 			// data
 			is.seek(START_OF_RECORDS);
 			while (is.getFilePointer() != is.length()) {
-				byte[] bytes = new byte[2];
-				is.read(bytes);
+				short flag = is.readShort();
 
-				// TODO: IF IS DELETED RECORD: Arrays.toString(bytes)
-				String[] dataItem = new String[6];
-				dataItem[0] = readString(is, FIELD_LENGTHS[0]);
-				dataItem[1] = readString(is, FIELD_LENGTHS[1]);
-				dataItem[2] = readString(is, FIELD_LENGTHS[2]);
-				dataItem[3] = readString(is, FIELD_LENGTHS[3]);
-				dataItem[4] = readString(is, FIELD_LENGTHS[4]);
-				dataItem[5] = readString(is, FIELD_LENGTHS[5]);
-
+				String[] dataItem = new String[NUMBER_OF_FIELDS];
+				if (flag == 0) {
+					for (int i = 0; i < dataItem.length; i++) {
+						dataItem[i] = readString(is, FIELD_LENGTHS[i]);
+					}
+				} else {
+					// skip the next record as it's marked deleted
+					is.seek(is.getFilePointer() + RECORD_LENGTH - 2);
+				}
 				contractors.add(dataItem);
 
-				System.out.println(new String(bytes) + " - " + Arrays.toString(dataItem));
+				System.out.println(flag + " - " + Arrays.toString(dataItem));
 			}
 
 		} catch (FileNotFoundException e) {
