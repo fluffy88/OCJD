@@ -85,9 +85,14 @@ public class Data implements DBMain {
 			boolean match = true;
 			for (int i = 0; i < criteria.length; i++) {
 				if (criteria[i] != null) {
-					String record = contractors.get(n)[i].toLowerCase();
-					String recordTest = criteria[i].toLowerCase();
-					if (!record.startsWith(recordTest)) {
+					String record = contractors.get(n)[i];
+					if (record != null) {
+						record = record.toLowerCase();
+						String recordTest = criteria[i].toLowerCase();
+						if (!record.startsWith(recordTest)) {
+							match = false;
+						}
+					} else {
 						match = false;
 					}
 				}

@@ -4,12 +4,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.rmi.RemoteException;
 
 import org.junit.Test;
+
+import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
@@ -73,9 +76,57 @@ public class DataTest {
 		dataService.read(2);
 	}
 
+	@Test(expected = RecordNotFoundException.class)
+	public void testDeleteTwice() throws RecordNotFoundException {
+		dataService.delete(2);
+		dataService.delete(2);
+		dataService.read(2);
+	}
+
 	@Test
-	public void testFind() {
-		fail("Not yet implemented");
+	public void testFindEmptyCriteria() throws RecordNotFoundException {
+		String[] criteria = new String[] { null, null, null, null, null, null };
+		int[] results = dataService.find(criteria);
+		assertThat(results.length, is(not(0)));
+
+		criteria = new String[] { "", "", "", "", "", "" };
+		results = dataService.find(criteria);
+		assertThat(results.length, is(not(0)));
+	}
+
+	@Test
+	public void testFindCriteriaShort() throws RecordNotFoundException {
+		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS - 2];
+		int[] results = dataService.find(criteria);
+		assertThat(results.length, is(not(0)));
+	}
+
+	@Test
+	public void testFindNoResults() throws RecordNotFoundException {
+		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
+		criteria[0] = "A fake name that doesn't exist in the database";
+		int[] empty = dataService.find(criteria);
+
+		assertArrayEquals(new int[] {}, empty);
+	}
+
+	@Test
+	public void testFindResults() throws RecordNotFoundException {
+		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
+		criteria[0] = "M";
+		int[] results = dataService.find(criteria);
+		assertThat(results.length, is(not(0)));
+
+		for (int recNo : results) {
+			String[] record = dataService.read(recNo);
+			assertThat(record, is(notNullValue()));
+			assertThat(record.length, is(equalTo(6)));
+			assertThat(record[0], is(not(equalTo(""))));
+			assertThat(record[1], is(not(equalTo(""))));
+			assertThat(record[2], is(not(equalTo(""))));
+			assertThat(Integer.parseInt(record[3]), is(notNullValue()));
+			assertThat(Float.parseFloat(record[4].substring(1)), is(notNullValue()));
+		}
 	}
 
 	@Test
