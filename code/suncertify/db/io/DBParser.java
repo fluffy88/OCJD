@@ -3,13 +3,13 @@ package suncertify.db.io;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.LinkedList;
-import java.util.List;
+
+import suncertify.shared.ObservableList;
 
 public class DBParser {
 
-	public List<String[]> get() {
-		List<String[]> contractors = new LinkedList<String[]>();
+	public ObservableList<String[]> get() {
+		ObservableList<String[]> contractors = new ObservableList<String[]>();
 		try (RandomAccessFile is = new RandomAccessFile("db-2x2.db", "r")) {
 
 			// headers

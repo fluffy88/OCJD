@@ -46,3 +46,7 @@ Data#read()
 	- Does not return actual result, returns a copy.
 	- This stops the Standalone application UI from modifying the cache indirectly.
 	- All read/modifications of the cache are to be handled through Data.java and will be synchronized. 
+	
+ObservableList.java
+	- Create a new List so I can set Listeners on the list.
+	- extends ArrayList so I don't have to do actual implementation of the List, I can focus on only the notifications.

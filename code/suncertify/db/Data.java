@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import suncertify.db.io.DBParser;
+import suncertify.shared.ListChangedListener;
+import suncertify.shared.ObservableList;
 
 /**
  * Singleton class to access the Database.
@@ -18,12 +20,17 @@ public class Data implements DBMain {
 	public static final Data INSTANCE = new Data();
 
 	private DBParser parser = new DBParser();
-	private List<String[]> contractors = parser.get();
+	private ObservableList<String[]> contractors = parser.get();
 
 	private List<WriteLock> locks = new ArrayList<WriteLock>();
 
 	private Data() {
-
+		contractors.addListener(new ListChangedListener() {
+			@Override
+			public void listChanged() {
+				// TODO: Add the call to the database writer.
+			}
+		});
 	}
 
 	@Override
@@ -38,16 +45,14 @@ public class Data implements DBMain {
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
 		checkRecordNumber(recNo);
 
-		String[] record = contractors.get(recNo);
-		for (int i = 0; i < record.length; i++) {
-			record[i] = data[i];
-		}
+		contractors.set(recNo, data);
 	}
 
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
+		checkRecordNumber(recNo);
 
+		contractors.remove(recNo);
 	}
 
 	@Override
@@ -80,8 +85,9 @@ public class Data implements DBMain {
 
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO: Check for DuplicateKey
+		contractors.add(data);
+		return contractors.indexOf(data);
 	}
 
 	@Override
