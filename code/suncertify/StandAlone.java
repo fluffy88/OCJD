@@ -3,7 +3,7 @@ package suncertify;
 import javax.swing.SwingUtilities;
 
 import suncertify.db.Data;
-import suncertify.db.ui.ClientUI;
+import suncertify.ui.ClientUI;
 
 public class StandAlone implements Application {
 

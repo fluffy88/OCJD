@@ -6,7 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import suncertify.db.DBMain;
-import suncertify.db.ui.ClientUI;
+import suncertify.ui.ClientUI;
 
 public class Client implements Application {
 

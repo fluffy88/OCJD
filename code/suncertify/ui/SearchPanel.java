@@ -1,4 +1,4 @@
-package suncertify.db.ui;
+package suncertify.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

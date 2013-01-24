@@ -1,4 +1,4 @@
-package suncertify.db.ui;
+package suncertify.ui;
 
 import java.awt.BorderLayout;
 
