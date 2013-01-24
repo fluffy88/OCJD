@@ -23,6 +23,7 @@ public class Data implements DBMain {
 	private List<WriteLock> locks = new ArrayList<WriteLock>();
 
 	private Data() {
+
 	}
 
 	@Override
@@ -35,8 +36,12 @@ public class Data implements DBMain {
 
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
+		checkRecordNumber(recNo);
 
+		String[] record = contractors.get(recNo);
+		for (int i = 0; i < record.length; i++) {
+			record[i] = data[i];
+		}
 	}
 
 	@Override
