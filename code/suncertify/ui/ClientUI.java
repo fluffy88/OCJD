@@ -8,8 +8,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import suncertify.Injection;
 import suncertify.db.DBMain;
+import suncertify.shared.Injection;
 
 public class ClientUI extends JFrame {
 

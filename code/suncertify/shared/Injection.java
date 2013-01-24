@@ -1,4 +1,4 @@
-package suncertify;
+package suncertify.shared;
 
 import java.util.HashMap;
 import java.util.Map;

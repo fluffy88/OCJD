@@ -12,9 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.Injection;
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
+import suncertify.shared.Injection;
 
 public class SearchPanel extends JPanel {
 

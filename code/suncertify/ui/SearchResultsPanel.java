@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-import suncertify.Injection;
+import suncertify.shared.Injection;
 
 public class SearchResultsPanel extends JPanel {
 
