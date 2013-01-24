@@ -1,11 +1,14 @@
 package suncertify.db;
 
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import suncertify.db.io.DBParser;
+import suncertify.db.io.DBWriter;
 
 /**
  * Singleton class to access the Database.
@@ -17,13 +20,29 @@ public class Data implements DBMain {
 
 	public static final Data INSTANCE = new Data();
 
-	private DBParser parser = new DBParser();
-	private List<String[]> contractors = parser.get();
+	private RandomAccessFile is;
+	private List<String[]> contractors;
+	private DBWriter dbWriter;
 
-	private List<WriteLock> locks = new ArrayList<WriteLock>();
+	private List<WriteLock> locks;
 
 	private Data() {
+		init();
+	}
 
+	private void init() {
+		locks = new ArrayList<WriteLock>();
+
+		try {
+			this.is = new RandomAccessFile("db-2x2.db", "rw");
+			DBParser parser = new DBParser(is);
+			contractors = parser.get();
+			dbWriter = new DBWriter(is);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -38,15 +57,20 @@ public class Data implements DBMain {
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
 		checkRecordNumber(recNo);
 
-		String[] record = contractors.get(recNo);
-		for (int i = 0; i < record.length; i++) {
-			record[i] = data[i];
+		boolean succeeded = dbWriter.write(recNo, data);
+
+		// TODO if database failed, roll back cache and handle error
+		if (succeeded) {
+			contractors.set(recNo, data);
 		}
 	}
 
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
+
+		char s = 0x8000;
+		short y = 00;
 
 	}
 

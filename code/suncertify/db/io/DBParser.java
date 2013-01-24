@@ -1,55 +1,73 @@
 package suncertify.db.io;
 
+import static suncertify.db.io.DBSchema.FIELD_HEADERS;
+import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
+import static suncertify.db.io.DBSchema.MAGIC_COOKIE;
+import static suncertify.db.io.DBSchema.NUMBER_OF_FIELDS;
+import static suncertify.db.io.DBSchema.RECORD_LENGTH;
+import static suncertify.db.io.DBSchema.START_OF_RECORDS;
+import static suncertify.db.io.DBSchema.US_ASCII;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DBParser {
 
+	private RandomAccessFile is;
+
+	public DBParser(RandomAccessFile is) {
+		this.is = is;
+	}
+
 	public List<String[]> get() {
 		List<String[]> contractors = new LinkedList<String[]>();
-		try (RandomAccessFile is = new RandomAccessFile("db-2x2.db", "r")) {
+		try {
 
 			// headers
-			int magicCookie = is.readInt();
-			int startOfRecords = is.readInt();
-			int fields = is.readShort();
+			MAGIC_COOKIE = is.readInt();
+			START_OF_RECORDS = is.readInt();
+			NUMBER_OF_FIELDS = is.readShort();
 
 			// data headers
-			int[] fieldLengths = new int[fields];
-			String[] fieldNames = new String[fields];
-			for (int i = 0; i < fields; i++) {
+			FIELD_LENGTHS = new int[NUMBER_OF_FIELDS];
+			FIELD_HEADERS = new String[NUMBER_OF_FIELDS];
+			for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
 				// 2 byte numeric, length in bytes of field name
 				int fieldNameLength = is.readShort();
 
 				// n bytes (defined by previous entry), field name
 				byte[] fieldName = new byte[fieldNameLength];
 				is.read(fieldName);
-				fieldNames[i] = new String(fieldName, "US-ASCII");
+				FIELD_HEADERS[i] = new String(fieldName, US_ASCII);
 
 				// 2 byte numeric, field length in bytes
 				int fieldLength = is.readShort();
-				fieldLengths[i] = fieldLength;
+				FIELD_LENGTHS[i] = fieldLength;
+				RECORD_LENGTH += fieldLength;
 			}
 
 			// data
-			is.seek(startOfRecords);
+			is.seek(START_OF_RECORDS);
 			while (is.getFilePointer() != is.length()) {
 				byte[] bytes = new byte[2];
 				is.read(bytes);
 
 				// TODO: IF IS DELETED RECORD: Arrays.toString(bytes)
-				String[] modelItem = new String[6];
-				modelItem[0] = readString(is, fieldLengths[0]);
-				modelItem[1] = readString(is, fieldLengths[1]);
-				modelItem[2] = readString(is, fieldLengths[2]);
-				modelItem[3] = readString(is, fieldLengths[3]);
-				modelItem[4] = readString(is, fieldLengths[4]);
-				modelItem[5] = readString(is, fieldLengths[5]);
+				String[] dataItem = new String[6];
+				dataItem[0] = readString(is, FIELD_LENGTHS[0]);
+				dataItem[1] = readString(is, FIELD_LENGTHS[1]);
+				dataItem[2] = readString(is, FIELD_LENGTHS[2]);
+				dataItem[3] = readString(is, FIELD_LENGTHS[3]);
+				dataItem[4] = readString(is, FIELD_LENGTHS[4]);
+				dataItem[5] = readString(is, FIELD_LENGTHS[5]);
 
-				contractors.add(modelItem);
+				contractors.add(dataItem);
+
+				System.out.println(new String(bytes) + " - " + Arrays.toString(dataItem));
 			}
 
 		} catch (FileNotFoundException e) {

@@ -46,3 +46,8 @@ Data#read()
 	- Does not return actual result, returns a copy.
 	- This stops the Standalone application UI from modifying the cache indirectly.
 	- All read/modifications of the cache are to be handled through Data.java and will be synchronized. 
+	
+DBSchema.java
+	- Created a Class to store Database information.
+	- Stores schema info, but also contains dynamic information, i.e. Total number of records, full byte length of a record.
+	  This makes it easy to read/write to database, as we have the full structure info at hand.  

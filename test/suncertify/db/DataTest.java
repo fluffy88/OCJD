@@ -13,11 +13,11 @@ import org.junit.Test;
 
 public class DataTest {
 
-	private Data data = Data.INSTANCE;
+	private Data dataService = Data.INSTANCE;
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
-		String[] record = data.read(0);
+		String[] record = dataService.read(0);
 
 		assertThat(record, is(notNullValue()));
 		assertThat(record.length, is(equalTo(6)));
@@ -31,17 +31,40 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testReadException() throws RecordNotFoundException, RemoteException {
-		data.read(500000);
+		dataService.read(500000);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testReadNegativeException() throws RecordNotFoundException, RemoteException {
-		data.read(-1);
+		dataService.read(-1);
 	}
 
 	@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
+	public void testUpdate() throws RecordNotFoundException {
+		int recNo = 5;
+
+		String[] origRec = dataService.read(recNo);
+		String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
+
+		dataService.update(recNo, newRec);
+		String[] afterRec = dataService.read(recNo);
+
+		assertThat(afterRec[0], is(equalTo(newRec[0])));
+		assertThat(afterRec[1], is(equalTo(newRec[1])));
+		assertThat(afterRec[2], is(equalTo(newRec[2])));
+		assertThat(afterRec[3], is(equalTo(newRec[3])));
+		assertThat(afterRec[4], is(equalTo(newRec[4])));
+		assertThat(afterRec[5], is(equalTo(newRec[5])));
+
+		dataService.update(recNo, origRec);
+		afterRec = dataService.read(recNo);
+
+		assertThat(afterRec[0], is(equalTo(origRec[0])));
+		assertThat(afterRec[1], is(equalTo(origRec[1])));
+		assertThat(afterRec[2], is(equalTo(origRec[2])));
+		assertThat(afterRec[3], is(equalTo(origRec[3])));
+		assertThat(afterRec[4], is(equalTo(origRec[4])));
+		assertThat(afterRec[5], is(equalTo(origRec[5])));
 	}
 
 	@Test
