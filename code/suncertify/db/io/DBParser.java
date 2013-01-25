@@ -12,7 +12,6 @@ import static suncertify.db.io.DBSchema.US_ASCII;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class DBParser {
 				}
 				contractors.add(dataItem);
 
-				System.out.println(flag + " - " + Arrays.toString(dataItem));
+				// System.out.println(flag + " - " + Arrays.toString(dataItem));
 			}
 
 		} catch (FileNotFoundException e) {
