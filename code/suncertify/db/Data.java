@@ -51,11 +51,13 @@ public class Data implements DBMain {
 		checkRecordNumber(recNo);
 
 		String[] contractor = contractors.get(recNo);
+		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
 		return Arrays.copyOf(contractor, contractor.length);
 	}
 
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
+		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		checkRecordNumber(recNo);
 
 		boolean succeeded = dbWriter.write(recNo, data);
@@ -68,6 +70,7 @@ public class Data implements DBMain {
 
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
+		System.out.println("Delete: " + recNo);
 		checkRecordNumber(recNo);
 
 		boolean succeeded = dbWriter.delete(recNo);
@@ -80,6 +83,8 @@ public class Data implements DBMain {
 
 	@Override
 	public int[] find(String[] criteria) throws RecordNotFoundException {
+		System.out.println("Find: " + Arrays.toString(criteria));
+
 		List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < contractors.size(); n++) {
 			boolean match = true;
@@ -113,6 +118,8 @@ public class Data implements DBMain {
 
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
+		System.out.println("Create: " + Arrays.toString(data));
+
 		int deletedPos = -1;
 		for (int i = 0; i < contractors.size(); i++) {
 			String[] record = contractors.get(i);
