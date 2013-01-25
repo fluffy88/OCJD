@@ -1,25 +1,48 @@
 package suncertify.ui;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+
+import suncertify.db.DBMain;
+import suncertify.db.RecordNotFoundException;
+import suncertify.shared.Injection;
 
 public class SearchResultsTableModel extends AbstractTableModel implements TableModel {
 
 	private static final long serialVersionUID = -6527725876159983929L;
 
-	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge", "Customer holding this record" };
+	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge",
+			"Customer holding this record" };
 
 	private ArrayList<Object[]> data = new ArrayList<Object[]>();
 
-	// { { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, {
-	// "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" },
-	// { "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" }, {
-	// "Joe Duffy", "Dublin", "Radio Presenter", "4", "€600", "" } };
-
 	public SearchResultsTableModel() {
+		// add empty data so table headers show up and can be resized.
 		data.add(new String[] { "", "", "", "", "", "" });
+
+		this.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				int row = e.getFirstRow();
+
+				if (row == e.getLastRow()) {
+					DBMain dataService = (DBMain) Injection.instance.get("DataService");
+					String[] updatedData = (String[]) data.get(row);
+
+					try {
+						dataService.update(row, updatedData);
+					} catch (RemoteException | RecordNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	public void clearData() {

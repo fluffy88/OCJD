@@ -30,6 +30,7 @@ public class SearchResultsPanel extends JPanel {
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);
+		this.table.setAutoCreateRowSorter(true);
 		this.setColumnWidth(3, 20);
 		this.setColumnWidth(4, 20);
 		this.setColumnWidth(5, 120);
