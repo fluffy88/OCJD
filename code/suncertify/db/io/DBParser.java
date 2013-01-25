@@ -4,6 +4,7 @@ import static suncertify.db.io.DBSchema.FIELD_HEADERS;
 import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
 import static suncertify.db.io.DBSchema.MAGIC_COOKIE;
 import static suncertify.db.io.DBSchema.NUMBER_OF_FIELDS;
+import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.START_OF_RECORDS;
 import static suncertify.db.io.DBSchema.US_ASCII;
@@ -62,7 +63,7 @@ public class DBParser {
 					}
 				} else {
 					// skip the next record as it's marked deleted
-					is.seek(is.getFilePointer() + RECORD_LENGTH - 2);
+					is.seek(is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
 				}
 				contractors.add(dataItem);
 

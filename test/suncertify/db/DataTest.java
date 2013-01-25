@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -58,16 +59,6 @@ public class DataTest {
 		assertThat(afterRec[3], is(equalTo(newRec[3])));
 		assertThat(afterRec[4], is(equalTo(newRec[4])));
 		assertThat(afterRec[5], is(equalTo(newRec[5])));
-
-		dataService.update(recNo, origRec);
-		afterRec = dataService.read(recNo);
-
-		assertThat(afterRec[0], is(equalTo(origRec[0])));
-		assertThat(afterRec[1], is(equalTo(origRec[1])));
-		assertThat(afterRec[2], is(equalTo(origRec[2])));
-		assertThat(afterRec[3], is(equalTo(origRec[3])));
-		assertThat(afterRec[4], is(equalTo(origRec[4])));
-		assertThat(afterRec[5], is(equalTo(origRec[5])));
 	}
 
 	@Test(expected = RecordNotFoundException.class)
@@ -80,7 +71,6 @@ public class DataTest {
 	public void testDeleteTwice() throws RecordNotFoundException {
 		dataService.delete(2);
 		dataService.delete(2);
-		dataService.read(2);
 	}
 
 	@Test
@@ -130,8 +120,27 @@ public class DataTest {
 	}
 
 	@Test
-	public void testCreate() {
-		fail("Not yet implemented");
+	public void testCreate() throws DuplicateKeyException, RecordNotFoundException {
+		String[] data = new String[] { "Jammies", "The Shire", "Door stop making/fitting", "57", "$0", "" };
+		int newRecNo = dataService.create(data);
+
+		String[] results = dataService.read(newRecNo);
+		for (int i = 0; i < data.length; i++) {
+			assertSame(data[i], results[i]);
+		}
+	}
+
+	@Test(expected = DuplicateKeyException.class)
+	public void testCreateDuplicate() throws DuplicateKeyException, RecordNotFoundException {
+		String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
+
+		int recNo = dataService.create(data);
+		String[] results = dataService.read(recNo);
+		for (int i = 0; i < data.length; i++) {
+			assertSame(data[i], results[i]);
+		}
+
+		dataService.create(data);
 	}
 
 	@Test

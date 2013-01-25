@@ -113,8 +113,31 @@ public class Data implements DBMain {
 
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
-		// TODO Auto-generated method stub
-		return 0;
+		int deletedPos = -1;
+		for (int i = 0; i < contractors.size(); i++) {
+			String[] record = contractors.get(i);
+			if (record[0] == null) {
+				deletedPos = i;
+			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
+				throw new DuplicateKeyException("A record with this Name & Address already exists.");
+			}
+		}
+
+		// TODO when write to db fails what now??
+		boolean succeeded = dbWriter.create(data);
+
+		int recNo = deletedPos;
+		if (succeeded) {
+			if (deletedPos != -1) {
+				contractors.set(deletedPos, data);
+				// for (int i = 0; i < contractors.size(); i++) { if (contractors.get(i)[0] == null) { contractors.set(i, data); recNo = i;
+				// break; } }
+			} else {
+				contractors.add(data);
+				recNo = contractors.size() - 1;
+			}
+		}
+		return recNo;
 	}
 
 	@Override

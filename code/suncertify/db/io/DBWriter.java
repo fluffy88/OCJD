@@ -1,6 +1,7 @@
 package suncertify.db.io;
 
 import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
+import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_DELETED;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.RECORD_VALID;
@@ -24,14 +25,8 @@ public class DBWriter {
 		try {
 
 			int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
-			is.seek(pos);
 
-			// write 2 byte flag to indicate not deleted
-			is.writeShort(RECORD_VALID);
-			for (int i = 0; i < data.length; i++) {
-				byte[] updatedData = Arrays.copyOf(data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
-				is.write(updatedData);
-			}
+			this.writeRecord(pos, data);
 			return true;
 
 		} catch (IOException e) {
@@ -56,4 +51,38 @@ public class DBWriter {
 		}
 	}
 
+	public boolean create(String[] data) {
+		try {
+			is.seek(START_OF_RECORDS);
+
+			while (is.getFilePointer() != is.length()) {
+				int flag = is.readShort();
+				if (flag != 0) {
+					this.writeRecord(is.getFilePointer() - NUM_BYTES_RECORD_DELETED_FLAG, data);
+					return true;
+				}
+				// skip the record
+				is.seek(is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
+			}
+
+			this.writeRecord(is.getFilePointer(), data);
+			return true;
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private void writeRecord(long pos, String[] data) throws IOException {
+		is.seek(pos);
+
+		// write 2 byte flag to indicate not deleted
+		is.writeShort(RECORD_VALID);
+		for (int i = 0; i < data.length; i++) {
+			byte[] updatedData = Arrays.copyOf(data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
+			is.write(updatedData);
+		}
+	}
 }

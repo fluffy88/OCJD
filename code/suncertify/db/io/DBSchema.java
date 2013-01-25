@@ -12,6 +12,7 @@ public class DBSchema {
 	// Describing data structure
 	public static final int NUM_BYTES_FIELD_HEADER_NUM_BYTES = 2;
 	public static final int NUM_BYTES_FIELD_LENGTH = 2;
+	public static final int NUM_BYTES_RECORD_DELETED_FLAG = 2;
 
 	// Deleted Flags
 	public static final int RECORD_VALID = 00;
@@ -25,6 +26,6 @@ public class DBSchema {
 	// Fields
 	public static String[] FIELD_HEADERS;
 	public static int[] FIELD_LENGTHS;
-	public static int RECORD_LENGTH = 2;
+	public static int RECORD_LENGTH = NUM_BYTES_RECORD_DELETED_FLAG;
 
 }
