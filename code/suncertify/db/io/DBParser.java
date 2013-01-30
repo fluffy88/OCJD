@@ -82,6 +82,6 @@ public class DBParser {
 	private String readString(RandomAccessFile is, int n) throws IOException {
 		byte[] bytes = new byte[n];
 		is.read(bytes);
-		return new String(bytes, "US-ASCII").trim();
+		return new String(bytes, US_ASCII).trim();
 	}
 }
