@@ -47,7 +47,6 @@ public class DataTest {
 	public void testUpdate() throws RecordNotFoundException {
 		int recNo = 5;
 
-		String[] origRec = dataService.read(recNo);
 		String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
 
 		dataService.update(recNo, newRec);
