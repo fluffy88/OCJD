@@ -17,7 +17,7 @@ import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
-	private Data dataService = Data.INSTANCE;
+	private Data dataService = new Data();
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {

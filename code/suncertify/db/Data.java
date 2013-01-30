@@ -4,8 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
@@ -19,26 +21,25 @@ import suncertify.db.io.DBWriter;
  */
 public class Data implements DBMain {
 
-	public static final Data INSTANCE = new Data();
-
 	private RandomAccessFile is;
 	private List<String[]> contractors;
 	private DBWriter dbWriter;
 
-	private List<WriteLock> locks;
+	private List<ReentrantLock> locks;
 
-	private Data() {
+	public Data() {
 		init();
 	}
 
 	private void init() {
-		locks = new ArrayList<WriteLock>();
-
 		try {
 			this.is = new RandomAccessFile("db-2x2.db", "rw");
-			DBParser parser = new DBParser(is);
-			contractors = parser.get();
-			dbWriter = new DBWriter(is);
+			DBParser parser = new DBParser(this.is);
+			this.contractors = parser.get();
+			this.dbWriter = new DBWriter(this.is);
+
+			this.locks = new ArrayList<ReentrantLock>();
+			this.locks.addAll(Collections.nCopies(this.contractors.size(), new ReentrantLock()));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -48,28 +49,33 @@ public class Data implements DBMain {
 
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
+		this.lock(recNo);
 		checkRecordNumber(recNo);
 
-		String[] contractor = contractors.get(recNo);
+		String[] contractor = this.contractors.get(recNo);
 		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
+		this.unlock(recNo);
 		return Arrays.copyOf(contractor, contractor.length);
 	}
 
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
+		this.lock(recNo);
 		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		checkRecordNumber(recNo);
 
-		boolean succeeded = dbWriter.write(recNo, data);
+		boolean succeeded = this.dbWriter.write(recNo, data);
 
 		// TODO if database failed, roll back cache and handle error
 		if (succeeded) {
 			contractors.set(recNo, data);
 		}
+		this.unlock(recNo);
 	}
 
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
+		this.lock(recNo);
 		System.out.println("Delete: " + recNo);
 		checkRecordNumber(recNo);
 
@@ -79,6 +85,7 @@ public class Data implements DBMain {
 		if (succeeded) {
 			contractors.set(recNo, new String[DBSchema.NUMBER_OF_FIELDS]);
 		}
+		this.unlock(recNo);
 	}
 
 	@Override
@@ -87,6 +94,7 @@ public class Data implements DBMain {
 
 		List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < contractors.size(); n++) {
+			this.lock(n);
 			boolean match = true;
 			for (int i = 0; i < criteria.length; i++) {
 				if (criteria[i] != null) {
@@ -106,6 +114,7 @@ public class Data implements DBMain {
 			if (match) {
 				results.add(n);
 			}
+			this.unlock(n);
 		}
 
 		int[] intResults = new int[results.size()];
@@ -120,29 +129,38 @@ public class Data implements DBMain {
 	public int create(String[] data) throws DuplicateKeyException {
 		System.out.println("Create: " + Arrays.toString(data));
 
-		int deletedPos = -1;
-		for (int i = 0; i < contractors.size(); i++) {
-			String[] record = contractors.get(i);
-			if (record[0] == null) {
-				deletedPos = i;
-			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				throw new DuplicateKeyException("A record with this Name & Address already exists.");
+		int recNo = -1;
+		try {
+			for (int i = 0; i < contractors.size(); i++) {
+				this.lock(i);
+				String[] record = contractors.get(i);
+				if (record[0] == null) {
+					recNo = i;
+					break;
+				} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
+					throw new DuplicateKeyException("A record with this Name & Address already exists.");
+				}
+				this.unlock(i);
 			}
-		}
 
-		// TODO when write to db fails what now??
-		boolean succeeded = dbWriter.create(data);
+			// TODO when write to db fails what now??
+			boolean succeeded = dbWriter.create(data);
 
-		int recNo = deletedPos;
-		if (succeeded) {
-			if (deletedPos != -1) {
-				contractors.set(deletedPos, data);
-				// for (int i = 0; i < contractors.size(); i++) { if (contractors.get(i)[0] == null) { contractors.set(i, data); recNo = i;
-				// break; } }
-			} else {
-				contractors.add(data);
-				recNo = contractors.size() - 1;
+			if (succeeded) {
+				if (recNo != -1) {
+					contractors.set(recNo, data);
+					this.unlock(recNo);
+					// for (int i = 0; i < contractors.size(); i++) { if (contractors.get(i)[0] == null) { contractors.set(i, data); recNo =
+					// i;
+					// break; } }
+				} else {
+					contractors.add(data);
+					recNo = contractors.size() - 1;
+				}
 			}
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return recNo;
 	}
@@ -152,7 +170,7 @@ public class Data implements DBMain {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
 
-		WriteLock lock = locks.get(recNo);
+		Lock lock = locks.get(recNo);
 		lock.lock();
 	}
 
@@ -161,7 +179,7 @@ public class Data implements DBMain {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
 
-		WriteLock lock = locks.get(recNo);
+		Lock lock = locks.get(recNo);
 		lock.unlock();
 	}
 
@@ -170,7 +188,7 @@ public class Data implements DBMain {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
 
-		WriteLock lock = locks.get(recNo);
+		Lock lock = locks.get(recNo);
 		boolean check = lock.tryLock();
 		lock.unlock();
 		return check;

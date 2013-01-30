@@ -14,7 +14,7 @@ public class Server implements Application {
 	public void start() {
 		try {
 
-			DBMain data = Data.INSTANCE;
+			DBMain data = new Data();
 			DBMain rmiStub = (DBMain) UnicastRemoteObject.exportObject(data, 0);
 			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind("Remote Database Server", rmiStub);

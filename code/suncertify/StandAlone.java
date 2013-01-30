@@ -9,7 +9,7 @@ public class StandAlone implements Application {
 
 	@Override
 	public void start() {
-		final Data dataService = Data.INSTANCE;
+		final Data dataService = new Data();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
