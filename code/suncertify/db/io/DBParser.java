@@ -12,7 +12,7 @@ import static suncertify.db.io.DBSchema.US_ASCII;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBParser {
@@ -24,7 +24,7 @@ public class DBParser {
 	}
 
 	public List<String[]> get() {
-		List<String[]> contractors = new LinkedList<String[]>();
+		List<String[]> contractors = new ArrayList<String[]>();
 		try {
 
 			// headers

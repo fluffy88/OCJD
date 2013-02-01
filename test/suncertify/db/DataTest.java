@@ -11,16 +11,25 @@ import static org.junit.Assert.fail;
 
 import java.rmi.RemoteException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
-	private Data dataService = new Data();
+	private Data dataService;
+
+	@Before
+	public void setup() {
+		if (this.dataService == null) {
+			this.dataService = new Data();
+		}
+	}
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
+		System.out.println("testRead");
 		String[] record = dataService.read(0);
 
 		assertThat(record, is(notNullValue()));
@@ -35,16 +44,19 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testReadException() throws RecordNotFoundException, RemoteException {
+		System.out.println("testReadException");
 		dataService.read(500000);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testReadNegativeException() throws RecordNotFoundException, RemoteException {
+		System.out.println("testReadNegativeException");
 		dataService.read(-1);
 	}
 
 	@Test
 	public void testUpdate() throws RecordNotFoundException {
+		System.out.println("testUpdate");
 		int recNo = 5;
 
 		String[] origRec = dataService.read(recNo);
@@ -63,18 +75,22 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDelete() throws RecordNotFoundException {
+		// TODO
+		System.out.println("testDelete");
 		dataService.delete(2);
 		dataService.read(2);
 	}
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDeleteTwice() throws RecordNotFoundException {
+		System.out.println("testDeleteTwice");
 		dataService.delete(2);
 		dataService.delete(2);
 	}
 
 	@Test
 	public void testFindEmptyCriteria() throws RecordNotFoundException {
+		System.out.println("testFindEmptyCriteria");
 		String[] criteria = new String[] { null, null, null, null, null, null };
 		int[] results = dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
@@ -86,6 +102,7 @@ public class DataTest {
 
 	@Test
 	public void testFindCriteriaShort() throws RecordNotFoundException {
+		System.out.println("testFindCriteriaShort");
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS - 2];
 		int[] results = dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
@@ -93,6 +110,7 @@ public class DataTest {
 
 	@Test
 	public void testFindNoResults() throws RecordNotFoundException {
+		System.out.println("testFindNoResults");
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "A fake name that doesn't exist in the database";
 		int[] empty = dataService.find(criteria);
@@ -102,6 +120,7 @@ public class DataTest {
 
 	@Test
 	public void testFindResults() throws RecordNotFoundException {
+		System.out.println("testFindResults");
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "M";
 		int[] results = dataService.find(criteria);
@@ -121,6 +140,7 @@ public class DataTest {
 
 	@Test
 	public void testCreate() throws DuplicateKeyException, RecordNotFoundException {
+		System.out.println("testCreate");
 		String[] data = new String[] { "Jammies", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 		int newRecNo = dataService.create(data);
 
@@ -132,6 +152,7 @@ public class DataTest {
 
 	@Test(expected = DuplicateKeyException.class)
 	public void testCreateDuplicate() throws DuplicateKeyException, RecordNotFoundException {
+		System.out.println("testCreateDuplicate");
 		String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 
 		int recNo = dataService.create(data);
