@@ -1,22 +1,11 @@
 package suncertify;
 
-import javax.swing.SwingUtilities;
-
-import suncertify.db.Data;
-import suncertify.ui.ClientUI;
-
 public class StandAlone implements Application {
 
 	@Override
 	public void start() {
-		final Data dataService = Data.INSTANCE;
+		Application server = new Server(AppType.StandAlone);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new ClientUI(dataService);
-			}
-		});
-
+		new Client(AppType.StandAlone);
 	}
-
 }

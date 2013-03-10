@@ -5,7 +5,6 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
@@ -19,23 +18,19 @@ import suncertify.db.io.DBWriter;
  */
 public class Data implements DBMain {
 
-	public static final Data INSTANCE = new Data();
-
 	private RandomAccessFile is;
 	private List<String[]> contractors;
 	private DBWriter dbWriter;
+	private final String dbLocation;
 
-	private List<WriteLock> locks;
-
-	private Data() {
+	public Data(String dbLoc) {
+		this.dbLocation = dbLoc;
 		init();
 	}
 
 	private void init() {
-		locks = new ArrayList<WriteLock>();
-
 		try {
-			this.is = new RandomAccessFile("db-2x2.db", "rw");
+			this.is = new RandomAccessFile(this.dbLocation, "rw");
 			DBParser parser = new DBParser(is);
 			contractors = parser.get();
 			dbWriter = new DBWriter(is);
@@ -151,29 +146,19 @@ public class Data implements DBMain {
 	public void lock(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
-
-		WriteLock lock = locks.get(recNo);
-		lock.lock();
 	}
 
 	@Override
 	public void unlock(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
-
-		WriteLock lock = locks.get(recNo);
-		lock.unlock();
 	}
 
 	@Override
 	public boolean isLocked(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
-
-		WriteLock lock = locks.get(recNo);
-		boolean check = lock.tryLock();
-		lock.unlock();
-		return check;
+		return false;
 	}
 
 	private void checkRecordNumber(int recNo) throws RecordNotFoundException {

@@ -1,28 +1,27 @@
 package suncertify;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
+import suncertify.client.DataServiceFactory;
 import suncertify.db.DBMain;
+import suncertify.shared.Injection;
 import suncertify.ui.ClientUI;
 
 public class Client implements Application {
 
+	private final AppType type;
+
+	public Client(AppType type) {
+		this.type = type;
+	}
+
 	@Override
 	public void start() {
 
-		try {
-			Registry registry = LocateRegistry.getRegistry();
-			DBMain dataService = (DBMain) registry.lookup("Remote Database Server");
+		DataServiceFactory factory = new DataServiceFactory();
+		DBMain dataService = factory.getService(type);
 
-			new ClientUI(dataService);
+		Injection.instance.add("DataService", dataService);
 
-		} catch (RemoteException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new ClientUI();
 
 	}
 
