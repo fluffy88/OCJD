@@ -1,10 +1,13 @@
 package suncertify.db.io;
 
+import java.io.File;
+import java.util.Scanner;
+
 import suncertify.shared.Preferences;
 
 public class Database {
 
-	public static final String DB_LOCATION = "databaseLocation";
+	public static final String DB_LOCATION = "DatabaseLocation";
 
 	private String location;
 
@@ -26,10 +29,30 @@ public class Database {
 	}
 
 	private String promptForLocation() {
-		System.out.println("Enter database location .....");
+		String location = null;
+		Scanner reader = new Scanner(System.in);
 
-		String dbLoc = "db-2x2.db";
-		return dbLoc;
+		while (location == null) {
+			System.out.println("Enter location of the database below:");
+			System.out.print(" -> ");
+
+			location = reader.nextLine();
+			if (!isDBFileValid(location)) {
+				location = null;
+			}
+		}
+		reader.close();
+
+		return location;
+	}
+
+	private boolean isDBFileValid(String location) {
+		if (!new File(location).exists()) {
+			return false;
+		}
+		// TODO: Check if Magic Cookie matches
+		// TODO: Check if File is a valid DB file
+		return false;
 	}
 
 	public String getLocation() {
