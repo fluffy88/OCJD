@@ -26,7 +26,17 @@ public class Server implements Application {
 		String dbLoc = db.getLocation();
 
 		DBMain data = new Data(dbLoc);
+		publish(data);
 
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				Server.this.shutdown();
+			}
+		});
+	}
+
+	private void publish(DBMain data) {
 		if (this.type == AppType.Server) {
 			try {
 				DBMain rmiStub = (DBMain) UnicastRemoteObject.exportObject(data, 0);
@@ -39,7 +49,6 @@ public class Server implements Application {
 		} else if (this.type == AppType.StandAlone) {
 			Injection.instance.add("DataServer", data);
 		}
-
 	}
 
 	public void shutdown() {
