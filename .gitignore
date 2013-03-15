@@ -1,3 +1,9 @@
+# Output directories
+output/
+bin/
+target/
+
+# Compiled files
 *.class
 
 # Package Files #
