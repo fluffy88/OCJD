@@ -1,12 +1,10 @@
 package suncertify.db;
 
 /**
- * Exception thrown when an attempting to create a new record with a Key that
- * already exists. When a new record is being created and added to the database,
- * if the database Key of the new record is not unique the a
- * DuplicateKeyException will be thrown.
+ * Exception thrown when an attempting to create a new record with a Key that already exists. When a new record is being created and added
+ * to the database, if the database Key of the new record is not unique the a DuplicateKeyException will be thrown.
  * 
- * @author Seán Dunne
+ * @author Sean Dunne
  * 
  */
 public class DuplicateKeyException extends Exception {

@@ -4,17 +4,16 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * This interface describes how a client can access the database records. A
- * class that provides database access must implement this interface.
+ * This interface describes how a client can access the database records. A class that provides database access must implement this
+ * interface.
  * 
- * @author Seán Dunne
+ * @author Sean Dunne
  * 
  */
 public interface DBMain extends Remote {
 
 	/**
-	 * Returns the record at the specified position. The record number is the
-	 * position of the record in the Database.
+	 * Returns the record at the specified position. The record number is the position of the record in the Database.
 	 * 
 	 * @param recNo
 	 *            The number of the record to search for.

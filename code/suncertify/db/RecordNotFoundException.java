@@ -1,11 +1,10 @@
 package suncertify.db;
 
 /**
- * Exception thrown when a specified record cannot be found. When an attempt to
- * find a particular record and the record does not exist or is marked as
- * deleted then a RecordNotFoundException is thrown.
+ * Exception thrown when a specified record cannot be found. When an attempt to find a particular record and the record does not exist or is
+ * marked as deleted then a RecordNotFoundException is thrown.
  * 
- * @author Seán Dunne
+ * @author Sean Dunne
  * 
  */
 public class RecordNotFoundException extends Exception {
