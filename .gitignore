@@ -3,6 +3,9 @@ output/
 bin/
 target/
 
+# Resources
+suncertify.properties
+
 # Compiled files
 *.class
 

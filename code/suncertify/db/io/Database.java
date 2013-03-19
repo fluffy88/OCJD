@@ -52,7 +52,7 @@ public class Database {
 		}
 		// TODO: Check if Magic Cookie matches
 		// TODO: Check if File is a valid DB file
-		return false;
+		return true;
 	}
 
 	public String getLocation() {
