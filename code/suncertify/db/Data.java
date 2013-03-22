@@ -32,7 +32,7 @@ public class Data implements DBMain {
 		try {
 			this.is = new RandomAccessFile(this.dbLocation, "rw");
 			DBParser parser = new DBParser(is);
-			contractors = parser.get();
+			contractors = parser.getAllRecords();
 			dbWriter = new DBWriter(is);
 
 		} catch (FileNotFoundException e) {

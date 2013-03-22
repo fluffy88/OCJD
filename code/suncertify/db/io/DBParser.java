@@ -23,7 +23,7 @@ public class DBParser {
 		this.is = is;
 	}
 
-	public List<String[]> get() {
+	public List<String[]> getAllRecords() {
 		List<String[]> contractors = new LinkedList<String[]>();
 		try {
 
