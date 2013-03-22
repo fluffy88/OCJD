@@ -1,5 +1,6 @@
 Create *.io package
-	- Keeps the main Data.java class clean.
+	- Place all file IO classes into this .io package.
+	- Keeps the main Data.java class clean as it can delegate work to the .io classes.
 	- Puts all the complex reading and writing to the DB into one place.
 
 Read full DB into memory
@@ -7,9 +8,13 @@ Read full DB into memory
 	- Makes future code changes simpler as data look ups are done on a Java collection.
 
 DB records as String[]
-	- Could use a model
+	- Could use a model, but server interface requires the use of String[] removing the benefits.
 	- String[] makes the DBParser.java more generic and transportable.
 	- If DB scheme ever changes, no need to change how the DB is read, only UI and server updates.
+	* Future Improvement
+		- Deprecate interface methods using String[] add overridden versions using a Domain object.
+		- Convert the server and Client side to use Domain objects.
+		- This makes reading & updating code much simpler and makes application more reliable.
 
 Made Data.java a Singleton
 	- Data.java is the class exposed by the server to give clients access to the database info.
@@ -17,21 +22,31 @@ Made Data.java a Singleton
 	  this singleton to read or write to the Database to maintain database integrity.
 
 RMI
-	- RMI adds some initial 'setup' complexity, but after setup reduces code complexity.
+	- RMI adds some initial 'setup' complexity, but after setup reduces code complexity substantially.
 	- Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
 
 Main.java
-	- Reads command line flag and passes off to specific application.
+	- Server, Client & StandAlone implement a common interface.
+	- Use factory pattern to dynamically chose which to run based on command line flag. 
 	- Keeps main start class clean with single purpose.
 	- Makes it very simple to have Non-networked & Networked modes.
+
+Client.java
+	- Use of factory pattern to get the Data.java instance.
+	- Keeps Client simple as it doesn't care if it's networked or not. 
 	
 ClientUI.java
 	- Single class with sole responsibility to create a new JFrame for the client application.
-	- Makes Application extensible, as new pages can be created & added easily.
+	- Makes Application extensible, as new 'pages' can be created & added easily.
 	
 UI Components, JPanels
 	- Extend JPanel for each Client area.
 	- This keeps each UI components separate, easily maintained, easily replaced.
+	- Sets up a good design flow to follow.
+
+TableModel
+	- Use of Swings inbuilt TableModel for displaying data.
+	- Model pattern is very simple to implement and use.
 
 Injection.java
 	- A very basic Dependency Injection framework.
@@ -40,14 +55,14 @@ Injection.java
 
 Data#find()
 	- Made search case insensitive.
-	- Makes use of application simpler & faster with less learning curve.
+	- Makes use of application simpler & faster for the end users with less learning curve.
 	
 Data#read()
 	- Does not return actual result, returns a copy.
 	- This stops the Standalone application UI from modifying the cache indirectly.
-	- All read/modifications of the cache are to be handled through Data.java and will be synchronized. 
+	- All read/modifications of the cache are to be handled through Data.java and will be synchronized.
 	
 DBSchema.java
 	- Created a Class to store Database information.
 	- Stores schema info, but also contains dynamic information, i.e. Total number of records, full byte length of a record.
-	  This makes it easy to read/write to database, as we have the full structure info at hand.  
+	  This makes it easy to read/write to database, as we have the full structure info at hand.
