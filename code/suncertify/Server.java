@@ -25,7 +25,7 @@ public class Server implements Application {
 		Database db = new Database();
 		String dbLoc = db.getLocation();
 
-		DBMain data = new Data(dbLoc);
+		DBMain data = Data.getInstance(dbLoc); // new Data(dbLoc);
 		publish(data);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {

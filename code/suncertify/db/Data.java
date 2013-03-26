@@ -5,6 +5,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
@@ -16,24 +17,40 @@ import suncertify.db.io.DBWriter;
  * @author Sean
  * 
  */
-public class Data implements DBMain {
+public final class Data implements DBMain {
+
+	private List<AtomicBoolean> locks;
 
 	private RandomAccessFile is;
 	private List<String[]> contractors;
 	private DBWriter dbWriter;
 	private final String dbLocation;
 
-	public Data(String dbLoc) {
+	private static Data instance;
+
+	private Data(String dbLoc) {
 		this.dbLocation = dbLoc;
 		init();
 	}
 
-	private void init() {
+	public static final Data getInstance(String dbLoc) {
+		if (instance == null) {
+			instance = new Data(dbLoc);
+		}
+		return instance;
+	}
+
+	private final void init() {
 		try {
 			this.is = new RandomAccessFile(this.dbLocation, "rw");
-			DBParser parser = new DBParser(is);
-			contractors = parser.getAllRecords();
+			final DBParser parser = new DBParser(is);
 			dbWriter = new DBWriter(is);
+
+			contractors = parser.getAllRecords();
+			locks = new ArrayList<AtomicBoolean>(contractors.size());
+			for (int i = 0; i < contractors.size(); i++) {
+				locks.add(new AtomicBoolean(false));
+			}
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -42,20 +59,20 @@ public class Data implements DBMain {
 	}
 
 	@Override
-	public String[] read(int recNo) throws RecordNotFoundException {
-		checkRecordNumber(recNo);
-
-		String[] contractor = contractors.get(recNo);
+	public final String[] read(int recNo) throws RecordNotFoundException {
+		this.lock(recNo);
+		final String[] contractor = contractors.get(recNo);
 		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
+		this.unlock(recNo);
 		return Arrays.copyOf(contractor, contractor.length);
 	}
 
 	@Override
-	public void update(int recNo, String[] data) throws RecordNotFoundException {
+	public final void update(int recNo, String[] data) throws RecordNotFoundException {
 		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		checkRecordNumber(recNo);
 
-		boolean succeeded = dbWriter.write(recNo, data);
+		final boolean succeeded = dbWriter.write(recNo, data);
 
 		// TODO if database failed, roll back cache and handle error
 		if (succeeded) {
@@ -64,11 +81,11 @@ public class Data implements DBMain {
 	}
 
 	@Override
-	public void delete(int recNo) throws RecordNotFoundException {
+	public final void delete(int recNo) throws RecordNotFoundException {
 		System.out.println("Delete: " + recNo);
 		checkRecordNumber(recNo);
 
-		boolean succeeded = dbWriter.delete(recNo);
+		final boolean succeeded = dbWriter.delete(recNo);
 
 		// TODO if database failed, roll back cache and handle error
 		if (succeeded) {
@@ -77,10 +94,10 @@ public class Data implements DBMain {
 	}
 
 	@Override
-	public int[] find(String[] criteria) throws RecordNotFoundException {
+	public final int[] find(String[] criteria) throws RecordNotFoundException {
 		System.out.println("Find: " + Arrays.toString(criteria));
 
-		List<Integer> results = new ArrayList<Integer>();
+		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < contractors.size(); n++) {
 			boolean match = true;
 			for (int i = 0; i < criteria.length; i++) {
@@ -88,7 +105,7 @@ public class Data implements DBMain {
 					String record = contractors.get(n)[i];
 					if (record != null) {
 						record = record.toLowerCase();
-						String recordTest = criteria[i].toLowerCase();
+						final String recordTest = criteria[i].toLowerCase();
 						if (!record.startsWith(recordTest)) {
 							match = false;
 						}
@@ -103,7 +120,7 @@ public class Data implements DBMain {
 			}
 		}
 
-		int[] intResults = new int[results.size()];
+		final int[] intResults = new int[results.size()];
 		for (int i = 0; i < results.size(); i++) {
 			intResults[i] = results.get(i);
 		}
@@ -112,12 +129,12 @@ public class Data implements DBMain {
 	}
 
 	@Override
-	public int create(String[] data) throws DuplicateKeyException {
+	public final int create(String[] data) throws DuplicateKeyException {
 		System.out.println("Create: " + Arrays.toString(data));
 
 		int deletedPos = -1;
 		for (int i = 0; i < contractors.size(); i++) {
-			String[] record = contractors.get(i);
+			final String[] record = contractors.get(i);
 			if (record[0] == null) {
 				deletedPos = i;
 			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
@@ -126,7 +143,7 @@ public class Data implements DBMain {
 		}
 
 		// TODO when write to db fails what now??
-		boolean succeeded = dbWriter.create(data);
+		final boolean succeeded = dbWriter.create(data);
 
 		int recNo = deletedPos;
 		if (succeeded) {
@@ -143,32 +160,33 @@ public class Data implements DBMain {
 	}
 
 	@Override
-	public void lock(int recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
+	public final void lock(int recNo) throws RecordNotFoundException {
+		this.locks.get(recNo).set(true);
 		checkRecordNumber(recNo);
 	}
 
 	@Override
-	public void unlock(int recNo) throws RecordNotFoundException {
+	public final void unlock(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
+		this.locks.get(recNo).set(false);
 	}
 
 	@Override
-	public boolean isLocked(int recNo) throws RecordNotFoundException {
+	public final boolean isLocked(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		checkRecordNumber(recNo);
 		return false;
 	}
 
-	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
+	private final void checkRecordNumber(int recNo) throws RecordNotFoundException {
 		if (recNo < 0) {
 			throw new IllegalArgumentException("The record number cannot be negative.");
 		}
 		if (contractors.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
-		String[] record = contractors.get(recNo);
+		final String[] record = contractors.get(recNo);
 		if (record[0] == null) {
 			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
