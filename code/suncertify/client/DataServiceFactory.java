@@ -13,7 +13,7 @@ public class DataServiceFactory {
 
 	public DBMain getService(AppType type) {
 
-		if (type == AppType.Server) {
+		if (type == AppType.Client) {
 			try {
 				Registry registry = LocateRegistry.getRegistry();
 				DBMain dataService = (DBMain) registry.lookup("Remote Database Server");
