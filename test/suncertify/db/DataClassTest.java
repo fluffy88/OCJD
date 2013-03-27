@@ -39,16 +39,21 @@ public class DataClassTest {
 			 * Practically, it is not necessary to execute this loop more than 1 time, but if you want, you can increase the controller
 			 * variable, so it is executed as many times as you want
 			 */
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 10; i++) {
 				Thread updatingRandom = new UpdatingRandomRecordThread();
+				updatingRandom.setName("UpdatingRandomRecordThread-" + i);
 				updatingRandom.start();
 				Thread updatingRecord1 = new UpdatingRecord1Thread();
+				updatingRecord1.setName("UpdatingRecord1Thread-" + i);
 				updatingRecord1.start();
 				Thread creatingRecord = new CreatingRecordThread();
+				creatingRecord.setName("CreatingRecordThread-" + i);
 				creatingRecord.start();
 				Thread deletingRecord = new DeletingRecord1Thread();
+				deletingRecord.setName("DeletingRecord1Thread-" + i);
 				deletingRecord.start();
 				Thread findingRecords = new FindingRecordsThread();
+				findingRecords.setName("FindingRecordsThread-" + i);
 				findingRecords.start();
 			}
 		} catch (Exception e) {
