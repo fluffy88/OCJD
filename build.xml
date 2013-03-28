@@ -118,26 +118,27 @@
     <target name="buildAndTest" depends="create-submission-jar">
         <!-- unjar submission jar -->
         <unjar src="${jar.submission}" dest="${dir.temp.submission}" />
-        <!-- compile the test files >
+        <!-- compile the test files -->
         <javac srcdir="${dir.test}" destdir="${dir.temp.test}" listfiles="true" failonerror="true">
             <classpath>
                 <pathelement location="${dir.temp.classes}" />
             </classpath>
-        </javac-->
+        </javac>
         <!-- copy the resources directory >
         <copy todir="${dir.temp.test}/resources">
             <fileset dir="${dir.test}/resources" />
         </copy-->
-        <!-- execute tests >
+        <!-- execute tests -->
         <junit printsummary="true" haltonfailure="true">
             <classpath id="test.class.path">
                 <pathelement location="${dir.temp.classes}" />
                 <pathelement location="${dir.temp.test}" />
                 <pathelement path="${java.class.path}" />
             </classpath>
-            <test fork="true" name="suncertify.test.TestJarSubmission" />
+        	<!-- <test fork="true" name="suncertify.test.TestJarSubmission" /> -->
+            <test fork="true" name="suncertify.db.DataTest" />
         </junit>
-        <java fork="true" jar="${jar.executable}" failonerror="true" -->
+        <!-- <java fork="true" jar="${jar.executable}" failonerror="true" /> -->
     </target>
 
 </project>
