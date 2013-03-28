@@ -16,7 +16,7 @@ import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
-	private final DBMain dataService = ServerFactory.createDataService();
+	private final DBMain dataService = new Data("db-2x2.db");
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
