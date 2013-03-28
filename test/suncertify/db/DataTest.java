@@ -119,7 +119,8 @@ public class DataTest {
 
 	@Test
 	public void testCreate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
-		String[] data = new String[] { "Jammies", "The Shire", "Door stop making/fitting", "57", "$0", "" };
+		String streetNo = Integer.toString((int) (Math.random() * 100000));
+		String[] data = new String[] { "Jammies", String.format("The Shire %s", streetNo), "Door stop making/fitting", "57", "$0", "" };
 		int newRecNo = dataService.create(data);
 
 		String[] results = dataService.read(newRecNo);
