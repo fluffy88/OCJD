@@ -27,18 +27,9 @@ public class Data implements DBMain {
 	private DBWriter dbWriter;
 	private final String dbLocation;
 
-	private static Data instance;
-
-	private Data(String dbLoc) {
+	public Data(String dbLoc) {
 		this.dbLocation = dbLoc;
 		init();
-	}
-
-	public static Data getInstance(String dbLoc) {
-		if (instance == null) {
-			instance = new Data(dbLoc);
-		}
-		return instance;
 	}
 
 	private void init() {

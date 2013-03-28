@@ -6,13 +6,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.db.DBMain;
-import suncertify.db.Data;
-import suncertify.db.io.Database;
+import suncertify.db.io.DataServiceFactory;
 import suncertify.shared.Injection;
 import suncertify.shared.Preferences;
 
 public class Server implements Application {
 
+	public static final String RMI_SERVER = "Remote Database Server";
 	private final AppType type;
 
 	public Server(AppType type) {
@@ -22,10 +22,7 @@ public class Server implements Application {
 	@Override
 	public void start() {
 
-		Database db = new Database();
-		String dbLoc = db.getLocation();
-
-		DBMain data = Data.getInstance(dbLoc); // new Data(dbLoc);
+		DBMain data = DataServiceFactory.getDataService();
 		publish(data);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -40,8 +37,8 @@ public class Server implements Application {
 		if (this.type == AppType.Server) {
 			try {
 				DBMain rmiStub = (DBMain) UnicastRemoteObject.exportObject(data, 0);
-				Registry registry = LocateRegistry.getRegistry();
-				registry.rebind("Remote Database Server", rmiStub);
+				Registry registry = this.getRMIRegistry();
+				registry.rebind(RMI_SERVER, rmiStub);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,8 +48,19 @@ public class Server implements Application {
 		}
 	}
 
+	private Registry getRMIRegistry() throws RemoteException {
+		Registry registry = null;
+		try {
+			registry = LocateRegistry.createRegistry(1099);
+		} catch (Exception e) {
+			registry = LocateRegistry.getRegistry(1099);
+		}
+		return registry;
+	}
+
 	public void shutdown() {
 		Preferences props = Preferences.getInstance();
 		props.save();
+		// TODO: unpublish
 	}
 }

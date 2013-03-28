@@ -3,15 +3,29 @@ package suncertify.db.io;
 import java.io.File;
 import java.util.Scanner;
 
+import suncertify.db.DBMain;
+import suncertify.db.Data;
 import suncertify.shared.Preferences;
 
-public class Database {
+public class DataServiceFactory {
 
 	public static final String DB_LOCATION = "DatabaseLocation";
+	private static DataServiceFactory instance;
 
+	private DBMain dataService;
 	private String location;
 
-	public Database() {
+	public static DBMain getDataService() {
+		if (instance == null) {
+			instance = new DataServiceFactory();
+		}
+		if (instance.dataService == null) {
+			instance.dataService = new Data(instance.location);
+		}
+		return instance.dataService;
+	}
+
+	private DataServiceFactory() {
 		this.init();
 	}
 
@@ -54,9 +68,4 @@ public class Database {
 		// TODO: Check if File is a valid DB file
 		return true;
 	}
-
-	public String getLocation() {
-		return this.location;
-	}
-
 }

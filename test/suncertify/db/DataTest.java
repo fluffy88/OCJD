@@ -14,10 +14,11 @@ import java.rmi.RemoteException;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
+import suncertify.db.io.DataServiceFactory;
 
 public class DataTest {
 
-	private Data dataService = Data.getInstance("db-2x2.db"); // new Data("db-2x2.db");
+	private final DBMain dataService = DataServiceFactory.getDataService();
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
@@ -44,7 +45,7 @@ public class DataTest {
 	}
 
 	@Test
-	public void testUpdate() throws RecordNotFoundException {
+	public void testUpdate() throws RecordNotFoundException, RemoteException {
 		int recNo = 5;
 
 		String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
@@ -61,19 +62,19 @@ public class DataTest {
 	}
 
 	@Test(expected = RecordNotFoundException.class)
-	public void testDelete() throws RecordNotFoundException {
+	public void testDelete() throws RecordNotFoundException, RemoteException {
 		dataService.delete(2);
 		dataService.read(2);
 	}
 
 	@Test(expected = RecordNotFoundException.class)
-	public void testDeleteTwice() throws RecordNotFoundException {
+	public void testDeleteTwice() throws RecordNotFoundException, RemoteException {
 		dataService.delete(2);
 		dataService.delete(2);
 	}
 
 	@Test
-	public void testFindEmptyCriteria() throws RecordNotFoundException {
+	public void testFindEmptyCriteria() throws RecordNotFoundException, RemoteException {
 		String[] criteria = new String[] { null, null, null, null, null, null };
 		int[] results = dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
@@ -84,14 +85,14 @@ public class DataTest {
 	}
 
 	@Test
-	public void testFindCriteriaShort() throws RecordNotFoundException {
+	public void testFindCriteriaShort() throws RecordNotFoundException, RemoteException {
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS - 2];
 		int[] results = dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
 	}
 
 	@Test
-	public void testFindNoResults() throws RecordNotFoundException {
+	public void testFindNoResults() throws RecordNotFoundException, RemoteException {
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "A fake name that doesn't exist in the database";
 		int[] empty = dataService.find(criteria);
@@ -100,7 +101,7 @@ public class DataTest {
 	}
 
 	@Test
-	public void testFindResults() throws RecordNotFoundException {
+	public void testFindResults() throws RecordNotFoundException, RemoteException {
 		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "M";
 		int[] results = dataService.find(criteria);
@@ -119,7 +120,7 @@ public class DataTest {
 	}
 
 	@Test
-	public void testCreate() throws DuplicateKeyException, RecordNotFoundException {
+	public void testCreate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
 		String[] data = new String[] { "Jammies", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 		int newRecNo = dataService.create(data);
 
@@ -130,7 +131,7 @@ public class DataTest {
 	}
 
 	@Test(expected = DuplicateKeyException.class)
-	public void testCreateDuplicate() throws DuplicateKeyException, RecordNotFoundException {
+	public void testCreateDuplicate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
 		String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 
 		int recNo = dataService.create(data);

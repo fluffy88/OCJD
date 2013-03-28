@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import suncertify.AppType;
+import suncertify.Server;
 import suncertify.db.DBMain;
 import suncertify.shared.Injection;
 
@@ -16,7 +17,7 @@ public class DataServiceFactory {
 		if (type == AppType.Client) {
 			try {
 				Registry registry = LocateRegistry.getRegistry();
-				DBMain dataService = (DBMain) registry.lookup("Remote Database Server");
+				DBMain dataService = (DBMain) registry.lookup(Server.RMI_SERVER);
 				return dataService;
 			} catch (RemoteException | NotBoundException e) {
 				// TODO Auto-generated catch block
