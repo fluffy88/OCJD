@@ -51,6 +51,9 @@ public class Data implements DBMain {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
 		// this.lock(recNo);
@@ -63,6 +66,9 @@ public class Data implements DBMain {
 		return Arrays.copyOf(contractor, contractor.length);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
 		// this.lock(recNo);
@@ -80,6 +86,9 @@ public class Data implements DBMain {
 		// this.unlock(recNo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
 		// this.lock(recNo);
@@ -97,12 +106,18 @@ public class Data implements DBMain {
 		// this.unlock(recNo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int[] find(String[] criteria) throws RecordNotFoundException {
 		System.out.println("Find: " + Arrays.toString(criteria));
 
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < contractors.size(); n++) {
+			if (contractors.get(n)[0] == null) {
+				continue;
+			}
 			this.lock(n);
 
 			boolean match = true;
@@ -136,6 +151,9 @@ public class Data implements DBMain {
 		return intResults;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
 		try {
@@ -175,32 +193,44 @@ public class Data implements DBMain {
 		return recNo;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void lock(int recNo) throws RecordNotFoundException {
+		this.checkRecordNumber(recNo);
 		try {
-			System.out.format("Thread %s is trying to acquire the lock for %d%n", Thread.currentThread().getName(), recNo);
 			this.locks.get(recNo).acquire();
-			System.out.format("Thread %s acquired the lock for %d%n", Thread.currentThread().getName(), recNo);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.checkRecordNumber(recNo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void unlock(int recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
-		System.out.format("Thread %s is releasing the lock for %d%n", Thread.currentThread().getName(), recNo);
 		this.checkRecordNumber(recNo);
 		this.locks.get(recNo).release();
-		System.out.format("Thread %s released the lock for %d%n", Thread.currentThread().getName(), recNo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isLocked(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
 		this.checkRecordNumber(recNo);
+		return isRecordLocked(recNo);
+	}
+
+	private boolean isRecordLocked(int recNo) {
+		int permits = this.locks.get(recNo).availablePermits();
+		if (permits == 0) {
+			return true;
+		}
 		return false;
 	}
 
@@ -211,9 +241,9 @@ public class Data implements DBMain {
 		if (contractors.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
-		// final String[] record = contractors.get(recNo);
-		// if (record[0] == null) {
-		// throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
-		// }
+		final String[] record = contractors.get(recNo);
+		if (record[0] == null && !isRecordLocked(recNo)) {
+			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
+		}
 	}
 }
