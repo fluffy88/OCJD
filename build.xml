@@ -144,7 +144,12 @@
                 <pathelement path="${java.class.path}" />
             </classpath>
         	<!-- <test fork="true" name="suncertify.test.TestJarSubmission" /> -->
-            <test fork="true" name="suncertify.db.DataTest" todir="${dir.temp.test}" />
+        	<batchtest fork="true" todir="${dir.temp.test}">
+        		<fileset dir="${dir.test}">
+        			<include name="**/*.java" />
+        		</fileset>
+        	</batchtest>
+            <!-- <test fork="true" name="suncertify.db.DataTest" todir="${dir.temp.test}" />-->
         </junit>
         <!-- <java fork="true" jar="${jar.executable}" failonerror="true" /> -->
     </target>

@@ -15,6 +15,7 @@
  */
 package suncertify.db;
 
+import org.junit.Test;
 
 /**
  * The <code>DataClassTest</code> tests the main functionalities of the {@link Data} class. In order to simulate several clients trying to
@@ -27,15 +28,11 @@ package suncertify.db;
  */
 public class DataClassTest {
 
-	private static final DBMain data = ServerFactory.createDataService();
+	private final DBMain data = ServerFactory.createDataService();
 
-	public static void main(String[] args) {
-		new DataClassTest().startTests();
-	}
-
+	@Test(timeout = 10000)
 	public void startTests() {
 		try {
-
 			/*
 			 * Practically, it is not necessary to execute this loop more than 1 time, but if you want, you can increase the controller
 			 * variable, so it is executed as many times as you want
