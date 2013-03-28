@@ -27,7 +27,7 @@ public class Data implements DBMain {
 	private DBWriter dbWriter;
 	private final String dbLocation;
 
-	public Data(String dbLoc) {
+	Data(String dbLoc) {
 		this.dbLocation = dbLoc;
 		init();
 	}
