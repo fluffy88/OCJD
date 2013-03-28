@@ -13,7 +13,7 @@ public class ServerFactory {
 	private DBMain dataService;
 	private String location;
 
-	public static DBMain getDataService() {
+	public static DBMain createDataService() {
 		if (instance == null) {
 			instance = new ServerFactory();
 		}

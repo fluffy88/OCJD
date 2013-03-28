@@ -22,7 +22,7 @@ public class Server implements Application {
 	@Override
 	public void start() {
 
-		DBMain data = ServerFactory.getDataService();
+		DBMain data = ServerFactory.createDataService();
 		publish(data);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {

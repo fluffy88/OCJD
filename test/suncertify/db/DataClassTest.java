@@ -27,7 +27,7 @@ package suncertify.db;
  */
 public class DataClassTest {
 
-	private static final DBMain data = ServerFactory.getDataService();
+	private static final DBMain data = ServerFactory.createDataService();
 
 	public static void main(String[] args) {
 		new DataClassTest().startTests();
