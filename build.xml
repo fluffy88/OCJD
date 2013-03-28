@@ -132,6 +132,7 @@
         </copy-->
         <!-- execute tests -->
         <junit printsummary="true" haltonfailure="true">
+        	<formatter type="xml" />
             <classpath id="test.class.path">
                 <pathelement location="lib/junit.jar" />
                 <pathelement location="lib/hamcrest.jar" />
@@ -140,7 +141,7 @@
                 <pathelement path="${java.class.path}" />
             </classpath>
         	<!-- <test fork="true" name="suncertify.test.TestJarSubmission" /> -->
-            <test fork="true" name="suncertify.db.DataTest" />
+            <test fork="true" name="suncertify.db.DataTest" todir="${dir.temp.test}" />
         </junit>
         <!-- <java fork="true" jar="${jar.executable}" failonerror="true" /> -->
     </target>
