@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.rmi.RemoteException;
 
@@ -143,18 +142,30 @@ public class DataTest {
 	}
 
 	@Test
-	public void testLock() {
-		fail("Not yet implemented");
+	public void testLock() throws RemoteException, RecordNotFoundException {
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		dataService.lock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(true)));
+		dataService.unlock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
 	}
 
 	@Test
-	public void testUnlock() {
-		fail("Not yet implemented");
+	public void testUnlock() throws RemoteException, RecordNotFoundException {
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		dataService.lock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(true)));
+		dataService.unlock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
 	}
 
 	@Test
-	public void testIsLocked() {
-		fail("Not yet implemented");
+	public void testIsLocked() throws RemoteException, RecordNotFoundException {
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		dataService.lock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(true)));
+		dataService.unlock(18);
+		assertThat(dataService.isLocked(18), is(equalTo(false)));
 	}
 
 }
