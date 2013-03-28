@@ -14,11 +14,10 @@ import java.rmi.RemoteException;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
-import suncertify.db.io.DataServiceFactory;
 
 public class DataTest {
 
-	private final DBMain dataService = DataServiceFactory.getDataService();
+	private final DBMain dataService = ServerFactory.getDataService();
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {

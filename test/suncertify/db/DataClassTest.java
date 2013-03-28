@@ -15,7 +15,6 @@
  */
 package suncertify.db;
 
-import suncertify.db.io.DataServiceFactory;
 
 /**
  * The <code>DataClassTest</code> tests the main functionalities of the {@link Data} class. In order to simulate several clients trying to
@@ -28,7 +27,7 @@ import suncertify.db.io.DataServiceFactory;
  */
 public class DataClassTest {
 
-	private static final DBMain data = DataServiceFactory.getDataService();
+	private static final DBMain data = ServerFactory.getDataService();
 
 	public static void main(String[] args) {
 		new DataClassTest().startTests();

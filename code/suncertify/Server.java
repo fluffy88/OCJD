@@ -6,7 +6,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.db.DBMain;
-import suncertify.db.io.DataServiceFactory;
+import suncertify.db.ServerFactory;
 import suncertify.shared.Injection;
 import suncertify.shared.Preferences;
 
@@ -22,7 +22,7 @@ public class Server implements Application {
 	@Override
 	public void start() {
 
-		DBMain data = DataServiceFactory.getDataService();
+		DBMain data = ServerFactory.getDataService();
 		publish(data);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {

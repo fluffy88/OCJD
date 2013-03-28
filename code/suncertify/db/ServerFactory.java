@@ -1,23 +1,21 @@
-package suncertify.db.io;
+package suncertify.db;
 
 import java.io.File;
 import java.util.Scanner;
 
-import suncertify.db.DBMain;
-import suncertify.db.Data;
 import suncertify.shared.Preferences;
 
-public class DataServiceFactory {
+public class ServerFactory {
 
 	public static final String DB_LOCATION = "DatabaseLocation";
-	private static DataServiceFactory instance;
+	private static ServerFactory instance;
 
 	private DBMain dataService;
 	private String location;
 
 	public static DBMain getDataService() {
 		if (instance == null) {
-			instance = new DataServiceFactory();
+			instance = new ServerFactory();
 		}
 		if (instance.dataService == null) {
 			instance.dataService = new Data(instance.location);
@@ -25,7 +23,7 @@ public class DataServiceFactory {
 		return instance.dataService;
 	}
 
-	private DataServiceFactory() {
+	private ServerFactory() {
 		this.init();
 	}
 
