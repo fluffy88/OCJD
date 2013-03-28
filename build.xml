@@ -121,6 +121,8 @@
         <!-- compile the test files -->
         <javac srcdir="${dir.test}" destdir="${dir.temp.test}" listfiles="true" failonerror="true">
             <classpath>
+                <pathelement location="lib/junit.jar" />
+                <pathelement location="lib/hamcrest.jar" />
                 <pathelement location="${dir.temp.classes}" />
             </classpath>
         </javac>
