@@ -13,7 +13,7 @@ public class ClientUI extends JFrame {
 	private static final long serialVersionUID = 4914465385167890566L;
 
 	public ClientUI() {
-		this.setTitle("Simple example");
+		this.setTitle("CSR Application");
 		this.setSize(900, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

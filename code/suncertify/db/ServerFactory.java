@@ -1,7 +1,10 @@
 package suncertify.db;
 
 import java.io.File;
-import java.util.Scanner;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import suncertify.shared.Preferences;
 
@@ -41,25 +44,31 @@ public class ServerFactory {
 	}
 
 	private String promptForLocation() {
+		JFileChooser chooser = new JFileChooser(new File(""));
+		chooser.setFileFilter(new FileNameExtensionFilter(".db files only", "db"));
+		chooser.setDialogTitle("Database location");
+
 		String location = null;
-		Scanner reader = new Scanner(System.in);
-
 		while (location == null) {
-			System.out.println("Enter location of the database below:");
-			System.out.print(" -> ");
 
-			location = reader.nextLine();
-			if (!isDBFileValid(location)) {
-				location = null;
+			int action = chooser.showOpenDialog(null);
+			if (action == JFileChooser.APPROVE_OPTION) {
+				File choice = chooser.getSelectedFile();
+				if (isDBFileValid(choice)) {
+					location = choice.getAbsolutePath();
+				}
+			} else if (action == JFileChooser.CANCEL_OPTION) {
+				JOptionPane.showMessageDialog(null, "You did not select a database location. \nApplication will exit!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
 			}
 		}
-		reader.close();
 
 		return location;
 	}
 
-	private boolean isDBFileValid(String location) {
-		if (!new File(location).exists()) {
+	private boolean isDBFileValid(File choice) {
+		if (!choice.exists()) {
 			return false;
 		}
 		// TODO: Check if Magic Cookie matches
