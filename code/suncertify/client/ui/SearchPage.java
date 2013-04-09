@@ -1,4 +1,4 @@
-package suncertify.ui;
+package suncertify.client.ui;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;

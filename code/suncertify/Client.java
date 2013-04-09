@@ -1,9 +1,9 @@
 package suncertify;
 
 import suncertify.client.DataServiceFactory;
+import suncertify.client.ui.ClientUI;
 import suncertify.db.DBMain;
 import suncertify.shared.Injection;
-import suncertify.ui.ClientUI;
 
 public class Client implements Application {
 

@@ -1,4 +1,4 @@
-package suncertify.ui;
+package suncertify.client.ui;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
