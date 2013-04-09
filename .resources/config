@@ -7,9 +7,9 @@
 	ignorecase = true
 	hideDotFiles = dotGitOnly
 
-[remote "origin"]
+[remote "bit"]
 	url   = git@bitbucket.org:fluffy88/ocjd.git
-	fetch = +refs/heads/*:refs/remotes/origin/*
+	fetch = +refs/heads/*:refs/remotes/bit/*
 	fetch = +refs/tags/*:refs/tags/*
 	push  = refs/heads/*:refs/heads/*
 	push  = refs/tags/*:refs/tags/*
@@ -19,9 +19,9 @@
 	fetch = +refs/tags/*:refs/tags/*
 	push  = refs/heads/*:refs/heads/*
 	push  = refs/tags/*:refs/tags/*
-[remote "cloudbees"]
+[remote "origin"]
 	url   = ssh://git@git.cloudbees.com/fluffy88/OCJD.git
-	fetch = +refs/heads/*:refs/remotes/cloudbees/*
+	fetch = +refs/heads/*:refs/remotes/origin/*
 	fetch = +refs/tags/*:refs/tags/*
 	push  = refs/heads/*:refs/heads/*
 	push  = refs/tags/*:refs/tags/*
