@@ -20,7 +20,9 @@ public class DataTest {
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
+		dataService.lock(0);
 		String[] record = dataService.read(0);
+		dataService.unlock(0);
 
 		assertThat(record, is(notNullValue()));
 		assertThat(record.length, is(equalTo(6)));
@@ -34,12 +36,16 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testReadException() throws RecordNotFoundException, RemoteException {
+		dataService.lock(500000);
 		dataService.read(500000);
+		dataService.unlock(500000);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testReadNegativeException() throws RecordNotFoundException, RemoteException {
+		dataService.lock(-1);
 		dataService.read(-1);
+		dataService.unlock(-1);
 	}
 
 	@Test
@@ -48,8 +54,12 @@ public class DataTest {
 
 		String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
 
+		dataService.lock(recNo);
 		dataService.update(recNo, newRec);
+		dataService.unlock(recNo);
+		dataService.lock(recNo);
 		String[] afterRec = dataService.read(recNo);
+		dataService.unlock(recNo);
 
 		assertThat(afterRec[0], is(equalTo(newRec[0])));
 		assertThat(afterRec[1], is(equalTo(newRec[1])));
@@ -61,14 +71,22 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDelete() throws RecordNotFoundException, RemoteException {
+		dataService.lock(2);
 		dataService.delete(2);
+		dataService.unlock(2);
+		dataService.lock(2);
 		dataService.read(2);
+		dataService.unlock(2);
 	}
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDeleteTwice() throws RecordNotFoundException, RemoteException {
-		dataService.delete(2);
-		dataService.delete(2);
+		dataService.lock(18);
+		dataService.delete(18);
+		dataService.unlock(18);
+		dataService.lock(18);
+		dataService.delete(18);
+		dataService.unlock(18);
 	}
 
 	@Test
@@ -106,7 +124,9 @@ public class DataTest {
 		assertThat(results.length, is(not(0)));
 
 		for (int recNo : results) {
+			dataService.lock(recNo);
 			String[] record = dataService.read(recNo);
+			dataService.unlock(recNo);
 			assertThat(record, is(notNullValue()));
 			assertThat(record.length, is(equalTo(6)));
 			assertThat(record[0], is(not(equalTo(""))));
@@ -123,7 +143,9 @@ public class DataTest {
 		String[] data = new String[] { "Jammies", String.format("The Shire %s", streetNo), "Door stop making/fitting", "57", "$0", "" };
 		int newRecNo = dataService.create(data);
 
+		dataService.lock(newRecNo);
 		String[] results = dataService.read(newRecNo);
+		dataService.unlock(newRecNo);
 		for (int i = 0; i < data.length; i++) {
 			assertSame(data[i], results[i]);
 		}
@@ -134,7 +156,9 @@ public class DataTest {
 		String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 
 		int recNo = dataService.create(data);
+		dataService.lock(recNo);
 		String[] results = dataService.read(recNo);
+		dataService.unlock(recNo);
 		for (int i = 0; i < data.length; i++) {
 			assertSame(data[i], results[i]);
 		}
