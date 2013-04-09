@@ -20,5 +20,4 @@ public class Client implements Application {
 
 		new ClientUI();
 	}
-
 }

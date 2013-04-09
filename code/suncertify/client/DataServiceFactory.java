@@ -14,15 +14,23 @@ public class DataServiceFactory {
 
 	private static DataServiceFactory instance;
 
+	static {
+		instance = new DataServiceFactory();
+	}
+
 	public static DBMain getService(AppType type) {
 
 		if (type == AppType.Client) {
 			return instance.getRemoteService();
 		} else if (type == AppType.StandAlone) {
-			return (DBMain) Injection.instance.get("DataServer");
+			return instance.getLocalService();
 		}
 
 		return null;
+	}
+
+	private DBMain getLocalService() {
+		return (DBMain) Injection.instance.get("DataServer");
 	}
 
 	private DBMain getRemoteService() {
