@@ -15,14 +15,10 @@ public class Client implements Application {
 
 	@Override
 	public void start() {
-
-		DataServiceFactory factory = new DataServiceFactory();
-		DBMain dataService = factory.getService(type);
-
+		DBMain dataService = DataServiceFactory.getService(type);
 		Injection.instance.add("DataService", dataService);
 
 		new ClientUI();
-
 	}
 
 }
