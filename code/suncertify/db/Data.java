@@ -186,6 +186,7 @@ public class Data implements DBMain {
 				// break; } }
 			} else {
 				this.contractors.add(data);
+				this.locks.add(new Semaphore(1));
 				recNo = this.contractors.size() - 1;
 			}
 		}
