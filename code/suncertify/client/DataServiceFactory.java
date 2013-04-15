@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 
 import suncertify.AppType;
 import suncertify.Server;
-import suncertify.db.DBMain;
+import suncertify.server.DataService;
 import suncertify.shared.Injection;
 
 public class DataServiceFactory {
@@ -18,7 +18,7 @@ public class DataServiceFactory {
 		instance = new DataServiceFactory();
 	}
 
-	public static DBMain getService(AppType type) {
+	public static DataService getService(AppType type) {
 
 		if (type == AppType.Client) {
 			return instance.getRemoteService();
@@ -29,14 +29,14 @@ public class DataServiceFactory {
 		return null;
 	}
 
-	private DBMain getLocalService() {
-		return (DBMain) Injection.instance.get("DataServer");
+	private DataService getLocalService() {
+		return (DataService) Injection.instance.get("DataServer");
 	}
 
-	private DBMain getRemoteService() {
+	private DataService getRemoteService() {
 		try {
 			Registry registry = LocateRegistry.getRegistry();
-			DBMain dataService = (DBMain) registry.lookup(Server.RMI_SERVER);
+			DataService dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 			return dataService;
 		} catch (RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block

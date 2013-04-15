@@ -5,9 +5,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import suncertify.db.DBMain;
-import suncertify.db.ServerFactory;
 import suncertify.db.ui.ServerUI;
+import suncertify.server.DataService;
+import suncertify.server.DataServiceImpl;
 import suncertify.shared.Injection;
 import suncertify.shared.Preferences;
 
@@ -23,8 +23,8 @@ public class Server implements Application {
 	@Override
 	public void start() {
 
-		final DBMain data = ServerFactory.createDataService();
-		this.publish(data);
+		final DataService dataService = new DataServiceImpl();
+		this.publish(dataService);
 		this.startServerUI();
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -41,10 +41,10 @@ public class Server implements Application {
 		}
 	}
 
-	private void publish(final DBMain data) {
+	private void publish(final DataService dataService) {
 		if (this.type == AppType.Server) {
 			try {
-				final DBMain rmiStub = (DBMain) UnicastRemoteObject.exportObject(data, 0);
+				final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService, 0);
 				final Registry registry = this.getRMIRegistry();
 				registry.rebind(RMI_SERVER, rmiStub);
 			} catch (RemoteException e) {
@@ -52,7 +52,7 @@ public class Server implements Application {
 				e.printStackTrace();
 			}
 		} else if (this.type == AppType.StandAlone) {
-			Injection.instance.add("DataServer", data);
+			Injection.instance.add("DataServer", dataService);
 		}
 	}
 

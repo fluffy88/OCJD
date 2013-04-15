@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
+import suncertify.server.DataService;
 import suncertify.shared.Injection;
 
 public class SearchPanel extends JPanel {
@@ -74,7 +74,7 @@ public class SearchPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			DBMain dataService = (DBMain) Injection.instance.get("DataService");
+			DataService dataService = (DataService) Injection.instance.get("DataService");
 			SearchResultsTableModel tableModel = (SearchResultsTableModel) Injection.instance.get("SearchResultsModel");
 			tableModel.clearData();
 			try {

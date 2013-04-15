@@ -8,8 +8,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
+import suncertify.server.DataService;
 import suncertify.shared.Injection;
 
 public class SearchResultsTableModel extends AbstractTableModel implements TableModel {
@@ -31,7 +31,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				int row = e.getFirstRow();
 
 				if (row == e.getLastRow()) {
-					DBMain dataService = (DBMain) Injection.instance.get("DataService");
+					DataService dataService = (DataService) Injection.instance.get("DataService");
 					String[] updatedData = (String[]) data.get(row);
 
 					try {

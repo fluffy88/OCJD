@@ -2,7 +2,7 @@ package suncertify;
 
 import suncertify.client.DataServiceFactory;
 import suncertify.client.ui.ClientUI;
-import suncertify.db.DBMain;
+import suncertify.server.DataService;
 import suncertify.shared.Injection;
 
 public class Client implements Application {
@@ -15,7 +15,7 @@ public class Client implements Application {
 
 	@Override
 	public void start() {
-		DBMain dataService = DataServiceFactory.getService(type);
+		DataService dataService = DataServiceFactory.getService(type);
 		Injection.instance.add("DataService", dataService);
 
 		new ClientUI();
