@@ -1,4 +1,4 @@
-package suncertify.db.ui;
+package suncertify.server.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

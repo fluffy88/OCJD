@@ -1,4 +1,4 @@
-package suncertify.db.ui;
+package suncertify.server.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
