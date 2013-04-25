@@ -2,55 +2,60 @@ package suncertify.server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import suncertify.db.DBMain;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.db.ServerFactory;
+import suncertify.shared.Contractor;
 
 public class DataServiceImpl implements DataService {
 
 	DBMain data = ServerFactory.createDataService();
 
 	@Override
-	public String[] read(final int recNo) throws RecordNotFoundException, RemoteException {
+	public Contractor read(final int recNo) throws RecordNotFoundException, RemoteException {
 		this.data.lock(recNo);
-		String[] record = this.data.read(recNo);
+		Contractor record = new Contractor(recNo, this.data.read(recNo));
 		this.data.unlock(recNo);
 
 		return record;
 	}
 
 	@Override
-	public void update(final int recNo, final String[] data) throws RecordNotFoundException, RemoteException {
-		this.data.lock(recNo);
-		this.data.update(recNo, data);
-		this.data.unlock(recNo);
+	public void update(final Contractor data) throws RecordNotFoundException, RemoteException {
+		this.data.lock(data.getRecordId());
+		this.data.update(data.getRecordId(), data.toArray());
+		this.data.unlock(data.getRecordId());
 	}
 
 	@Override
-	public void delete(final int recNo) throws RecordNotFoundException, RemoteException {
-		this.data.lock(recNo);
-		this.data.delete(recNo);
-		this.data.unlock(recNo);
+	public void delete(final Contractor record) throws RecordNotFoundException, RemoteException {
+		this.data.lock(record.getRecordId());
+		this.data.delete(record.getRecordId());
+		this.data.unlock(record.getRecordId());
 	}
 
 	@Override
-	public int[] find(final String[] criteria, final boolean exactMatch) throws RecordNotFoundException, RemoteException {
+	public List<Contractor> find(final String[] criteria, final boolean exactMatch) throws RecordNotFoundException, RemoteException {
 		final int[] rawResults = this.data.find(criteria);
-		if (exactMatch) {
-			final ArrayList<Integer> filteredResults = new ArrayList<Integer>();
-			for (int recNo : rawResults) {
-				String[] record = this.read(recNo);
+		final List<Contractor> finalResults = new ArrayList<Contractor>();
+
+		add_loop: for (int recNo : rawResults) {
+			Contractor record = this.read(recNo);
+			if (exactMatch) {
+				String[] dataArray = record.toArray();
 				for (int i = 0; i < criteria.length; i++) {
-					if (criteria[i] != null && !criteria[i].equals("") && record[i].equalsIgnoreCase(criteria[i])) {
-						filteredResults.add(recNo);
+					if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equalsIgnoreCase(criteria[i])) {
+						continue add_loop;
 					}
 				}
 			}
-			// TODO: Need to return (int[]) filteredResults;
+			finalResults.add(record);
 		}
-		return rawResults;
+
+		return finalResults;
 	}
 
 	@Override

@@ -5,12 +5,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
+import suncertify.shared.Contractor;
 
 public class DataServiceImplTest {
 
@@ -27,54 +29,54 @@ public class DataServiceImplTest {
 
 	@Test
 	public void testRead() throws RemoteException, RecordNotFoundException {
-		String[] record = this.dataService.read(READ_REC_NO);
+		Contractor record = this.dataService.read(READ_REC_NO);
 
-		assertThat(record[0], is(equalTo("Hamner & Tong")));
-		assertThat(record[1], is(equalTo("EmeraldCity")));
-		assertThat(record[2], is(equalTo("Roofing, Electrical")));
-		assertThat(record[3], is(equalTo("7")));
-		assertThat(record[4], is(equalTo("$45.00")));
-		assertThat(record[5], is(equalTo("")));
+		assertThat(record.getName(), is(equalTo("Hamner & Tong")));
+		assertThat(record.getLocation(), is(equalTo("EmeraldCity")));
+		assertThat(record.getSpecialites(), is(equalTo("Roofing, Electrical")));
+		assertThat(record.getNoStaff(), is(equalTo("7")));
+		assertThat(record.getRate(), is(equalTo("$45.00")));
+		assertThat(record.getCustomerId(), is(equalTo("")));
 	}
 
 	@Test
 	public void testUpdate() throws RemoteException, RecordNotFoundException {
-		String[] origRecord = this.dataService.read(UPDATE_REC_NO);
-		assertThat(origRecord[0], is(equalTo("Bitter Homes & Gardens")));
-		assertThat(origRecord[1], is(equalTo("EmeraldCity")));
-		assertThat(origRecord[2], is(equalTo("Heating, Plumbing, Painting")));
-		assertThat(origRecord[3], is(equalTo("6")));
-		assertThat(origRecord[4], is(equalTo("$90.00")));
-		assertThat(origRecord[5], is(equalTo("")));
+		Contractor origRecord = this.dataService.read(UPDATE_REC_NO);
+		assertThat(origRecord.getName(), is(equalTo("Bitter Homes & Gardens")));
+		assertThat(origRecord.getLocation(), is(equalTo("EmeraldCity")));
+		assertThat(origRecord.getSpecialites(), is(equalTo("Heating, Plumbing, Painting")));
+		assertThat(origRecord.getNoStaff(), is(equalTo("6")));
+		assertThat(origRecord.getRate(), is(equalTo("$90.00")));
+		assertThat(origRecord.getCustomerId(), is(equalTo("")));
 
-		String[] newRecordData = new String[] { "Belter", "Greenland", "Green house building", "32", "$53.50", "12" };
-		this.dataService.update(UPDATE_REC_NO, newRecordData);
-		String[] updatedRecord = this.dataService.read(UPDATE_REC_NO);
-		for (int i = 0; i < newRecordData.length; i++) {
-			assertThat(updatedRecord[i], is(equalTo(newRecordData[i])));
+		Contractor newRecordData = new Contractor(UPDATE_REC_NO, "Belter", "Greenland", "Green house building", "32", "$53.50", "12");
+		this.dataService.update(newRecordData);
+		Contractor updatedRecord = this.dataService.read(UPDATE_REC_NO);
+		for (int i = 0; i < newRecordData.toArray().length; i++) {
+			assertThat(updatedRecord.toArray()[i], is(equalTo(newRecordData.toArray()[i])));
 		}
 
-		this.dataService.update(UPDATE_REC_NO, origRecord);
+		this.dataService.update(origRecord);
 	}
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDelete() throws RemoteException, RecordNotFoundException, DuplicateKeyException {
-		String[] record = this.dataService.read(DELETE_REC_NO);
-		this.dataService.delete(DELETE_REC_NO);
+		Contractor record = this.dataService.read(DELETE_REC_NO);
+		this.dataService.delete(record);
 		this.dataService.read(DELETE_REC_NO);
 	}
 
 	@Test
 	public void testFind() throws RemoteException, RecordNotFoundException {
 		String[] findCriteria = new String[] { "Hamner" };
-		int[] records = this.dataService.find(findCriteria, true);
-		assertThat(records.length, is(equalTo(0)));
+		List<Contractor> records = this.dataService.find(findCriteria, true);
+		assertThat(records.size(), is(equalTo(0)));
 
 		findCriteria = new String[] { "Bitter Homes & Gardens" };
 		records = this.dataService.find(findCriteria, true);
-		assertThat(records.length, is(equalTo(2)));
-		assertThat(records[0], is(equalTo(6)));
-		assertThat(records[1], is(equalTo(15)));
+		assertThat(records.size(), is(equalTo(2)));
+		assertThat(records.get(0).getRecordId(), is(equalTo(6)));
+		assertThat(records.get(1).getRecordId(), is(equalTo(15)));
 	}
 
 	@Test

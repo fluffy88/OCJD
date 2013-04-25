@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 
 import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
+import suncertify.shared.Contractor;
 import suncertify.shared.Injection;
 
 public class SearchPanel extends JPanel {
@@ -86,12 +88,10 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				int[] records = dataService.find(searchCriteria, true);
+				List<Contractor> records = dataService.find(searchCriteria, true);
 
-				for (int i : records) {
-					String[] record = dataService.read(i);
-
-					tableModel.add(record);
+				for (Contractor rec : records) {
+					tableModel.add(rec);
 				}
 				tableModel.fireTableDataChanged();
 

@@ -10,6 +10,7 @@ import javax.swing.table.TableModel;
 
 import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
+import suncertify.shared.Contractor;
 import suncertify.shared.Injection;
 
 public class SearchResultsTableModel extends AbstractTableModel implements TableModel {
@@ -19,11 +20,11 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge",
 			"Customer holding this record" };
 
-	private ArrayList<Object[]> data = new ArrayList<Object[]>();
+	private ArrayList<Contractor> data = new ArrayList<Contractor>();
 
 	public SearchResultsTableModel() {
 		// add empty data so table headers show up and can be resized.
-		data.add(new String[] { "", "", "", "", "", "" });
+		data.add(new Contractor(0, null, null, null, null, null, null));
 
 		this.addTableModelListener(new TableModelListener() {
 			@Override
@@ -32,10 +33,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 				if (row == e.getLastRow()) {
 					DataService dataService = (DataService) Injection.instance.get("DataService");
-					String[] updatedData = (String[]) data.get(row);
+					Contractor updatedData = data.get(row);
 
 					try {
-						dataService.update(row, updatedData);
+						dataService.update(updatedData);
 					} catch (RemoteException | RecordNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -49,8 +50,8 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		data.clear();
 	}
 
-	public void add(String[] record) {
-		data.add(record);
+	public void add(Contractor rec) {
+		data.add(rec);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public int getColumnCount() {
 		// if (data != null && data.size() > 0) {
-		return data.get(0).length;
+		return columnNames.length;
 		// }
 		// return 0;
 	}
@@ -77,7 +78,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// if (data != null && rowIndex < data.size()) {
-		return data.get(rowIndex)[columnIndex];
+		return data.get(rowIndex).toArray()[columnIndex];
 		// }
 
 		// return "";
@@ -91,7 +92,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		if (data != null && row < data.size()) {
-			data.get(row)[col] = value;
+			Contractor contractor = data.get(row);
+			String[] record = contractor.toArray();
+			record[col] = (String) value;
+			data.set(row, new Contractor(contractor.getRecordId(), record));
 			fireTableCellUpdated(row, col);
 		}
 	}
