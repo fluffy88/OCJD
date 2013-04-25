@@ -18,8 +18,8 @@ public class DataServiceImplTest {
 
 	private DataService dataService;
 
-	private static final int READ_REC_NO = 14;
-	private static final int UPDATE_REC_NO = 15;
+	private static final int UPDATE_REC_NO = 14;
+	private static final int READ_REC_NO = 15;
 	private static final int DELETE_REC_NO = 16;
 
 	@Before
@@ -30,23 +30,23 @@ public class DataServiceImplTest {
 	@Test
 	public void testRead() throws RemoteException, RecordNotFoundException {
 		Contractor record = this.dataService.read(READ_REC_NO);
-
-		assertThat(record.getName(), is(equalTo("Hamner & Tong")));
+		assertThat(record.getName(), is(equalTo("Bitter Homes & Gardens")));
 		assertThat(record.getLocation(), is(equalTo("EmeraldCity")));
-		assertThat(record.getSpecialites(), is(equalTo("Roofing, Electrical")));
-		assertThat(record.getNoStaff(), is(equalTo("7")));
-		assertThat(record.getRate(), is(equalTo("$45.00")));
+		assertThat(record.getSpecialites(), is(equalTo("Heating, Plumbing, Painting")));
+		assertThat(record.getNoStaff(), is(equalTo("6")));
+		assertThat(record.getRate(), is(equalTo("$90.00")));
 		assertThat(record.getCustomerId(), is(equalTo("")));
+
 	}
 
 	@Test
 	public void testUpdate() throws RemoteException, RecordNotFoundException {
 		Contractor origRecord = this.dataService.read(UPDATE_REC_NO);
-		assertThat(origRecord.getName(), is(equalTo("Bitter Homes & Gardens")));
+		assertThat(origRecord.getName(), is(equalTo("Hamner & Tong")));
 		assertThat(origRecord.getLocation(), is(equalTo("EmeraldCity")));
-		assertThat(origRecord.getSpecialites(), is(equalTo("Heating, Plumbing, Painting")));
-		assertThat(origRecord.getNoStaff(), is(equalTo("6")));
-		assertThat(origRecord.getRate(), is(equalTo("$90.00")));
+		assertThat(origRecord.getSpecialites(), is(equalTo("Roofing, Electrical")));
+		assertThat(origRecord.getNoStaff(), is(equalTo("7")));
+		assertThat(origRecord.getRate(), is(equalTo("$45.00")));
 		assertThat(origRecord.getCustomerId(), is(equalTo("")));
 
 		Contractor newRecordData = new Contractor(UPDATE_REC_NO, "Belter", "Greenland", "Green house building", "32", "$53.50", "12");
@@ -72,11 +72,12 @@ public class DataServiceImplTest {
 		List<Contractor> records = this.dataService.find(findCriteria, true);
 		assertThat(records.size(), is(equalTo(0)));
 
-		findCriteria = new String[] { "Bitter Homes & Gardens" };
+		findCriteria = new String[] { "Buonarotti & Company" };
 		records = this.dataService.find(findCriteria, true);
-		assertThat(records.size(), is(equalTo(2)));
-		assertThat(records.get(0).getRecordId(), is(equalTo(6)));
-		assertThat(records.get(1).getRecordId(), is(equalTo(15)));
+		assertThat(records.size(), is(equalTo(3)));
+		assertThat(records.get(0).getRecordId(), is(equalTo(21)));
+		assertThat(records.get(1).getRecordId(), is(equalTo(24)));
+		assertThat(records.get(2).getRecordId(), is(equalTo(26)));
 	}
 
 	@Test

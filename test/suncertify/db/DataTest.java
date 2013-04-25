@@ -16,6 +16,8 @@ import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
+	private static final int DELETE_TWICE_NO = 27;
+
 	private final DBMain dataService = ServerFactory.createDataService();
 
 	@Test
@@ -52,7 +54,7 @@ public class DataTest {
 	public void testUpdate() throws RecordNotFoundException, RemoteException {
 		int recNo = 5;
 
-		String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
+		String[] newRec = new String[] { "Slappers Plasters", "In your head", "Plastering", "13", "$15.50", "" };
 
 		dataService.lock(recNo);
 		dataService.update(recNo, newRec);
@@ -81,12 +83,12 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDeleteTwice() throws RecordNotFoundException, RemoteException {
-		dataService.lock(18);
-		dataService.delete(18);
-		dataService.unlock(18);
-		dataService.lock(18);
-		dataService.delete(18);
-		dataService.unlock(18);
+		dataService.lock(DELETE_TWICE_NO);
+		dataService.delete(DELETE_TWICE_NO);
+		dataService.unlock(DELETE_TWICE_NO);
+		dataService.lock(DELETE_TWICE_NO);
+		dataService.delete(DELETE_TWICE_NO);
+		dataService.unlock(DELETE_TWICE_NO);
 	}
 
 	@Test

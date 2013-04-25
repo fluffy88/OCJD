@@ -65,7 +65,7 @@ public class DataClassTest {
 		public void run() {
 			final String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
 
-			final int recNo = (int) (Math.random() * 28);
+			final int recNo = (int) (Math.random() * 10);
 			try {
 				System.out.println(Thread.currentThread().getId() + " trying to lock record #" + recNo + " on UpdatingRandomRecordThread");
 
