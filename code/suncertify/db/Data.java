@@ -163,12 +163,17 @@ public class Data implements DBMain {
 			e.printStackTrace();
 		}
 		System.out.println("Create: " + Arrays.toString(data));
+		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
+			this.createLock.release();
+			throw new IllegalArgumentException("The Name & Address cannot be empty!");
+		}
 
 		int deletedPos = -1;
 		for (int i = 0; i < this.contractors.size(); i++) {
 			final String[] record = this.contractors.get(i);
 			if (record[0] == null) {
 				deletedPos = i;
+				break;
 			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
 				this.createLock.release();
 				throw new DuplicateKeyException("A record with this Name & Address already exists.");
