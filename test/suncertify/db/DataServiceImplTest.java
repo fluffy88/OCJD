@@ -9,8 +9,6 @@ import java.rmi.RemoteException;
 import org.junit.Before;
 import org.junit.Test;
 
-import suncertify.db.DuplicateKeyException;
-import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 
@@ -94,7 +92,7 @@ public class DataServiceImplTest {
 		this.dataService.create(newRecord);
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEmpty() throws RemoteException, DuplicateKeyException {
 		String[] newRecord = new String[] {};
 		this.dataService.create(newRecord);
