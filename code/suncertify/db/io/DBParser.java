@@ -17,56 +17,23 @@ import java.util.List;
 
 public class DBParser {
 
-	private RandomAccessFile is;
+	private final RandomAccessFile is;
 
-	public DBParser(RandomAccessFile is) {
+	public DBParser(final RandomAccessFile is) {
 		this.is = is;
 	}
 
 	public List<String[]> getAllRecords() {
-		List<String[]> contractors = new LinkedList<String[]>();
+		final List<String[]> contractors = new LinkedList<String[]>();
 		try {
 
-			// headers
-			MAGIC_COOKIE = is.readInt();
-			START_OF_RECORDS = is.readInt();
-			NUMBER_OF_FIELDS = is.readShort();
-
-			// data headers
-			FIELD_LENGTHS = new int[NUMBER_OF_FIELDS];
-			FIELD_HEADERS = new String[NUMBER_OF_FIELDS];
-			for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
-				// 2 byte numeric, length in bytes of field name
-				int fieldNameLength = is.readShort();
-
-				// n bytes (defined by previous entry), field name
-				byte[] fieldName = new byte[fieldNameLength];
-				is.read(fieldName);
-				FIELD_HEADERS[i] = new String(fieldName, US_ASCII);
-
-				// 2 byte numeric, field length in bytes
-				int fieldLength = is.readShort();
-				FIELD_LENGTHS[i] = fieldLength;
-				RECORD_LENGTH += fieldLength;
-			}
+			this.readDataFileHeaders();
 
 			// data
-			is.seek(START_OF_RECORDS);
-			while (is.getFilePointer() != is.length()) {
-				short flag = is.readShort();
-
-				String[] dataItem = new String[NUMBER_OF_FIELDS];
-				if (flag == 0) {
-					for (int i = 0; i < dataItem.length; i++) {
-						dataItem[i] = readString(is, FIELD_LENGTHS[i]);
-					}
-				} else {
-					// skip the next record as it's marked deleted
-					is.seek(is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
-				}
+			this.is.seek(START_OF_RECORDS);
+			while (this.is.getFilePointer() != this.is.length()) {
+				final String[] dataItem = readNextRecord();
 				contractors.add(dataItem);
-
-				// System.out.println(flag + " - " + Arrays.toString(dataItem));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -77,6 +44,44 @@ public class DBParser {
 			e1.printStackTrace();
 		}
 		return contractors;
+	}
+
+	private void readDataFileHeaders() throws IOException {
+		// headers
+		MAGIC_COOKIE = this.is.readInt();
+		START_OF_RECORDS = this.is.readInt();
+		NUMBER_OF_FIELDS = this.is.readShort();
+
+		// data headers
+		FIELD_LENGTHS = new int[NUMBER_OF_FIELDS];
+		FIELD_HEADERS = new String[NUMBER_OF_FIELDS];
+		for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
+			// 2 byte numeric, length (in bytes) of field name
+			final int fieldNameLength = this.is.readShort();
+
+			// n bytes (defined by previous entry), field name
+			FIELD_HEADERS[i] = this.readString(fieldNameLength);
+
+			// 2 byte numeric, field length in bytes
+			final int fieldLength = this.is.readShort();
+			FIELD_LENGTHS[i] = fieldLength;
+			RECORD_LENGTH += fieldLength;
+		}
+	}
+
+	private String[] readNextRecord() throws IOException {
+		final short flag = this.is.readShort();
+
+		final String[] dataItem = new String[NUMBER_OF_FIELDS];
+		if (flag == 0) {
+			for (int i = 0; i < dataItem.length; i++) {
+				dataItem[i] = this.readString(FIELD_LENGTHS[i]);
+			}
+		} else {
+			// skip the next record as it's marked deleted
+			this.is.seek(this.is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
+		}
+		return dataItem;
 	}
 
 	/**
@@ -90,9 +95,9 @@ public class DBParser {
 	 * @throws IOException
 	 *             If something does wrong when reading from the RandomAccessFile.
 	 */
-	private String readString(RandomAccessFile is, int n) throws IOException {
-		byte[] bytes = new byte[n];
-		is.read(bytes);
+	private String readString(final int n) throws IOException {
+		final byte[] bytes = new byte[n];
+		this.is.read(bytes);
 		return new String(bytes, US_ASCII).trim();
 	}
 }
