@@ -12,10 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DBWriter {
 
 	private RandomAccessFile is;
+	private ReentrantLock lock = new ReentrantLock();
 
 	public DBWriter(RandomAccessFile is) throws FileNotFoundException {
 		this.is = is;
@@ -26,7 +28,9 @@ public class DBWriter {
 
 			int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 
+			this.lock.lock();
 			this.writeRecord(pos, data);
+			this.lock.unlock();
 			return true;
 
 		} catch (IOException e) {
@@ -40,8 +44,10 @@ public class DBWriter {
 
 		int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 		try {
+			this.lock.lock();
 			is.seek(pos);
 			is.writeShort(RECORD_DELETED);
+			this.lock.unlock();
 			return true;
 
 		} catch (IOException e) {
@@ -53,6 +59,7 @@ public class DBWriter {
 
 	public boolean create(String[] data) {
 		try {
+			this.lock.lock();
 			is.seek(START_OF_RECORDS);
 
 			while (is.getFilePointer() != is.length()) {
@@ -66,6 +73,7 @@ public class DBWriter {
 			}
 
 			this.writeRecord(is.getFilePointer(), data);
+			this.lock.unlock();
 			return true;
 
 		} catch (IOException e) {
