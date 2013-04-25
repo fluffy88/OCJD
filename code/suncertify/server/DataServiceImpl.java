@@ -1,6 +1,7 @@
 package suncertify.server;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import suncertify.db.DBMain;
 import suncertify.db.DuplicateKeyException;
@@ -35,8 +36,21 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public int[] find(final String[] criteria) throws RecordNotFoundException, RemoteException {
-		return this.data.find(criteria);
+	public int[] find(final String[] criteria, final boolean exactMatch) throws RecordNotFoundException, RemoteException {
+		final int[] rawResults = this.data.find(criteria);
+		if (exactMatch) {
+			final ArrayList<Integer> filteredResults = new ArrayList<Integer>();
+			for (int recNo : rawResults) {
+				String[] record = this.read(recNo);
+				for (int i = 0; i < criteria.length; i++) {
+					if (criteria[i] != null && !criteria[i].equals("") && record[i].equalsIgnoreCase(criteria[i])) {
+						filteredResults.add(recNo);
+					}
+				}
+			}
+			// TODO: Need to return (int[]) filteredResults;
+		}
+		return rawResults;
 	}
 
 	@Override

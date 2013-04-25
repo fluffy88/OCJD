@@ -86,7 +86,7 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				int[] records = dataService.find(searchCriteria);
+				int[] records = dataService.find(searchCriteria, true);
 
 				for (int i : records) {
 					String[] record = dataService.read(i);

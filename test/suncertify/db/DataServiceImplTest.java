@@ -67,11 +67,11 @@ public class DataServiceImplTest {
 	@Test
 	public void testFind() throws RemoteException, RecordNotFoundException {
 		String[] findCriteria = new String[] { "Hamner" };
-		int[] records = this.dataService.find(findCriteria);
+		int[] records = this.dataService.find(findCriteria, true);
 		assertThat(records.length, is(equalTo(0)));
 
 		findCriteria = new String[] { "Bitter Homes & Gardens" };
-		records = this.dataService.find(findCriteria);
+		records = this.dataService.find(findCriteria, true);
 		assertThat(records.length, is(equalTo(2)));
 		assertThat(records[0], is(equalTo(6)));
 		assertThat(records[1], is(equalTo(15)));

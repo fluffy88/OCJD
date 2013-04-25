@@ -14,7 +14,7 @@ public interface DataService extends Remote {
 
 	void delete(int recNo) throws RecordNotFoundException, RemoteException;
 
-	int[] find(String[] criteria) throws RecordNotFoundException, RemoteException;
+	int[] find(String[] criteria, boolean exactMatch) throws RecordNotFoundException, RemoteException;
 
 	int create(String[] data) throws DuplicateKeyException, RemoteException;
 
