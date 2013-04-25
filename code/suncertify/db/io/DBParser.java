@@ -79,6 +79,17 @@ public class DBParser {
 		return contractors;
 	}
 
+	/**
+	 * Simple implementation of a RandomAccessFile#readString() as it's not included by default.
+	 * 
+	 * @param is
+	 *            The RandomAccessFile instance to read from.
+	 * @param n
+	 *            The number of bytes to be read for the String.
+	 * @return The trimmed result of reading n bytes from the RandomAccessFile and converting to a String.
+	 * @throws IOException
+	 *             If something does wrong when reading from the RandomAccessFile.
+	 */
 	private String readString(RandomAccessFile is, int n) throws IOException {
 		byte[] bytes = new byte[n];
 		is.read(bytes);
