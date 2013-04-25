@@ -16,15 +16,16 @@ import suncertify.db.io.DBSchema;
 
 public class DataTest {
 
+	private static final int READ_NO = 11;
 	private static final int DELETE_TWICE_NO = 27;
 
 	private final DBMain dataService = ServerFactory.createDataService();
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
-		dataService.lock(0);
-		String[] record = dataService.read(0);
-		dataService.unlock(0);
+		dataService.lock(READ_NO);
+		String[] record = dataService.read(READ_NO);
+		dataService.unlock(READ_NO);
 
 		assertThat(record, is(notNullValue()));
 		assertThat(record.length, is(equalTo(6)));

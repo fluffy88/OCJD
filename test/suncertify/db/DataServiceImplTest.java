@@ -18,6 +18,7 @@ public class DataServiceImplTest {
 
 	private DataService dataService;
 
+	private static final int CREATE_REC_NO = 0;
 	private static final int UPDATE_REC_NO = 14;
 	private static final int READ_REC_NO = 15;
 	private static final int DELETE_REC_NO = 16;
@@ -81,11 +82,12 @@ public class DataServiceImplTest {
 	}
 
 	@Test
-	public void testCreate() throws RemoteException, DuplicateKeyException {
+	public void testCreate() throws RemoteException, DuplicateKeyException, RecordNotFoundException {
 		String[] newRecord = new String[] { "Hello Kitty", "Japan", "Bags", "12345", "$99.00", "" };
+		this.dataService.delete(new Contractor(CREATE_REC_NO, "Dogs With Tools", "Smallville", "Roofing", "7", "$35.00", ""));
 		int newRecordNum = this.dataService.create(newRecord);
 
-		assertThat(newRecordNum, is(equalTo(16)));
+		assertThat(newRecordNum, is(equalTo(CREATE_REC_NO)));
 	}
 
 	@Test(expected = DuplicateKeyException.class)
