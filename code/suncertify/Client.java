@@ -9,13 +9,13 @@ public class Client implements Application {
 
 	private final AppType type;
 
-	public Client(AppType type) {
+	public Client(final AppType type) {
 		this.type = type;
 	}
 
 	@Override
 	public void start() {
-		DataService dataService = DataServiceFactory.getService(type);
+		final DataService dataService = DataServiceFactory.getService(type);
 		Injection.instance.add("DataService", dataService);
 
 		new ClientUI();

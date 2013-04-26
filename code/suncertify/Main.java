@@ -1,12 +1,11 @@
 package suncertify;
 
-
 public class Main {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		sanitiseParams(args);
 
 		String mode = "";
@@ -14,13 +13,13 @@ public class Main {
 			mode = args[0];
 		}
 
-		ApplicationFactory factory = new ApplicationFactory();
-		Application app = factory.createApplication(mode);
+		final ApplicationFactory factory = new ApplicationFactory();
+		final Application app = factory.createApplication(mode);
 
 		app.start();
 	}
 
-	private static void sanitiseParams(String[] args) {
+	private static void sanitiseParams(final String[] args) {
 		boolean tests = true;
 		tests = tests && args.length > 1;
 		tests = tests && args.length == 1;

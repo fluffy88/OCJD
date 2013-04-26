@@ -4,10 +4,10 @@ public class StandAlone implements Application {
 
 	@Override
 	public void start() {
-		Application server = new Server(AppType.StandAlone);
+		final Application server = new Server(AppType.StandAlone);
 		server.start();
 
-		Client client = new Client(AppType.StandAlone);
+		final Client client = new Client(AppType.StandAlone);
 		client.start();
 	}
 }

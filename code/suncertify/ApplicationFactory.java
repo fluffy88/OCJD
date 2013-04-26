@@ -3,8 +3,8 @@ package suncertify;
 public class ApplicationFactory {
 
 	public Application createApplication(final String mode) {
-		String appMode = mode.toLowerCase();
-		Application app;
+		final String appMode = mode.toLowerCase();
+		final Application app;
 
 		switch (appMode) {
 		case "alone":
@@ -22,5 +22,4 @@ public class ApplicationFactory {
 
 		return app;
 	}
-
 }
