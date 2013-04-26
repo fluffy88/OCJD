@@ -4,6 +4,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
 
 import suncertify.AppType;
 import suncertify.Server;
@@ -39,8 +43,12 @@ public class DataServiceFactory {
 			DataService dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 			return dataService;
 		} catch (RemoteException | NotBoundException e) {
+			Logger.getLogger("scr.logger").log(Level.SEVERE, "Cannot connect to remote server.");
+			JOptionPane.showMessageDialog(null, "Cannot connect to remote server.\nApplication will exit!", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return null;
 	}
