@@ -35,13 +35,13 @@ public class SearchResultsPanel extends JPanel {
 		this.setColumnWidth(4, 20);
 		this.setColumnWidth(5, 120);
 
-		JScrollPane scrollPane = new JScrollPane(this.table);
+		final JScrollPane scrollPane = new JScrollPane(this.table);
 		this.add(scrollPane, BorderLayout.CENTER);
 	}
 
-	private void setColumnWidth(int idx, int width) {
+	private void setColumnWidth(final int idx, final int width) {
 		// TODO when TableModel data is empty we get null here....
-		TableColumn column = this.table.getColumnModel().getColumn(idx);
+		final TableColumn column = this.table.getColumnModel().getColumn(idx);
 		column.setPreferredWidth(width);
 	}
 }
