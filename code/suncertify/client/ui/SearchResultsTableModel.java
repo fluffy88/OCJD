@@ -20,20 +20,20 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge",
 			"Customer holding this record" };
 
-	private ArrayList<Contractor> data = new ArrayList<Contractor>();
+	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
 
 	public SearchResultsTableModel() {
 		// add empty data so table headers show up and can be resized.
-		data.add(new Contractor(0, null, null, null, null, null, null));
+		this.data.add(new Contractor(0, null, null, null, null, null, null));
 
 		this.addTableModelListener(new TableModelListener() {
 			@Override
-			public void tableChanged(TableModelEvent e) {
-				int row = e.getFirstRow();
+			public void tableChanged(final TableModelEvent e) {
+				final int row = e.getFirstRow();
 
 				if (row == e.getLastRow()) {
-					DataService dataService = (DataService) Injection.instance.get("DataService");
-					Contractor updatedData = data.get(row);
+					final DataService dataService = (DataService) Injection.instance.get("DataService");
+					final Contractor updatedData = data.get(row);
 
 					try {
 						dataService.update(updatedData);
@@ -47,22 +47,22 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	}
 
 	public void clearData() {
-		data.clear();
+		this.data.clear();
 	}
 
-	public void add(Contractor rec) {
-		data.add(rec);
+	public void add(final Contractor rec) {
+		this.data.add(rec);
 	}
 
 	@Override
-	public String getColumnName(int column) {
-		return columnNames[column];
+	public String getColumnName(final int column) {
+		return this.columnNames[column];
 	}
 
 	@Override
 	public int getRowCount() {
 		// if (data != null) {
-		return data.size();
+		return this.data.size();
 		// }
 		// return 0;
 	}
@@ -70,32 +70,32 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public int getColumnCount() {
 		// if (data != null && data.size() > 0) {
-		return columnNames.length;
+		return this.columnNames.length;
 		// }
 		// return 0;
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	public Object getValueAt(final int rowIndex, final int columnIndex) {
 		// if (data != null && rowIndex < data.size()) {
-		return data.get(rowIndex).toArray()[columnIndex];
+		return this.data.get(rowIndex).toArray()[columnIndex];
 		// }
 
 		// return "";
 	}
 
 	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
+	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
 		return true;
 	}
 
 	@Override
-	public void setValueAt(Object value, int row, int col) {
-		if (data != null && row < data.size()) {
-			Contractor contractor = data.get(row);
-			String[] record = contractor.toArray();
+	public void setValueAt(final Object value, final int row, final int col) {
+		if (this.data != null && row < this.data.size()) {
+			final Contractor contractor = this.data.get(row);
+			final String[] record = contractor.toArray();
 			record[col] = (String) value;
-			data.set(row, new Contractor(contractor.getRecordId(), record));
+			this.data.set(row, new Contractor(contractor.getRecordId(), record));
 			fireTableCellUpdated(row, col);
 		}
 	}
