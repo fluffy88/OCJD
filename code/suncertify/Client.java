@@ -18,6 +18,6 @@ public class Client implements Application {
 		final DataService dataService = DataServiceFactory.getService(type);
 		Injection.instance.add("DataService", dataService);
 
-		new ClientUI();
+		ClientUI.start();
 	}
 }
