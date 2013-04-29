@@ -28,7 +28,7 @@ import org.junit.Test;
  */
 public class DataClassTest {
 
-	private final DBMain data = ServerFactory.createDataService();
+	private final DBMain data = DataAccessFactory.getDataService();
 
 	@Test(timeout = 10000)
 	public void startTests() {

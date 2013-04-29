@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.db.ServerFactory.DB_LOCATION;
+import static suncertify.db.DataAccessFactory.DB_LOCATION;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

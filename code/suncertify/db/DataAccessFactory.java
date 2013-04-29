@@ -8,17 +8,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import suncertify.shared.Preferences;
 
-public class ServerFactory {
+public class DataAccessFactory {
 
 	public static final String DB_LOCATION = "DatabaseLocation";
-	private static ServerFactory instance;
+	private static DataAccessFactory instance;
 
 	private DBMain dataService;
 	private String location;
 
-	public static DBMain createDataService() {
+	public static DBMain getDataService() {
 		if (instance == null) {
-			instance = new ServerFactory();
+			instance = new DataAccessFactory();
 		}
 		if (instance.dataService == null) {
 			instance.dataService = new Data(instance.location);
@@ -26,7 +26,7 @@ public class ServerFactory {
 		return instance.dataService;
 	}
 
-	private ServerFactory() {
+	private DataAccessFactory() {
 		this.init();
 	}
 

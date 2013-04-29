@@ -7,12 +7,12 @@ import java.util.List;
 import suncertify.db.DBMain;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
-import suncertify.db.ServerFactory;
+import suncertify.db.DataAccessFactory;
 import suncertify.shared.Contractor;
 
 public class DataServiceImpl implements DataService {
 
-	DBMain data = ServerFactory.createDataService();
+	DBMain data = DataAccessFactory.getDataService();
 
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException, RemoteException {

@@ -19,7 +19,7 @@ public class DataTest {
 	private static final int READ_NO = 11;
 	private static final int DELETE_TWICE_NO = 27;
 
-	private final DBMain dataService = ServerFactory.createDataService();
+	private final DBMain dataService = DataAccessFactory.getDataService();
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
