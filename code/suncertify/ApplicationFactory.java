@@ -12,7 +12,7 @@ public class ApplicationFactory {
 			break;
 
 		case "server":
-			app = new Server(AppType.Server);
+			app = new Server();
 			break;
 
 		default: // client

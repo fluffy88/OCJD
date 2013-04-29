@@ -1,5 +1,7 @@
 package suncertify;
 
+import suncertify.shared.Preferences;
+
 public class Main {
 
 	/**
@@ -17,6 +19,7 @@ public class Main {
 		final Application app = factory.createApplication(mode);
 
 		app.start();
+		setShutdownHook();
 	}
 
 	private static void sanitiseParams(final String[] args) {
@@ -37,5 +40,15 @@ public class Main {
 		System.out.println("\\tserver:\\tTo start networked server.");
 		System.out.println("\\alone:\\tTo start unnetworked standalone application.");
 		System.out.println("\\No mode:\\tTo start networked client.");
+	}
+
+	private static void setShutdownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				final Preferences props = Preferences.getInstance();
+				props.save();
+			}
+		});
 	}
 }
