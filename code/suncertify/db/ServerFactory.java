@@ -44,7 +44,7 @@ public class ServerFactory {
 	}
 
 	private String promptForLocation() {
-		JFileChooser chooser = new JFileChooser(new File(""));
+		JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
 		chooser.setFileFilter(new FileNameExtensionFilter(".db files only", "db"));
 		chooser.setDialogTitle("Database location");
 
