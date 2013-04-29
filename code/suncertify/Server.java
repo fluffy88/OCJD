@@ -26,7 +26,7 @@ public class Server implements Application {
 
 	private void publish(final DataService dataService) {
 		try {
-			final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService, 0);
+			final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService, Registry.REGISTRY_PORT);
 			final Registry registry = this.getRMIRegistry();
 			registry.rebind(RMI_SERVER, rmiStub);
 		} catch (RemoteException e) {
