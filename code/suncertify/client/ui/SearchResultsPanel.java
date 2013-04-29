@@ -8,7 +8,10 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
+import suncertify.client.CurrencyComparator;
+import suncertify.client.NumberComparator;
 import suncertify.shared.Injection;
 
 public class SearchResultsPanel extends JPanel {
@@ -30,7 +33,13 @@ public class SearchResultsPanel extends JPanel {
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);
-		this.table.setAutoCreateRowSorter(true);
+
+		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableModel);
+		sorter.setComparator(3, new NumberComparator());
+		sorter.setComparator(4, new CurrencyComparator());
+		sorter.setComparator(5, new NumberComparator());
+		this.table.setRowSorter(sorter);
+
 		this.setColumnWidth(3, 20);
 		this.setColumnWidth(4, 20);
 		this.setColumnWidth(5, 120);
