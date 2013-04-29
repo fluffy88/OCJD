@@ -22,7 +22,7 @@
     <property name="dir.submission.docs" value="${dir.submission}/docs" description="the required directory docs (in the submission jar)" />
     <property name="dir.submission.javadoc" value="${dir.submission.docs}/javadoc" description="the required directory javadoc (in the submission jar) with the Javadoc/HTML files" />
     <property name="file.choices" value="choices.txt" description="the required file choices.txt" />
-    <property name="file.db" value="${dir.temp.assignment}/db-1x2.db" description="the required original, unchanged database file" />
+    <property name="file.db" value="${dir.temp.assignment}/db-2x2.db" description="the required original, unchanged database file" />
     <property name="file.instructions" value="${dir.temp.assignment}/instructions.html" description="the required file instructions.html" />
     <property name="file.userguide" value="userguide.txt" description="the required file userguide.txt" />
     <property name="file.version" value="version.txt" description="the required file version.txt" />
