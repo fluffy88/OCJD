@@ -2,8 +2,10 @@ package suncertify.server.ui;
 
 import static suncertify.db.DataAccessFactory.DB_LOCATION;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,55 +22,60 @@ public class ServerPage extends JPanel {
 	private static final long serialVersionUID = 5317757024984525594L;
 
 	public ServerPage() {
-		this.setLayout(new GridBagLayout());
-		Insets inset = new Insets(5, 5, 5, 5);
+		this.setLayout(new GridLayout(3, 1));
 
-		JButton startBtn = new JButton("Start");
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.insets = inset;
-		this.add(startBtn, c);
+		createTopArea();
+		createCentreArea();
+		createBottomArea();
+	}
 
-		JButton stopBtn = new JButton("Stop");
-		c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = inset;
-		this.add(stopBtn, c);
+	private void createTopArea() {
+		JPanel top = new JPanel();
+		FlowLayout topLayout = new FlowLayout();
+		topLayout.setAlignment(FlowLayout.RIGHT);
+		top.setLayout(topLayout);
 
 		JLabel serverStatusLbl = new JLabel("Online");
-		c = new GridBagConstraints();
-		c.gridx = 2;
-		c.gridy = 0;
-		c.gridheight = 2;
-		c.gridwidth = 2;
-		c.insets = inset;
-		this.add(serverStatusLbl, c);
+		top.add(serverStatusLbl);
+		this.add(top);
+	}
+
+	private void createCentreArea() {
+		JPanel middle = new JPanel();
+		GridBagLayout middleLayout = new GridBagLayout();
+		Insets inset = new Insets(5, 5, 5, 5);
+		middle.setLayout(middleLayout);
 
 		JLabel dbFileLocLbl = new JLabel("Database file: ");
-		c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
-		c.gridy = 2;
 		c.insets = inset;
-		this.add(dbFileLocLbl, c);
+		middle.add(dbFileLocLbl, c);
 
 		JTextField dbFileLocTxt = new JTextField(Preferences.getInstance().get(DB_LOCATION));
 		c = new GridBagConstraints();
 		c.gridx = 1;
-		c.gridy = 2;
 		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 2;
-		c.weightx = 1.0;
+		c.weightx = 1;
 		c.insets = inset;
-		this.add(dbFileLocTxt, c);
+		middle.add(dbFileLocTxt, c);
 
-		JButton browseBtn = new JButton("Browse");
+		JButton browseBtn = new JButton("Locate");
 		c = new GridBagConstraints();
-		c.gridx = 3;
-		c.gridy = 2;
+		c.gridx = 2;
 		c.insets = inset;
-		this.add(browseBtn, c);
+		middle.add(browseBtn, c);
+		this.add(middle);
+	}
+
+	private void createBottomArea() {
+		JPanel bottom = new JPanel();
+		FlowLayout layout = new FlowLayout();
+		layout.setAlignment(FlowLayout.RIGHT);
+		bottom.setLayout(layout);
+
+		JButton startBtn = new JButton("Start");
+		bottom.add(startBtn);
 
 		JButton b = new JButton("Shutdown");
 		b.addActionListener(new ActionListener() {
@@ -77,10 +84,7 @@ public class ServerPage extends JPanel {
 				System.exit(0);
 			}
 		});
-		c = new GridBagConstraints();
-		c.gridx = 3;
-		c.gridy = 3;
-		c.insets = inset;
-		this.add(b, c);
+		bottom.add(b);
+		this.add(bottom);
 	}
 }
