@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
+import suncertify.shared.Injection;
 
 public class Server implements Application {
 
@@ -15,13 +16,13 @@ public class Server implements Application {
 
 	@Override
 	public void start() {
-		final DataService dataService = new DataServiceImpl();
-		this.publish(dataService);
-		this.startServerUI();
+		ServerUI.start();
+		Injection.instance.add("server.instance", this);
 	}
 
-	private void startServerUI() {
-		ServerUI.start();
+	public void init() {
+		final DataService dataService = new DataServiceImpl();
+		this.publish(dataService);
 	}
 
 	private void publish(final DataService dataService) {

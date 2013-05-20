@@ -12,14 +12,22 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import suncertify.Server;
+import suncertify.db.ui.DatabaseLocator;
+import suncertify.shared.Injection;
 import suncertify.shared.Preferences;
 
 public class ServerPage extends JPanel {
 
 	private static final long serialVersionUID = 5317757024984525594L;
+	private JButton startBtn;
+	private JButton shutdownBtn;
+	private JTextField dbFileLocTxt;
+	private JButton browseBtn;
 
 	public ServerPage() {
 		this.setLayout(new GridLayout(3, 1));
@@ -52,7 +60,8 @@ public class ServerPage extends JPanel {
 		c.insets = inset;
 		middle.add(dbFileLocLbl, c);
 
-		JTextField dbFileLocTxt = new JTextField(Preferences.getInstance().get(DB_LOCATION));
+		dbFileLocTxt = new JTextField(Preferences.getInstance().get(DB_LOCATION));
+		dbFileLocTxt.setEditable(false);
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.fill = GridBagConstraints.BOTH;
@@ -60,7 +69,16 @@ public class ServerPage extends JPanel {
 		c.insets = inset;
 		middle.add(dbFileLocTxt, c);
 
-		JButton browseBtn = new JButton("Locate");
+		browseBtn = new JButton("Locate");
+		browseBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String location = DatabaseLocator.getLocation();
+				if (location != null) {
+					dbFileLocTxt.setText(location);
+				}
+			}
+		});
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.insets = inset;
@@ -74,17 +92,31 @@ public class ServerPage extends JPanel {
 		layout.setAlignment(FlowLayout.RIGHT);
 		bottom.setLayout(layout);
 
-		JButton startBtn = new JButton("Start");
+		startBtn = new JButton("Start");
+		startBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (dbFileLocTxt.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "You must choose a database file first!", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					Server server = (Server) Injection.instance.get("server.instance");
+					server.init();
+
+					startBtn.setEnabled(false);
+					browseBtn.setEnabled(false);
+				}
+			}
+		});
 		bottom.add(startBtn);
 
-		JButton b = new JButton("Shutdown");
-		b.addActionListener(new ActionListener() {
+		shutdownBtn = new JButton("Shutdown");
+		shutdownBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		bottom.add(b);
+		bottom.add(shutdownBtn);
 		this.add(bottom);
 	}
 }
