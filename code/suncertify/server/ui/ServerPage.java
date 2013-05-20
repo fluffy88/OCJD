@@ -30,22 +30,10 @@ public class ServerPage extends JPanel {
 	private JButton browseBtn;
 
 	public ServerPage() {
-		this.setLayout(new GridLayout(3, 1));
+		this.setLayout(new GridLayout(2, 1));
 
-		createTopArea();
 		createCentreArea();
 		createBottomArea();
-	}
-
-	private void createTopArea() {
-		JPanel top = new JPanel();
-		FlowLayout topLayout = new FlowLayout();
-		topLayout.setAlignment(FlowLayout.RIGHT);
-		top.setLayout(topLayout);
-
-		JLabel serverStatusLbl = new JLabel("Online");
-		top.add(serverStatusLbl);
-		this.add(top);
 	}
 
 	private void createCentreArea() {
