@@ -4,12 +4,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -95,11 +97,17 @@ public class SearchPanel extends JPanel {
 				}
 				tableModel.fireTableDataChanged();
 
-			} catch (RecordNotFoundException | RemoteException e1) {
+			} catch (RecordNotFoundException exp) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				exp.printStackTrace();
+			} catch (ConnectException exp) {
+				JOptionPane.showMessageDialog(null, "Cannot connect to server. \nApplication will exit!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
+			} catch (RemoteException exp) {
+				// TODO Auto-generated catch block
+				exp.printStackTrace();
 			}
 		}
-
 	}
 }
