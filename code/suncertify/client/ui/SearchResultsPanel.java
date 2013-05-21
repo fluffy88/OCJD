@@ -18,6 +18,8 @@ public class SearchResultsPanel extends JPanel {
 
 	private static final long serialVersionUID = -2713791197021056298L;
 
+	public static final String TABLE_MODEL = "SearchResultsModel";
+
 	private JTable table;
 
 	public SearchResultsPanel() {
@@ -29,7 +31,7 @@ public class SearchResultsPanel extends JPanel {
 
 	private void createTableArea() {
 		final TableModel tableModel = new SearchResultsTableModel();
-		App.publish("SearchResultsModel", tableModel);
+		App.publish(TABLE_MODEL, tableModel);
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);

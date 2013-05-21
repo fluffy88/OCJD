@@ -7,6 +7,8 @@ import suncertify.shared.App;
 
 public class Client implements Application {
 
+	public static final String DATASERVICE = "dataservice";
+
 	private final AppType type;
 
 	public Client(final AppType type) {
@@ -16,7 +18,7 @@ public class Client implements Application {
 	@Override
 	public void start() {
 		final DataService dataService = DataServiceFactory.getService(type);
-		App.publish("DataService", dataService);
+		App.publish(DATASERVICE, dataService);
 
 		ClientUI.start();
 	}

@@ -1,5 +1,7 @@
 package suncertify.client.ui;
 
+import static suncertify.Client.DATASERVICE;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -32,7 +34,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				final int row = e.getFirstRow();
 
 				if (row == e.getLastRow()) {
-					final DataService dataService = (DataService) App.getDependancy("DataService");
+					final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
 					final Contractor updatedData = data.get(row);
 
 					try {

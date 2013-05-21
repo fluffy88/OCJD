@@ -12,12 +12,13 @@ import suncertify.shared.App;
 
 public class Server implements Application {
 
-	public static final String RMI_SERVER = "Remote Database Server";
+	public static final String RMI_SERVER = "remote.database.server";
+	public static final String SERVER_INSTANCE = "server.instance";
 
 	@Override
 	public void start() {
 		ServerUI.start();
-		App.publish("server.instance", this);
+		App.publish(SERVER_INSTANCE, this);
 	}
 
 	public void init() {
