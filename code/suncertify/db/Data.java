@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
+import suncertify.shared.App;
 
 /**
  * Singleton class to access the Database.
@@ -44,10 +45,8 @@ public class Data implements DBMain {
 			for (int i = 0; i < this.contractors.size(); i++) {
 				locks.add(new Semaphore(1));
 			}
-
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			App.showErrorAndExit("Cannot open database file.");
 		}
 	}
 
@@ -159,8 +158,8 @@ public class Data implements DBMain {
 		try {
 			this.createLock.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			App.showError("Thread interrupted while waiting to acquire the write lock.");
+			return -1;
 		}
 		System.out.println("Create: " + Arrays.toString(data));
 		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
@@ -208,8 +207,7 @@ public class Data implements DBMain {
 		try {
 			this.locks.get(recNo).acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			App.showError("Thread interrupted while waiting to acquire the lock for " + recNo + ".");
 		}
 	}
 

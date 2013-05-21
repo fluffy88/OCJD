@@ -9,11 +9,12 @@ import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.START_OF_RECORDS;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
 import java.util.List;
+
+import suncertify.shared.App;
 
 public class DBParser {
 
@@ -36,12 +37,8 @@ public class DBParser {
 				contractors.add(dataItem);
 			}
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			App.showErrorAndExit("Cannot read from database file.");
 		}
 		return contractors;
 	}

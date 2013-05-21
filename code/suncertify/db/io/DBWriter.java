@@ -8,53 +8,46 @@ import static suncertify.db.io.DBSchema.RECORD_VALID;
 import static suncertify.db.io.DBSchema.START_OF_RECORDS;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
+
+import suncertify.shared.App;
 
 public class DBWriter {
 
 	private RandomAccessFile is;
 	private ReentrantLock lock = new ReentrantLock();
 
-	public DBWriter(RandomAccessFile is) throws FileNotFoundException {
+	public DBWriter(RandomAccessFile is) {
 		this.is = is;
 	}
 
 	public boolean write(int recNo, String[] data) {
 		try {
-
 			int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 
 			this.lock.lock();
 			this.writeRecord(pos, data);
 			this.lock.unlock();
-			return true;
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			App.showErrorAndExit("Cannot write to database file.");
 		}
+		return true;
 	}
 
 	public boolean delete(int recNo) {
-
 		int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 		try {
 			this.lock.lock();
 			is.seek(pos);
 			is.writeShort(RECORD_DELETED);
 			this.lock.unlock();
-			return true;
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			App.showErrorAndExit("Cannot write to database file.");
 		}
+		return true;
 	}
 
 	public boolean create(String[] data) {
@@ -74,13 +67,10 @@ public class DBWriter {
 
 			this.writeRecord(is.getFilePointer(), data);
 			this.lock.unlock();
-			return true;
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			App.showErrorAndExit("Cannot write to database file.");
 		}
+		return true;
 	}
 
 	private void writeRecord(long pos, String[] data) throws IOException {
