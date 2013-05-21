@@ -37,12 +37,9 @@ public class Preferences {
 			try (InputStream stream = new BufferedInputStream(new FileInputStream(propsFile))) {
 				this.props.load(stream);
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				// Will be thrown when props file is malformed ... handle this!
-				e.printStackTrace();
+				App.showError("Cannot read the properties file, it is corrupted.");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				App.showError("Cannot open the properties file for reading.");
 			}
 		}
 	}
@@ -51,8 +48,7 @@ public class Preferences {
 		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(PROPS_FILE))) {
 			this.props.store(stream, null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			App.showError("Could not write to the properties file.");
 		}
 	}
 
@@ -62,5 +58,6 @@ public class Preferences {
 
 	public void set(String key, String value) {
 		this.props.setProperty(key, value);
+		this.save();
 	}
 }

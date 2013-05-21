@@ -40,8 +40,10 @@ public class DataServiceFactory {
 			Registry registry = LocateRegistry.getRegistry();
 			DataService dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 			return dataService;
-		} catch (RemoteException | NotBoundException e) {
+		} catch (RemoteException e) {
 			App.showErrorAndExit("Cannot connect to remote server.");
+		} catch (NotBoundException e) {
+			App.showErrorAndExit("Server not started.");
 		}
 		return null;
 	}

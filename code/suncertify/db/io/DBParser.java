@@ -37,7 +37,7 @@ public class DBParser {
 				contractors.add(dataItem);
 			}
 
-		} catch (IOException e1) {
+		} catch (IOException e) {
 			App.showErrorAndExit("Cannot read from database file.");
 		}
 		return contractors;

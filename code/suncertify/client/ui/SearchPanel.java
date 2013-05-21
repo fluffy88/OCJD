@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -100,13 +99,9 @@ public class SearchPanel extends JPanel {
 				tableModel.fireTableDataChanged();
 
 			} catch (RecordNotFoundException exp) {
-				// TODO Auto-generated catch block
-				exp.printStackTrace();
-			} catch (ConnectException exp) {
-				App.showErrorAndExit("Cannot connect to server.");
+				App.showError(exp.getMessage());
 			} catch (RemoteException exp) {
-				// TODO Auto-generated catch block
-				exp.printStackTrace();
+				App.showErrorAndExit("Cannot connect to remote server.");
 			}
 		}
 	}

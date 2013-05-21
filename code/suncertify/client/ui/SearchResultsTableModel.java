@@ -39,9 +39,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 					try {
 						dataService.update(updatedData);
-					} catch (RemoteException | RecordNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					} catch (RecordNotFoundException exp) {
+						App.showError(exp.getMessage());
+					} catch (RemoteException e1) {
+						App.showErrorAndExit("Cannot connect to remote server.");
 					}
 				}
 			}
