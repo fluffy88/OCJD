@@ -14,7 +14,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -104,9 +103,7 @@ public class SearchPanel extends JPanel {
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
 			} catch (ConnectException exp) {
-				JOptionPane.showMessageDialog(null, "Cannot connect to server. \nApplication will exit!", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				System.exit(1);
+				App.showErrorAndExit("Cannot connect to server. \nApplication will exit!");
 			} catch (RemoteException exp) {
 				// TODO Auto-generated catch block
 				exp.printStackTrace();

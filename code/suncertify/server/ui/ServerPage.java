@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -86,7 +85,7 @@ public class ServerPage extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (dbFileLocTxt.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "You must choose a database file first!", "Error", JOptionPane.ERROR_MESSAGE);
+					App.showError("You must choose a database file first!");
 				} else {
 					Server server = (Server) App.getDependancy(SERVER_INSTANCE);
 					server.init();

@@ -1,8 +1,7 @@
 package suncertify.db;
 
-import javax.swing.JOptionPane;
-
 import suncertify.db.ui.DatabaseLocator;
+import suncertify.shared.App;
 import suncertify.shared.Preferences;
 
 public class DataAccessFactory {
@@ -34,9 +33,7 @@ public class DataAccessFactory {
 		if (this.location == null) {
 			this.location = DatabaseLocator.getLocation();
 			if (this.location == null) {
-				JOptionPane.showMessageDialog(null, "You did not select a database location. \nApplication will exit!", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				System.exit(1);
+				App.showErrorAndExit("You did not select a database location. \nApplication will exit!");
 			}
 		}
 	}
