@@ -3,17 +3,17 @@ package suncertify.shared;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Injection {
+public class App {
 
-	public static final Injection instance = new Injection();
+	public static final App instance = new App();
 
 	private Map<String, Object> injectableItems = new HashMap<String, Object>();
 
-	public void add(String key, Object value) {
+	public void publish(String key, Object value) {
 		injectableItems.put(key, value);
 	}
 
-	public Object get(String key) {
+	public Object getDependancy(String key) {
 		return injectableItems.get(key);
 	}
 }

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import suncertify.AppType;
 import suncertify.Server;
 import suncertify.server.DataService;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 
 public class DataServiceFactory {
 
@@ -34,7 +34,7 @@ public class DataServiceFactory {
 	}
 
 	private DataService getLocalService() {
-		return (DataService) Injection.instance.get("DataServer");
+		return (DataService) App.instance.getDependancy("DataServer");
 	}
 
 	private DataService getRemoteService() {

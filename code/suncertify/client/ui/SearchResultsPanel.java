@@ -12,7 +12,7 @@ import javax.swing.table.TableRowSorter;
 
 import suncertify.client.CurrencyComparator;
 import suncertify.client.NumberComparator;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 
 public class SearchResultsPanel extends JPanel {
 
@@ -29,7 +29,7 @@ public class SearchResultsPanel extends JPanel {
 
 	private void createTableArea() {
 		final TableModel tableModel = new SearchResultsTableModel();
-		Injection.instance.add("SearchResultsModel", tableModel);
+		App.instance.publish("SearchResultsModel", tableModel);
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);

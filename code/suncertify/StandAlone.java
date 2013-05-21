@@ -2,7 +2,7 @@ package suncertify;
 
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 
 public class StandAlone implements Application {
 
@@ -16,6 +16,6 @@ public class StandAlone implements Application {
 	}
 
 	private void publish(final DataService dataService) {
-		Injection.instance.add("DataServer", dataService);
+		App.instance.publish("DataServer", dataService);
 	}
 }

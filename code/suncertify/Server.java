@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 
 public class Server implements Application {
 
@@ -17,7 +17,7 @@ public class Server implements Application {
 	@Override
 	public void start() {
 		ServerUI.start();
-		Injection.instance.add("server.instance", this);
+		App.instance.publish("server.instance", this);
 	}
 
 	public void init() {

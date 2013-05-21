@@ -3,7 +3,7 @@ package suncertify;
 import suncertify.client.DataServiceFactory;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 
 public class Client implements Application {
 
@@ -16,7 +16,7 @@ public class Client implements Application {
 	@Override
 	public void start() {
 		final DataService dataService = DataServiceFactory.getService(type);
-		Injection.instance.add("DataService", dataService);
+		App.instance.publish("DataService", dataService);
 
 		ClientUI.start();
 	}

@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 
 import suncertify.Server;
 import suncertify.db.ui.DatabaseLocator;
-import suncertify.shared.Injection;
+import suncertify.shared.App;
 import suncertify.shared.Preferences;
 
 public class ServerPage extends JPanel {
@@ -87,7 +87,7 @@ public class ServerPage extends JPanel {
 				if (dbFileLocTxt.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "You must choose a database file first!", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					Server server = (Server) Injection.instance.get("server.instance");
+					Server server = (Server) App.instance.getDependancy("server.instance");
 					server.init();
 
 					startBtn.setEnabled(false);
