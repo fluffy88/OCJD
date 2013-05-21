@@ -7,7 +7,7 @@ import suncertify.shared.Preferences;
 
 public class DataAccessFactory {
 
-	public static final String DB_LOCATION = "DatabaseLocation";
+	public static final String DB_LOCATION = "database.location";
 	private static DataAccessFactory instance;
 
 	private DBMain dataService;
