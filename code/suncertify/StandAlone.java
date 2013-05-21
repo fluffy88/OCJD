@@ -16,6 +16,6 @@ public class StandAlone implements Application {
 	}
 
 	private void publish(final DataService dataService) {
-		App.instance.publish("DataServer", dataService);
+		App.publish("DataServer", dataService);
 	}
 }

@@ -10,8 +10,8 @@ import javax.swing.table.TableModel;
 
 import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
-import suncertify.shared.Contractor;
 import suncertify.shared.App;
+import suncertify.shared.Contractor;
 
 public class SearchResultsTableModel extends AbstractTableModel implements TableModel {
 
@@ -32,7 +32,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				final int row = e.getFirstRow();
 
 				if (row == e.getLastRow()) {
-					final DataService dataService = (DataService) App.instance.getDependancy("DataService");
+					final DataService dataService = (DataService) App.getDependancy("DataService");
 					final Contractor updatedData = data.get(row);
 
 					try {

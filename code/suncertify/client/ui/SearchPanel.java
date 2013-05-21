@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 
 import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
-import suncertify.shared.Contractor;
 import suncertify.shared.App;
+import suncertify.shared.Contractor;
 
 public class SearchPanel extends JPanel {
 
@@ -78,8 +78,8 @@ public class SearchPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			DataService dataService = (DataService) App.instance.getDependancy("DataService");
-			SearchResultsTableModel tableModel = (SearchResultsTableModel) App.instance.getDependancy("SearchResultsModel");
+			DataService dataService = (DataService) App.getDependancy("DataService");
+			SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy("SearchResultsModel");
 			tableModel.clearData();
 			try {
 				String[] searchCriteria = new String[6];

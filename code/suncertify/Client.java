@@ -16,7 +16,7 @@ public class Client implements Application {
 	@Override
 	public void start() {
 		final DataService dataService = DataServiceFactory.getService(type);
-		App.instance.publish("DataService", dataService);
+		App.publish("DataService", dataService);
 
 		ClientUI.start();
 	}

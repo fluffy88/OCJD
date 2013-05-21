@@ -5,15 +5,13 @@ import java.util.Map;
 
 public class App {
 
-	public static final App instance = new App();
+	private static Map<String, Object> injectableItems = new HashMap<String, Object>();
 
-	private Map<String, Object> injectableItems = new HashMap<String, Object>();
-
-	public void publish(String key, Object value) {
+	public static void publish(String key, Object value) {
 		injectableItems.put(key, value);
 	}
 
-	public Object getDependancy(String key) {
+	public static Object getDependancy(String key) {
 		return injectableItems.get(key);
 	}
 }

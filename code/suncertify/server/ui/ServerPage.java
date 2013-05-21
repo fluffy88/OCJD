@@ -87,7 +87,7 @@ public class ServerPage extends JPanel {
 				if (dbFileLocTxt.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "You must choose a database file first!", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					Server server = (Server) App.instance.getDependancy("server.instance");
+					Server server = (Server) App.getDependancy("server.instance");
 					server.init();
 
 					startBtn.setEnabled(false);

@@ -34,7 +34,7 @@ public class DataServiceFactory {
 	}
 
 	private DataService getLocalService() {
-		return (DataService) App.instance.getDependancy("DataServer");
+		return (DataService) App.getDependancy("DataServer");
 	}
 
 	private DataService getRemoteService() {

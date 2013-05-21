@@ -17,7 +17,7 @@ public class Server implements Application {
 	@Override
 	public void start() {
 		ServerUI.start();
-		App.instance.publish("server.instance", this);
+		App.publish("server.instance", this);
 	}
 
 	public void init() {
