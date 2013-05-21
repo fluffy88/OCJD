@@ -28,16 +28,16 @@ public class App {
 
 	public static void showErrorAndExit(String msg) {
 		logError(msg);
-		JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg + "\nApplication will now exit!", "Error", JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 
 	public static void logWarning(String msg) {
-		Logger.getLogger(LOGGER).log(Level.WARNING, msg);
+		log(msg, Level.WARNING);
 	}
 
 	public static void logError(String msg) {
-		Logger.getLogger(LOGGER).log(Level.SEVERE, msg);
+		log(msg, Level.SEVERE);
 	}
 
 	public static void log(String msg, Level lvl) {

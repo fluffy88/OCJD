@@ -33,7 +33,7 @@ public class DataAccessFactory {
 		if (this.location == null) {
 			this.location = DatabaseLocator.getLocation();
 			if (this.location == null) {
-				App.showErrorAndExit("You did not select a database location. \nApplication will exit!");
+				App.showErrorAndExit("You did not select a database location.");
 			}
 		}
 	}

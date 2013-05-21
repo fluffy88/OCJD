@@ -103,7 +103,7 @@ public class SearchPanel extends JPanel {
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
 			} catch (ConnectException exp) {
-				App.showErrorAndExit("Cannot connect to server. \nApplication will exit!");
+				App.showErrorAndExit("Cannot connect to server.");
 			} catch (RemoteException exp) {
 				// TODO Auto-generated catch block
 				exp.printStackTrace();

@@ -32,8 +32,7 @@ public class Server implements Application {
 			final Registry registry = this.getRMIRegistry();
 			registry.rebind(RMI_SERVER, rmiStub);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			App.showErrorAndExit("Cannot publish the RMI server, check no other applications are using the default RMI port 1099.");
 		}
 	}
 

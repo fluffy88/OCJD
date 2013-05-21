@@ -41,7 +41,7 @@ public class DataServiceFactory {
 			DataService dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 			return dataService;
 		} catch (RemoteException | NotBoundException e) {
-			App.showErrorAndExit("Cannot connect to remote server.\nApplication will exit!");
+			App.showErrorAndExit("Cannot connect to remote server.");
 		}
 		return null;
 	}
