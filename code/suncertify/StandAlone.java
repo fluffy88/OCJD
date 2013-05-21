@@ -6,6 +6,8 @@ import suncertify.shared.App;
 
 public class StandAlone implements Application {
 
+	public static final String STANDALONE_DATA_SERVICE = "standalone.dataservice";
+
 	@Override
 	public void start() {
 		final DataService dataService = new DataServiceImpl();
@@ -16,6 +18,6 @@ public class StandAlone implements Application {
 	}
 
 	private void publish(final DataService dataService) {
-		App.publish("DataServer", dataService);
+		App.publish(STANDALONE_DATA_SERVICE, dataService);
 	}
 }

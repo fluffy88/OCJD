@@ -1,5 +1,7 @@
 package suncertify.client;
 
+import static suncertify.StandAlone.STANDALONE_DATA_SERVICE;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -34,7 +36,7 @@ public class DataServiceFactory {
 	}
 
 	private DataService getLocalService() {
-		return (DataService) App.getDependancy("DataServer");
+		return (DataService) App.getDependancy(STANDALONE_DATA_SERVICE);
 	}
 
 	private DataService getRemoteService() {
