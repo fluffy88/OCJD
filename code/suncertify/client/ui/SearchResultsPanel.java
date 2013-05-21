@@ -18,7 +18,7 @@ public class SearchResultsPanel extends JPanel {
 
 	private static final long serialVersionUID = -2713791197021056298L;
 
-	public static final String TABLE_MODEL = "SearchResultsModel";
+	public static final String TABLE_MODEL = "search.results.tablemodel";
 
 	private JTable table;
 
