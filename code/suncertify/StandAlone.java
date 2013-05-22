@@ -1,23 +1,22 @@
 package suncertify;
 
+import static suncertify.Client.DATASERVICE;
+import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 import suncertify.shared.App;
 
 public class StandAlone implements Application {
 
-	public static final String STANDALONE_DATA_SERVICE = "standalone.dataservice";
-
 	@Override
 	public void start() {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 
-		final Client client = new Client(AppType.StandAlone);
-		client.start();
+		ClientUI.start();
 	}
 
 	private void publish(final DataService dataService) {
-		App.publish(STANDALONE_DATA_SERVICE, dataService);
+		App.publish(DATASERVICE, dataService);
 	}
 }

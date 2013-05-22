@@ -16,7 +16,7 @@ public class ApplicationFactory {
 			break;
 
 		default: // client
-			app = new Client(AppType.Client);
+			app = new Client();
 			break;
 		}
 
