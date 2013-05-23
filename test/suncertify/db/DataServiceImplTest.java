@@ -26,7 +26,7 @@ public class DataServiceImplTest {
 	private static final int DELETE_REC_NO = 16;
 
 	@BeforeClass
-	public void setupClass() {
+	public static void setupClass() {
 		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 

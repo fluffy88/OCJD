@@ -34,7 +34,7 @@ public class DataClassTest {
 	private final DBMain data = DataAccessFactory.getDataService();
 
 	@BeforeClass
-	public void setupClass() {
+	public static void setupClass() {
 		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
