@@ -131,8 +131,6 @@
             <fileset dir="${dir.test}/resources" />
         </copy-->
     	
-    	<echo file="suncertify.properties" message="database.location=db-2x2.db" />
-    	
         <!-- execute tests -->
         <junit printsummary="true" haltonfailure="true">
         	<formatter type="xml" />

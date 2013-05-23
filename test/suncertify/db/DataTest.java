@@ -10,16 +10,25 @@ import static org.junit.Assert.assertThat;
 
 import java.rmi.RemoteException;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
+import suncertify.shared.Preferences;
 
 public class DataTest {
+
+	public static final String DATABASE_FILE = "db-2x2.db";
 
 	private static final int READ_NO = 11;
 	private static final int DELETE_TWICE_NO = 27;
 
 	private final DBMain dataService = DataAccessFactory.getDataService();
+
+	@BeforeClass
+	public void setupClass() {
+		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+	}
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {

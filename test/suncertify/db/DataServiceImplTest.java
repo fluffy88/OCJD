@@ -8,11 +8,13 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 import suncertify.shared.Contractor;
+import suncertify.shared.Preferences;
 
 public class DataServiceImplTest {
 
@@ -22,6 +24,11 @@ public class DataServiceImplTest {
 	private static final int UPDATE_REC_NO = 14;
 	private static final int READ_REC_NO = 15;
 	private static final int DELETE_REC_NO = 16;
+
+	@BeforeClass
+	public void setupClass() {
+		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+	}
 
 	@Before
 	public void setup() {
