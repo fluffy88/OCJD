@@ -39,9 +39,9 @@ public class Server implements Application {
 	private Registry getRMIRegistry() throws RemoteException {
 		Registry registry = null;
 		try {
-			registry = LocateRegistry.createRegistry(1099);
+			registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 		} catch (Exception e) {
-			registry = LocateRegistry.getRegistry(1099);
+			registry = LocateRegistry.getRegistry(Registry.REGISTRY_PORT);
 		}
 		return registry;
 	}
