@@ -55,13 +55,10 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
-		// this.lock(recNo);
-
 		this.checkRecordNumber(recNo);
 		final String[] contractor = this.contractors.get(recNo);
 		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
 
-		// this.unlock(recNo);
 		return Arrays.copyOf(contractor, contractor.length);
 	}
 
@@ -70,19 +67,11 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
-		// this.lock(recNo);
-
 		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		this.checkRecordNumber(recNo);
 
-		final boolean succeeded = this.dbWriter.write(recNo, data);
-
-		// TODO if database failed, roll back cache and handle error
-		if (succeeded) {
-			this.contractors.set(recNo, data);
-		}
-
-		// this.unlock(recNo);
+		this.dbWriter.write(recNo, data);
+		this.contractors.set(recNo, data);
 	}
 
 	/**
@@ -90,19 +79,11 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
-		// this.lock(recNo);
-
 		System.out.println("Delete: " + recNo);
 		this.checkRecordNumber(recNo);
 
-		final boolean succeeded = this.dbWriter.delete(recNo);
-
-		// TODO if database failed, roll back cache and handle error
-		if (succeeded) {
-			this.contractors.set(recNo, new String[DBSchema.NUMBER_OF_FIELDS]);
-		}
-
-		// this.unlock(recNo);
+		this.dbWriter.delete(recNo);
+		this.contractors.set(recNo, new String[DBSchema.NUMBER_OF_FIELDS]);
 	}
 
 	/**
@@ -179,20 +160,15 @@ public class Data implements DBMain {
 			}
 		}
 
-		// TODO when write to db fails what now??
-		final boolean succeeded = this.dbWriter.create(data);
+		this.dbWriter.create(data);
 
 		int recNo = deletedPos;
-		if (succeeded) {
-			if (deletedPos != -1) {
-				this.contractors.set(deletedPos, data);
-				// for (int i = 0; i < contractors.size(); i++) { if (contractors.get(i)[0] == null) { contractors.set(i, data); recNo = i;
-				// break; } }
-			} else {
-				this.contractors.add(data);
-				this.locks.add(new Semaphore(1));
-				recNo = this.contractors.size() - 1;
-			}
+		if (deletedPos != -1) {
+			this.contractors.set(deletedPos, data);
+		} else {
+			this.contractors.add(data);
+			this.locks.add(new Semaphore(1));
+			recNo = this.contractors.size() - 1;
 		}
 		this.createLock.release();
 		return recNo;
@@ -225,7 +201,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public boolean isLocked(int recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
 		this.checkRecordNumber(recNo);
 		return this.isRecordLocked(recNo);
 	}
