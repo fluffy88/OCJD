@@ -7,6 +7,7 @@ import suncertify.shared.Preferences;
 public class DataAccessFactory {
 
 	public static final String DB_LOCATION = "database.location";
+
 	private static DataAccessFactory instance;
 
 	private DBMain dataService;
@@ -16,17 +17,15 @@ public class DataAccessFactory {
 		if (instance == null) {
 			instance = new DataAccessFactory();
 		}
-		if (instance.dataService == null) {
-			instance.dataService = new Data(instance.location);
-		}
 		return instance.dataService;
 	}
 
 	private DataAccessFactory() {
-		this.init();
+		this.getDBLocation();
+		dataService = new Data(location);
 	}
 
-	private void init() {
+	private void getDBLocation() {
 		final Preferences props = Preferences.getInstance();
 		this.location = props.get(DB_LOCATION);
 
