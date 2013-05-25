@@ -10,12 +10,12 @@ import suncertify.shared.App;
 
 public class StandAlone implements Application, Startable {
 
-	private ServerUI ui;
+	private ServerUI serverUI;
 
 	@Override
 	public void launch() {
-		ui = new ServerUI();
-		ui.open();
+		serverUI = new ServerUI();
+		serverUI.open();
 
 		App.publish(DEP_SERVER_INSTANCE, this);
 	}
@@ -25,7 +25,7 @@ public class StandAlone implements Application, Startable {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 
-		ui.setVisible(false);
+		serverUI.setVisible(false);
 		ClientUI.start();
 	}
 

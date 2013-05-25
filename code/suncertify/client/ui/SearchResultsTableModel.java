@@ -28,25 +28,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		// add empty data so table headers show up and can be resized.
 		this.data.add(new Contractor(0, null, null, null, null, null, null));
 
-		this.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(final TableModelEvent e) {
-				final int row = e.getFirstRow();
-
-				if (row == e.getLastRow()) {
-					final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
-					final Contractor updatedData = data.get(row);
-
-					try {
-						dataService.update(updatedData);
-					} catch (RecordNotFoundException exp) {
-						App.showError(exp.getMessage());
-					} catch (RemoteException e1) {
-						App.showErrorAndExit("Cannot connect to remote server.");
-					}
-				}
-			}
-		});
+		this.addTableModelListener(new RecordUpdateListener());
 	}
 
 	public void clearData() {
@@ -64,27 +46,17 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	@Override
 	public int getRowCount() {
-		// if (data != null) {
 		return this.data.size();
-		// }
-		// return 0;
 	}
 
 	@Override
 	public int getColumnCount() {
-		// if (data != null && data.size() > 0) {
 		return this.columnNames.length;
-		// }
-		// return 0;
 	}
 
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		// if (data != null && rowIndex < data.size()) {
 		return this.data.get(rowIndex).toArray()[columnIndex];
-		// }
-
-		// return "";
 	}
 
 	@Override
@@ -133,6 +105,26 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 			App.showError(exp.getMessage());
 		} catch (RemoteException exp) {
 			App.showErrorAndExit("Cannot connect to remote server.");
+		}
+	}
+
+	private class RecordUpdateListener implements TableModelListener {
+		@Override
+		public void tableChanged(final TableModelEvent e) {
+			final int row = e.getFirstRow();
+
+			if (row == e.getLastRow()) {
+				final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+				final Contractor updatedData = data.get(row);
+
+				try {
+					dataService.update(updatedData);
+				} catch (RecordNotFoundException exp) {
+					App.showError(exp.getMessage());
+				} catch (RemoteException e1) {
+					App.showErrorAndExit("Cannot connect to remote server.");
+				}
+			}
 		}
 	}
 }

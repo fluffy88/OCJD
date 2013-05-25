@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -51,8 +52,10 @@ public class SearchResultsPanel extends JPanel {
 	}
 
 	private void setColumnWidth(final int idx, final int width) {
-		// TODO when TableModel data is empty we get null here....
-		final TableColumn column = this.table.getColumnModel().getColumn(idx);
-		column.setPreferredWidth(width);
+		final TableColumnModel columnModel = this.table.getColumnModel();
+		if (columnModel != null) {
+			final TableColumn column = columnModel.getColumn(idx);
+			column.setPreferredWidth(width);
+		}
 	}
 }
