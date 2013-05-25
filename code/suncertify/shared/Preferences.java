@@ -60,4 +60,14 @@ public class Preferences {
 		this.props.setProperty(key, value);
 		this.save();
 	}
+
+	public boolean getBoolean(String key) {
+		String value = this.props.getProperty(key);
+		return Boolean.parseBoolean(value);
+	}
+
+	public void set(String key, boolean value) {
+		this.props.setProperty(key, Boolean.toString(value));
+		this.save();
+	}
 }

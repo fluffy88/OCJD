@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,8 +21,11 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
+import suncertify.shared.Preferences;
 
 public class SearchPanel extends JPanel {
+
+	public static final String EXACT_MATCH = "exact.match.enabled";
 
 	private static final long serialVersionUID = 8203310258095403940L;
 
@@ -61,7 +65,15 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		this.add(new JLabel());
+		boolean state = Preferences.getInstance().getBoolean(EXACT_MATCH);
+		final JCheckBox exactMatch = new JCheckBox("Exact match", state);
+		exactMatch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Preferences.getInstance().set(EXACT_MATCH, exactMatch.isSelected());
+			}
+		});
+		this.add(exactMatch);
 
 		this.add(nameField);
 		this.add(cityField);
@@ -91,7 +103,8 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				final List<Contractor> records = dataService.find(searchCriteria, true);
+				boolean exactMatch = Preferences.getInstance().getBoolean(EXACT_MATCH);
+				final List<Contractor> records = dataService.find(searchCriteria, exactMatch);
 
 				for (final Contractor rec : records) {
 					tableModel.add(rec);
