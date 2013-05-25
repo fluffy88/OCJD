@@ -149,6 +149,16 @@ public class DataTest {
 		}
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEmpty() throws DuplicateKeyException {
+		dataService.create(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEmptyArray() throws DuplicateKeyException {
+		dataService.create(new String[] {});
+	}
+
 	@Test
 	public void testCreate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
 		String streetNo = Integer.toString((int) (Math.random() * 100000));

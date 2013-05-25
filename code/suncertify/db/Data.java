@@ -130,26 +130,12 @@ public class Data implements DBMain {
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
 		this.createLock.lock();
-		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
-			this.createLock.unlock();
-			throw new IllegalArgumentException("The Name & Address cannot be empty!");
-		}
 
-		int deletedPos = -1;
-		for (int i = 0; i < this.contractors.size(); i++) {
-			final String[] record = this.contractors.get(i);
-			if (record[0] == null) {
-				deletedPos = i;
-				break;
-			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				this.createLock.unlock();
-				throw new DuplicateKeyException("A record with this Name & Address already exists.");
-			}
-		}
+		checkCreateData(data);
 
-		this.dbWriter.create(data);
-
+		int deletedPos = this.dbWriter.create(data);
 		int recNo = deletedPos;
+
 		if (deletedPos != -1) {
 			this.contractors.set(deletedPos, data);
 		} else {
@@ -159,6 +145,23 @@ public class Data implements DBMain {
 		}
 		this.createLock.unlock();
 		return recNo;
+	}
+
+	private boolean checkCreateData(String[] data) throws DuplicateKeyException {
+		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
+			this.createLock.unlock();
+			throw new IllegalArgumentException("The Name & Address cannot be empty!");
+		}
+
+		for (String[] record : this.contractors) {
+			if (record[0] == null) {
+				continue;
+			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
+				this.createLock.unlock();
+				throw new DuplicateKeyException("A record with this Name & Address already exists.");
+			}
+		}
+		return false;
 	}
 
 	/**
