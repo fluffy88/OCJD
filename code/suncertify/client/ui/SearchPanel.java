@@ -1,7 +1,7 @@
 package suncertify.client.ui;
 
-import static suncertify.Client.DATASERVICE;
-import static suncertify.client.ui.SearchResultsPanel.TABLE_MODEL;
+import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.TABLE_MODEL;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

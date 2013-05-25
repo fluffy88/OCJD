@@ -12,6 +12,10 @@ public class App {
 	public static final String LOGGER = "scr.logger";
 
 	private static Map<String, Object> injectableItems = new HashMap<String, Object>();
+	public static final String DATASERVICE = "dataservice";
+	public static final String SERVER_INSTANCE = "server.instance";
+	public static final String STANDALONE_INSTANCE = "standalone.instance";
+	public static final String TABLE_MODEL = "search.results.tablemodel";
 
 	public static void publish(String key, Object value) {
 		injectableItems.put(key, value);

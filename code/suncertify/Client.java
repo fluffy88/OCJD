@@ -1,5 +1,7 @@
 package suncertify;
 
+import static suncertify.shared.App.DATASERVICE;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -10,8 +12,6 @@ import suncertify.server.DataService;
 import suncertify.shared.App;
 
 public class Client implements Application {
-
-	public static final String DATASERVICE = "dataservice";
 
 	@Override
 	public void start() {

@@ -1,6 +1,7 @@
 package suncertify;
 
-import static suncertify.Client.DATASERVICE;
+import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.STANDALONE_INSTANCE;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
@@ -9,8 +10,6 @@ import suncertify.server.ui.StandAloneServerUI;
 import suncertify.shared.App;
 
 public class StandAlone implements Application {
-
-	public static final String STANDALONE_INSTANCE = "standalone.instance";
 
 	@Override
 	public void start() {

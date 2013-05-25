@@ -1,5 +1,7 @@
 package suncertify;
 
+import static suncertify.shared.App.SERVER_INSTANCE;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,7 +16,6 @@ import suncertify.shared.App;
 public class Server implements Application {
 
 	public static final String RMI_SERVER = "remote.database.server";
-	public static final String SERVER_INSTANCE = "server.instance";
 
 	@Override
 	public void start() {

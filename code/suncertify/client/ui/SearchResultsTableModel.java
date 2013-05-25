@@ -1,6 +1,6 @@
 package suncertify.client.ui;
 
-import static suncertify.Client.DATASERVICE;
+import static suncertify.shared.App.DATASERVICE;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;

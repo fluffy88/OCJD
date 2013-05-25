@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.Server.SERVER_INSTANCE;
+import static suncertify.shared.App.SERVER_INSTANCE;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
