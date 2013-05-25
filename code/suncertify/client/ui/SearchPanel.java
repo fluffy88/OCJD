@@ -87,7 +87,7 @@ public class SearchPanel extends JPanel {
 		this.add(button);
 	}
 
-	class SearchButtonListener implements ActionListener {
+	private class SearchButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
