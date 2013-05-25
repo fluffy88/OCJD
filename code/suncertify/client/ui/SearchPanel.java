@@ -41,17 +41,17 @@ public class SearchPanel extends JPanel {
 	}
 
 	private void createSearchArea() {
-		JLabel nameLabel = new JLabel("Name:");
+		final JLabel nameLabel = new JLabel("Name:");
 		nameField = new JTextField(10);
-		JLabel cityLabel = new JLabel("City:");
+		final JLabel cityLabel = new JLabel("City:");
 		cityField = new JTextField(10);
-		JLabel workLabel = new JLabel("Type of Work:");
+		final JLabel workLabel = new JLabel("Type of Work:");
 		workField = new JTextField(10);
-		JLabel staffLabel = new JLabel("Number of Staff:");
+		final JLabel staffLabel = new JLabel("Number of Staff:");
 		staffField = new JTextField(10);
-		JLabel chargeLabel = new JLabel("Hourly Charge:");
+		final JLabel chargeLabel = new JLabel("Hourly Charge:");
 		chargeField = new JTextField(10);
-		JLabel customerLabel = new JLabel("Customer:");
+		final JLabel customerLabel = new JLabel("Customer:");
 		customerField = new JTextField(10);
 
 		this.add(nameLabel);
@@ -70,7 +70,7 @@ public class SearchPanel extends JPanel {
 		this.add(chargeField);
 		this.add(customerField);
 
-		JButton button = new JButton("Search");
+		final JButton button = new JButton("Search");
 		button.addActionListener(new SearchButtonListener());
 		this.add(button);
 	}
@@ -79,11 +79,11 @@ public class SearchPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			DataService dataService = (DataService) App.getDependancy(DATASERVICE);
-			SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(TABLE_MODEL);
+			final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
+			final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(TABLE_MODEL);
 			tableModel.clearData();
 			try {
-				String[] searchCriteria = new String[6];
+				final String[] searchCriteria = new String[6];
 				searchCriteria[0] = nameField.getText().trim();
 				searchCriteria[1] = cityField.getText().trim();
 				searchCriteria[2] = workField.getText().trim();
@@ -91,9 +91,9 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				List<Contractor> records = dataService.find(searchCriteria, true);
+				final List<Contractor> records = dataService.find(searchCriteria, true);
 
-				for (Contractor rec : records) {
+				for (final Contractor rec : records) {
 					tableModel.add(rec);
 				}
 				tableModel.fireTableDataChanged();
