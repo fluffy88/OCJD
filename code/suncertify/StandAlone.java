@@ -1,7 +1,7 @@
 package suncertify;
 
-import static suncertify.shared.App.DATASERVICE;
-import static suncertify.shared.App.STANDALONE_INSTANCE;
+import static suncertify.shared.App.DEP_DATASERVICE;
+import static suncertify.shared.App.DEP_STANDALONE_INSTANCE;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
@@ -16,7 +16,7 @@ public class StandAlone implements Application {
 		ServerUI ui = new StandAloneServerUI();
 		ui.open();
 
-		App.publish(STANDALONE_INSTANCE, this);
+		App.publish(DEP_STANDALONE_INSTANCE, this);
 	}
 
 	public void init() {
@@ -27,6 +27,6 @@ public class StandAlone implements Application {
 	}
 
 	private void publish(final DataService dataService) {
-		App.publish(DATASERVICE, dataService);
+		App.publish(DEP_DATASERVICE, dataService);
 	}
 }

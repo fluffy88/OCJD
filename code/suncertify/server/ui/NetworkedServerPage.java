@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.shared.App.SERVER_INSTANCE;
+import static suncertify.shared.App.DEP_SERVER_INSTANCE;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -32,7 +32,7 @@ public class NetworkedServerPage extends ServerPage {
 				if (dbFileLocTxt.getText().equals("")) {
 					App.showError("You must choose a database file first!");
 				} else {
-					Server server = (Server) App.getDependancy(SERVER_INSTANCE);
+					Server server = (Server) App.getDependancy(DEP_SERVER_INSTANCE);
 					server.init();
 
 					startBtn.setEnabled(false);

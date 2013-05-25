@@ -1,6 +1,6 @@
 package suncertify.client.ui;
 
-import static suncertify.shared.App.TABLE_MODEL;
+import static suncertify.shared.App.DEP_TABLE_MODEL;
 
 import java.awt.BorderLayout;
 
@@ -31,7 +31,7 @@ public class SearchResultsPanel extends JPanel {
 
 	private void createTableArea() {
 		final TableModel tableModel = new SearchResultsTableModel();
-		App.publish(TABLE_MODEL, tableModel);
+		App.publish(DEP_TABLE_MODEL, tableModel);
 
 		this.table = new JTable(tableModel);
 		this.table.setFillsViewportHeight(true);

@@ -1,6 +1,6 @@
 package suncertify;
 
-import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.DEP_DATASERVICE;
 import static suncertify.shared.App.PROP_SERVER_HOSTNAME;
 
 import java.rmi.NotBoundException;
@@ -20,7 +20,7 @@ public class Client implements Application {
 	@Override
 	public void start() {
 		final DataService dataService = this.getRemoteService();
-		App.publish(DATASERVICE, dataService);
+		App.publish(DEP_DATASERVICE, dataService);
 
 		ClientUI.start();
 	}

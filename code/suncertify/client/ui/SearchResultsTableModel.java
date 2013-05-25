@@ -1,6 +1,6 @@
 package suncertify.client.ui;
 
-import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.DEP_DATASERVICE;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				final int row = e.getFirstRow();
 
 				if (row == e.getLastRow()) {
-					final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
+					final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 					final Contractor updatedData = data.get(row);
 
 					try {
@@ -116,7 +116,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	private void hasRecordChanged(int row) {
 		final Contractor contractor = this.data.get(row);
 		try {
-			final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
+			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 			final Contractor cachedContractor = dataService.read(contractor.getRecordId());
 
 			final String[] record = contractor.toArray();

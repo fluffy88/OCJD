@@ -1,8 +1,8 @@
 package suncertify.client.ui;
 
-import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.DEP_DATASERVICE;
 import static suncertify.shared.App.PROP_EXACT_MATCH;
-import static suncertify.shared.App.TABLE_MODEL;
+import static suncertify.shared.App.DEP_TABLE_MODEL;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -90,8 +90,8 @@ public class SearchPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
-			final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(TABLE_MODEL);
+			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+			final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
 			tableModel.clearData();
 			try {
 				final String[] searchCriteria = new String[6];

@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.shared.App.STANDALONE_INSTANCE;
+import static suncertify.shared.App.DEP_STANDALONE_INSTANCE;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -32,7 +32,7 @@ public class StandAloneServerPage extends ServerPage {
 				if (dbFileLocTxt.getText().equals("")) {
 					App.showError("You must choose a database file first!");
 				} else {
-					StandAlone server = (StandAlone) App.getDependancy(STANDALONE_INSTANCE);
+					StandAlone server = (StandAlone) App.getDependancy(DEP_STANDALONE_INSTANCE);
 					server.init();
 
 					StandAloneServerPage.this.getTopLevelAncestor().setVisible(false);

@@ -12,10 +12,10 @@ public class App {
 	public static final String LOGGER = "scr.logger";
 
 	private static Map<String, Object> injectableItems = new HashMap<String, Object>();
-	public static final String DATASERVICE = "dataservice";
-	public static final String SERVER_INSTANCE = "server.instance";
-	public static final String STANDALONE_INSTANCE = "standalone.instance";
-	public static final String TABLE_MODEL = "search.results.tablemodel";
+	public static final String DEP_DATASERVICE = "dataservice";
+	public static final String DEP_SERVER_INSTANCE = "server.instance";
+	public static final String DEP_STANDALONE_INSTANCE = "standalone.instance";
+	public static final String DEP_TABLE_MODEL = "search.results.tablemodel";
 
 	public static final String PROP_SERVER_HOSTNAME = "server.hostname";
 	public static final String PROP_DB_LOCATION = "database.location";
