@@ -65,7 +65,7 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		boolean state = Preferences.getInstance().getBoolean(EXACT_MATCH);
+		boolean state = Preferences.getInstance().getBoolean(EXACT_MATCH, true);
 		final JCheckBox exactMatch = new JCheckBox("Exact match", state);
 		exactMatch.addActionListener(new ActionListener() {
 			@Override

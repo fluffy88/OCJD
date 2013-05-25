@@ -66,6 +66,15 @@ public class Preferences {
 		return Boolean.parseBoolean(value);
 	}
 
+	public boolean getBoolean(String key, boolean defaultValue) {
+		String value = this.props.getProperty(key);
+		if (value == null) {
+			value = Boolean.toString(defaultValue);
+			this.set(key, value);
+		}
+		return Boolean.parseBoolean(value);
+	}
+
 	public void set(String key, boolean value) {
 		this.props.setProperty(key, Boolean.toString(value));
 		this.save();
