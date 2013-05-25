@@ -96,30 +96,43 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	public void setValueAt(final Object value, final int row, final int col) {
 		if (this.data != null && row < this.data.size()) {
 			final Contractor contractor = this.data.get(row);
+			String updatedValue = (String) value;
 
-			final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
-			try {
-				final Contractor cachedContractor = dataService.read(contractor.getRecordId());
-
-				final String[] record = contractor.toArray();
-				final String[] cachedRecord = cachedContractor.toArray();
-				for (int i = 0; i < record.length; i++) {
-					if (!record[i].equals(cachedRecord[i])) {
-						this.data.set(row, cachedContractor);
-						fireTableRowsUpdated(row, row);
-						App.showError("The record value has changed on the server!\nThe table has been automatically updated with the latest values, please try again.");
-						return;
-					}
-				}
-
-				record[col] = (String) value;
-				this.data.set(row, new Contractor(contractor.getRecordId(), record));
-				fireTableCellUpdated(row, col);
-			} catch (RecordNotFoundException exp) {
-				App.showError(exp.getMessage());
-			} catch (RemoteException exp) {
-				App.showErrorAndExit("Cannot connect to remote server.");
+			if (col == columnNames.length - 1 && !updatedValue.matches("^(\\d{8}|)$")) {
+				App.showError("The Customer ID must be 8 digits.");
+				return;
 			}
+
+			hasRecordChanged(row);
+
+			final String[] record = contractor.toArray();
+			record[col] = updatedValue;
+
+			this.data.set(row, new Contractor(contractor.getRecordId(), record));
+			fireTableCellUpdated(row, col);
+		}
+	}
+
+	private void hasRecordChanged(int row) {
+		final Contractor contractor = this.data.get(row);
+		try {
+			final DataService dataService = (DataService) App.getDependancy(DATASERVICE);
+			final Contractor cachedContractor = dataService.read(contractor.getRecordId());
+
+			final String[] record = contractor.toArray();
+			final String[] cachedRecord = cachedContractor.toArray();
+			for (int i = 0; i < record.length; i++) {
+				if (!record[i].equals(cachedRecord[i])) {
+					this.data.set(row, cachedContractor);
+					fireTableRowsUpdated(row, row);
+					App.showError("The record value has changed on the server!\nThe table has been automatically updated with the latest values, please try again.");
+					return;
+				}
+			}
+		} catch (RecordNotFoundException exp) {
+			App.showError(exp.getMessage());
+		} catch (RemoteException exp) {
+			App.showErrorAndExit("Cannot connect to remote server.");
 		}
 	}
 }
