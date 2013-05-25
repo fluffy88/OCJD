@@ -52,6 +52,10 @@ public class Properties {
 		return instance.props.getProperty(key);
 	}
 
+	public static String get(String key, String defaultValue) {
+		return instance.props.getProperty(key, defaultValue);
+	}
+
 	public static void set(String key, String value) {
 		instance.props.setProperty(key, value);
 		save();
@@ -62,11 +66,7 @@ public class Properties {
 	}
 
 	public static boolean getBoolean(String key, boolean defaultValue) {
-		String value = get(key);
-		if (value == null) {
-			value = Boolean.toString(defaultValue);
-			set(key, value);
-		}
+		String value = get(key, Boolean.toString(defaultValue));
 		return Boolean.parseBoolean(value);
 	}
 

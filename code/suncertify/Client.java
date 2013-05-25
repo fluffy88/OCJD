@@ -41,7 +41,7 @@ public class Client implements Application {
 	private Registry getRegistry() throws RemoteException {
 		String host = null;
 		while (host == null || host.equals("")) {
-			host = JOptionPane.showInputDialog("Enter the server hostname", Properties.get(PROP_SERVER_HOSTNAME));
+			host = JOptionPane.showInputDialog("Enter the server hostname", Properties.get(PROP_SERVER_HOSTNAME, "localhost"));
 		}
 		Properties.set(PROP_SERVER_HOSTNAME, host);
 		Registry registry = LocateRegistry.getRegistry(host);
