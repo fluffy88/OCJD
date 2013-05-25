@@ -25,6 +25,10 @@ public class DataAccessFactory {
 		dataService = new Data(location);
 	}
 
+	public DBMain getDataServie() {
+		return this.dataService;
+	}
+
 	private void getDBLocation() {
 		final Preferences props = Preferences.getInstance();
 		this.location = props.get(DB_LOCATION);
