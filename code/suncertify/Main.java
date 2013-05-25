@@ -1,6 +1,6 @@
 package suncertify;
 
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class Main {
 
@@ -46,8 +46,7 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				final Preferences props = Preferences.getInstance();
-				props.save();
+				Properties.save();
 			}
 		});
 	}

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.shared.App;
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class Client implements Application {
 
@@ -40,9 +40,9 @@ public class Client implements Application {
 	private Registry getRegistry() throws RemoteException {
 		String host = null;
 		while (host == null || host.equals("")) {
-			host = JOptionPane.showInputDialog("Enter the server hostname", Preferences.getInstance().get("server.hostname"));
+			host = JOptionPane.showInputDialog("Enter the server hostname", Properties.get("server.hostname"));
 		}
-		Preferences.getInstance().set("server.hostname", host);
+		Properties.set("server.hostname", host);
 		Registry registry = LocateRegistry.getRegistry(host);
 		return registry;
 	}

@@ -8,29 +8,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Properties;
 
-public class Preferences {
+public class Properties {
 
 	private static final String PROPS_FILE = "suncertify.properties";
 
-	private Properties props;
+	private java.util.Properties props;
 
-	private static Preferences preferences;
+	private static Properties instance;
 
-	public static Preferences getInstance() {
-		if (preferences == null) {
-			preferences = new Preferences();
-		}
-		return preferences;
+	static {
+		instance = new Properties();
 	}
 
-	private Preferences() {
+	private Properties() {
 		this.init();
 	}
 
 	private void init() {
-		this.props = new Properties();
+		this.props = new java.util.Properties();
 
 		File propsFile = new File(PROPS_FILE);
 		if (propsFile.exists()) {
@@ -44,39 +40,37 @@ public class Preferences {
 		}
 	}
 
-	public void save() {
+	public static void save() {
 		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(PROPS_FILE))) {
-			this.props.store(stream, null);
+			instance.props.store(stream, null);
 		} catch (IOException e) {
 			App.showError("Could not write to the properties file.");
 		}
 	}
 
-	public String get(String key) {
-		return this.props.getProperty(key);
+	public static String get(String key) {
+		return instance.props.getProperty(key);
 	}
 
-	public void set(String key, String value) {
-		this.props.setProperty(key, value);
-		this.save();
+	public static void set(String key, String value) {
+		instance.props.setProperty(key, value);
+		save();
 	}
 
-	public boolean getBoolean(String key) {
-		String value = this.props.getProperty(key);
-		return Boolean.parseBoolean(value);
+	public static boolean getBoolean(String key) {
+		return Boolean.parseBoolean(get(key));
 	}
 
-	public boolean getBoolean(String key, boolean defaultValue) {
-		String value = this.props.getProperty(key);
+	public static boolean getBoolean(String key, boolean defaultValue) {
+		String value = get(key);
 		if (value == null) {
 			value = Boolean.toString(defaultValue);
-			this.set(key, value);
+			set(key, value);
 		}
 		return Boolean.parseBoolean(value);
 	}
 
-	public void set(String key, boolean value) {
-		this.props.setProperty(key, Boolean.toString(value));
-		this.save();
+	public static void set(String key, boolean value) {
+		set(key, Boolean.toString(value));
 	}
 }

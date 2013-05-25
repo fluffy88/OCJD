@@ -14,7 +14,7 @@ import org.junit.Test;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 import suncertify.shared.Contractor;
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class DataServiceImplTest {
 
@@ -27,7 +27,7 @@ public class DataServiceImplTest {
 
 	@BeforeClass
 	public static void setupClass() {
-		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Before

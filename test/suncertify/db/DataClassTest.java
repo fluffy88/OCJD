@@ -18,7 +18,7 @@ package suncertify.db;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 /**
  * The <code>DataClassTest</code> tests the main functionalities of the {@link Data} class. In order to simulate several clients trying to
@@ -35,7 +35,7 @@ public class DataClassTest {
 
 	@BeforeClass
 	public static void setupClass() {
-		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Test(timeout = 10000)

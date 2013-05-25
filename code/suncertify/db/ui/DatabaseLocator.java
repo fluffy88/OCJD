@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class DatabaseLocator {
 
@@ -20,7 +20,7 @@ public class DatabaseLocator {
 			File choice = chooser.getSelectedFile();
 			if (isDBFileValid(choice)) {
 				location = choice.getAbsolutePath();
-				Preferences.getInstance().set(DB_LOCATION, location);
+				Properties.set(DB_LOCATION, location);
 			}
 		}
 

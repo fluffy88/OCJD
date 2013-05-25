@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class DataTest {
 
@@ -27,7 +27,7 @@ public class DataTest {
 
 	@BeforeClass
 	public static void setupClass() {
-		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Test

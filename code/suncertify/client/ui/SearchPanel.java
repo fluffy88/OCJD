@@ -21,7 +21,7 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public class SearchPanel extends JPanel {
 
@@ -65,12 +65,12 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		boolean state = Preferences.getInstance().getBoolean(EXACT_MATCH, true);
+		boolean state = Properties.getBoolean(EXACT_MATCH, true);
 		final JCheckBox exactMatch = new JCheckBox("Exact match", state);
 		exactMatch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Preferences.getInstance().set(EXACT_MATCH, exactMatch.isSelected());
+				Properties.set(EXACT_MATCH, exactMatch.isSelected());
 			}
 		});
 		this.add(exactMatch);
@@ -103,7 +103,7 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				boolean exactMatch = Preferences.getInstance().getBoolean(EXACT_MATCH);
+				boolean exactMatch = Properties.getBoolean(EXACT_MATCH);
 				final List<Contractor> records = dataService.find(searchCriteria, exactMatch);
 
 				for (final Contractor rec : records) {

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import suncertify.db.ui.DatabaseLocator;
-import suncertify.shared.Preferences;
+import suncertify.shared.Properties;
 
 public abstract class ServerPage extends JPanel {
 
@@ -42,7 +42,7 @@ public abstract class ServerPage extends JPanel {
 		c.insets = inset;
 		middle.add(dbFileLocLbl, c);
 
-		dbFileLocTxt = new JTextField(Preferences.getInstance().get(DB_LOCATION));
+		dbFileLocTxt = new JTextField(Properties.get(DB_LOCATION));
 		dbFileLocTxt.setEditable(false);
 		c = new GridBagConstraints();
 		c.gridx = 1;
