@@ -88,32 +88,31 @@ public class Data implements DBMain {
 	public int[] find(String[] criteria) throws RecordNotFoundException {
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < this.contractors.size(); n++) {
-			if (isRecordDeleted(n)) {
-				continue;
-			}
-			this.lock(n);
+			if (!isRecordDeleted(n)) {
+				this.lock(n);
 
-			boolean match = true;
-			for (int i = 0; i < criteria.length; i++) {
-				if (criteria[i] != null) {
-					String record = this.contractors.get(n)[i];
-					if (record != null) {
-						record = record.toLowerCase();
-						final String recordTest = criteria[i].toLowerCase();
-						if (!record.startsWith(recordTest)) {
+				boolean match = true;
+				for (int i = 0; i < criteria.length; i++) {
+					if (criteria[i] != null) {
+						String field = this.contractors.get(n)[i];
+						if (field != null) {
+							field = field.toLowerCase();
+							criteria[i] = criteria[i].toLowerCase();
+							if (!field.startsWith(criteria[i])) {
+								match = false;
+							}
+						} else {
 							match = false;
 						}
-					} else {
-						match = false;
 					}
 				}
-			}
 
-			if (match) {
-				results.add(n);
-			}
+				if (match) {
+					results.add(n);
+				}
 
-			this.unlock(n);
+				this.unlock(n);
+			}
 		}
 
 		final int[] intResults = new int[results.size()];
