@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
@@ -20,8 +20,8 @@ import suncertify.shared.App;
  */
 public class Data implements DBMain {
 
-	private List<Semaphore> locks;
-	private Semaphore createLock;
+	private List<ReentrantLock> locks;
+	private ReentrantLock createLock;
 
 	private RandomAccessFile is;
 	private List<String[]> contractors;
@@ -38,12 +38,12 @@ public class Data implements DBMain {
 			this.is = new RandomAccessFile(this.dbLocation, "rw");
 			final DBParser parser = new DBParser(this.is);
 			this.dbWriter = new DBWriter(this.is);
-			this.createLock = new Semaphore(1);
+			this.createLock = new ReentrantLock();
 
 			this.contractors = parser.getAllRecords();
-			this.locks = new ArrayList<Semaphore>(this.contractors.size());
+			this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
 			for (int i = 0; i < this.contractors.size(); i++) {
-				locks.add(new Semaphore(1));
+				locks.add(new ReentrantLock());
 			}
 		} catch (FileNotFoundException e) {
 			App.showErrorAndExit("Cannot open database file.");
@@ -136,15 +136,10 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
-		try {
-			this.createLock.acquire();
-		} catch (InterruptedException e) {
-			App.showError("Thread interrupted while waiting to acquire the write lock.");
-			return -1;
-		}
+		this.createLock.lock();
 		System.out.println("Create: " + Arrays.toString(data));
 		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
-			this.createLock.release();
+			this.createLock.unlock();
 			throw new IllegalArgumentException("The Name & Address cannot be empty!");
 		}
 
@@ -155,7 +150,7 @@ public class Data implements DBMain {
 				deletedPos = i;
 				break;
 			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				this.createLock.release();
+				this.createLock.lock();
 				throw new DuplicateKeyException("A record with this Name & Address already exists.");
 			}
 		}
@@ -167,10 +162,10 @@ public class Data implements DBMain {
 			this.contractors.set(deletedPos, data);
 		} else {
 			this.contractors.add(data);
-			this.locks.add(new Semaphore(1));
+			this.locks.add(new ReentrantLock());
 			recNo = this.contractors.size() - 1;
 		}
-		this.createLock.release();
+		this.createLock.unlock();
 		return recNo;
 	}
 
@@ -180,11 +175,7 @@ public class Data implements DBMain {
 	@Override
 	public void lock(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
-		try {
-			this.locks.get(recNo).acquire();
-		} catch (InterruptedException e) {
-			App.showError("Thread interrupted while waiting to acquire the lock for " + recNo + ".");
-		}
+		this.locks.get(recNo).lock();
 	}
 
 	/**
@@ -193,7 +184,7 @@ public class Data implements DBMain {
 	@Override
 	public void unlock(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
-		this.locks.get(recNo).release();
+		this.locks.get(recNo).unlock();
 	}
 
 	/**
@@ -206,11 +197,7 @@ public class Data implements DBMain {
 	}
 
 	private boolean isRecordLocked(int recNo) {
-		int permits = this.locks.get(recNo).availablePermits();
-		if (permits == 0) {
-			return true;
-		}
-		return false;
+		return this.locks.get(recNo).isLocked();
 	}
 
 	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
