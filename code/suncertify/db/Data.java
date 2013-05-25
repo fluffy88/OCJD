@@ -88,7 +88,7 @@ public class Data implements DBMain {
 	public int[] find(String[] criteria) throws RecordNotFoundException {
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < this.contractors.size(); n++) {
-			if (this.contractors.get(n)[0] == null) {
+			if (isRecordDeleted(n)) {
 				continue;
 			}
 			this.lock(n);
@@ -153,12 +153,13 @@ public class Data implements DBMain {
 			throw new IllegalArgumentException("The Name & Address cannot be empty!");
 		}
 
-		for (String[] record : this.contractors) {
-			if (record[0] == null) {
-				continue;
-			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				this.createLock.unlock();
-				throw new DuplicateKeyException("A record with this Name & Address already exists.");
+		for (int i = 0; i < this.contractors.size(); i++) {
+			if (!isRecordDeleted(i)) {
+				String[] record = this.contractors.get(i);
+				if (record[0].equals(data[0]) && record[1].equals(data[1])) {
+					this.createLock.unlock();
+					throw new DuplicateKeyException("A record with this Name & Address already exists.");
+				}
 			}
 		}
 		return false;
@@ -193,6 +194,10 @@ public class Data implements DBMain {
 
 	private boolean isRecordLocked(int recNo) {
 		return this.locks.get(recNo).isLocked();
+	}
+
+	private boolean isRecordDeleted(int recNo) {
+		return this.contractors.get(recNo)[0] == null;
 	}
 
 	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
