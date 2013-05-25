@@ -142,7 +142,7 @@ public class Data implements DBMain {
 				deletedPos = i;
 				break;
 			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				this.createLock.lock();
+				this.createLock.unlock();
 				throw new DuplicateKeyException("A record with this Name & Address already exists.");
 			}
 		}
