@@ -1,9 +1,7 @@
 package suncertify.server.ui;
 
-import static suncertify.Server.SERVER_INSTANCE;
 import static suncertify.db.DataAccessFactory.DB_LOCATION;
 
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -16,27 +14,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.Server;
 import suncertify.db.ui.DatabaseLocator;
-import suncertify.shared.App;
 import suncertify.shared.Preferences;
 
-public class ServerPage extends JPanel {
+public abstract class ServerPage extends JPanel {
 
 	private static final long serialVersionUID = 5317757024984525594L;
-	private JButton startBtn;
-	private JButton shutdownBtn;
-	private JTextField dbFileLocTxt;
-	private JButton browseBtn;
+	JTextField dbFileLocTxt;
+	JButton browseBtn;
 
 	public ServerPage() {
 		this.setLayout(new GridLayout(2, 1));
 
-		createCentreArea();
-		createBottomArea();
+		createDBLocationPanel();
+		createServerButtons();
 	}
 
-	private void createCentreArea() {
+	private void createDBLocationPanel() {
 		JPanel middle = new JPanel();
 		GridBagLayout middleLayout = new GridBagLayout();
 		Insets inset = new Insets(5, 5, 5, 5);
@@ -74,37 +68,5 @@ public class ServerPage extends JPanel {
 		this.add(middle);
 	}
 
-	private void createBottomArea() {
-		JPanel bottom = new JPanel();
-		FlowLayout layout = new FlowLayout();
-		layout.setAlignment(FlowLayout.RIGHT);
-		bottom.setLayout(layout);
-
-		startBtn = new JButton("Start");
-		startBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (dbFileLocTxt.getText().equals("")) {
-					App.showError("You must choose a database file first!");
-				} else {
-					Server server = (Server) App.getDependancy(SERVER_INSTANCE);
-					server.init();
-
-					startBtn.setEnabled(false);
-					browseBtn.setEnabled(false);
-				}
-			}
-		});
-		bottom.add(startBtn);
-
-		shutdownBtn = new JButton("Shutdown");
-		shutdownBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		bottom.add(shutdownBtn);
-		this.add(bottom);
-	}
+	abstract void createServerButtons();
 }

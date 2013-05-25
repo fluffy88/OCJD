@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
+import suncertify.server.ui.NetworkedServerUI;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
@@ -17,7 +18,9 @@ public class Server implements Application {
 
 	@Override
 	public void start() {
-		ServerUI.start();
+		ServerUI ui = new NetworkedServerUI();
+		ui.open();
+
 		App.publish(SERVER_INSTANCE, this);
 	}
 

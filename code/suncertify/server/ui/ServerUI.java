@@ -1,17 +1,12 @@
 package suncertify.server.ui;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-public class ServerUI extends JFrame {
+public abstract class ServerUI extends JFrame {
 
 	private static final long serialVersionUID = 4825206061500231551L;
 
-	public static void start() {
-		new ServerUI();
-	}
-
-	private ServerUI() {
+	public void open() {
 		this.setTitle("CSR Server application");
 		this.setSize(600, 125);
 		this.setResizable(false);
@@ -22,8 +17,5 @@ public class ServerUI extends JFrame {
 		this.setVisible(true);
 	}
 
-	private void initUIElements() {
-		final JPanel panel = new ServerPage();
-		this.getContentPane().add(panel);
-	}
+	abstract void initUIElements();
 }
