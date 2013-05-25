@@ -18,7 +18,7 @@ import suncertify.shared.Properties;
 public class Client implements Application {
 
 	@Override
-	public void start() {
+	public void launch() {
 		final DataService dataService = this.getRemoteService();
 		App.publish(DEP_DATASERVICE, dataService);
 

@@ -9,23 +9,23 @@ import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
-import suncertify.server.ui.NetworkedServerUI;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
-public class Server implements Application {
+public class Server implements Application, Startable {
 
 	public static final String RMI_SERVER = "remote.database.server";
 
 	@Override
-	public void start() {
-		ServerUI ui = new NetworkedServerUI();
+	public void launch() {
+		ServerUI ui = new ServerUI();
 		ui.open();
 
 		App.publish(DEP_SERVER_INSTANCE, this);
 	}
 
-	public void init() {
+	@Override
+	public void start() {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 	}

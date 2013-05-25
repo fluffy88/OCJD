@@ -1,7 +1,9 @@
 package suncertify.server.ui;
 
+import static suncertify.shared.App.DEP_SERVER_INSTANCE;
 import static suncertify.shared.App.PROP_DB_LOCATION;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -9,19 +11,24 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import suncertify.Startable;
 import suncertify.db.ui.DatabaseLocator;
+import suncertify.shared.App;
 import suncertify.shared.Properties;
 
-public abstract class ServerPage extends JPanel {
+public class ServerPage extends JPanel {
 
 	private static final long serialVersionUID = 5317757024984525594L;
-	JTextField dbFileLocTxt;
-	JButton browseBtn;
+	private JTextField dbFileLocTxt;
+	private JButton browseBtn;
+	private AbstractButton shutdownBtn;
+	private JButton startBtn;
 
 	public ServerPage() {
 		this.setLayout(new GridLayout(2, 1));
@@ -68,5 +75,37 @@ public abstract class ServerPage extends JPanel {
 		this.add(middle);
 	}
 
-	abstract void createServerButtons();
+	void createServerButtons() {
+		JPanel bottom = new JPanel();
+		FlowLayout layout = new FlowLayout();
+		layout.setAlignment(FlowLayout.RIGHT);
+		bottom.setLayout(layout);
+
+		startBtn = new JButton("Start");
+		startBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (dbFileLocTxt.getText().equals("")) {
+					App.showError("You must choose a database file first!");
+				} else {
+					Startable server = (Startable) App.getDependancy(DEP_SERVER_INSTANCE);
+					server.start();
+
+					startBtn.setEnabled(false);
+					browseBtn.setEnabled(false);
+				}
+			}
+		});
+		bottom.add(startBtn);
+
+		shutdownBtn = new JButton("Shutdown");
+		shutdownBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		bottom.add(shutdownBtn);
+		this.add(bottom);
+	}
 }

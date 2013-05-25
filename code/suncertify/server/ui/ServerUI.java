@@ -2,7 +2,7 @@ package suncertify.server.ui;
 
 import javax.swing.JFrame;
 
-public abstract class ServerUI extends JFrame {
+public class ServerUI extends JFrame {
 
 	private static final long serialVersionUID = 4825206061500231551L;
 
@@ -17,5 +17,7 @@ public abstract class ServerUI extends JFrame {
 		this.setVisible(true);
 	}
 
-	abstract void initUIElements();
+	private void initUIElements() {
+		this.getContentPane().add(new ServerPage());
+	}
 }
