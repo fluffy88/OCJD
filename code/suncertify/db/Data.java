@@ -12,12 +12,6 @@ import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
 import suncertify.shared.App;
 
-/**
- * Singleton class to access the Database.
- * 
- * @author Sean Dunne
- * 
- */
 public class Data implements DBMain {
 
 	private List<ReentrantLock> locks;
@@ -40,13 +34,17 @@ public class Data implements DBMain {
 			this.dbWriter = new DBWriter(this.is);
 			this.createLock = new ReentrantLock();
 
-			this.contractors = parser.getAllRecords();
-			this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
-			for (int i = 0; i < this.contractors.size(); i++) {
-				locks.add(new ReentrantLock());
-			}
+			this.buildCache(parser);
 		} catch (FileNotFoundException e) {
 			App.showErrorAndExit("Cannot open database file.");
+		}
+	}
+
+	private void buildCache(DBParser parser) {
+		this.contractors = parser.getAllRecords();
+		this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
+		for (int i = 0; i < this.contractors.size(); i++) {
+			locks.add(new ReentrantLock());
 		}
 	}
 
@@ -57,7 +55,6 @@ public class Data implements DBMain {
 	public String[] read(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		final String[] contractor = this.contractors.get(recNo);
-		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
 
 		return Arrays.copyOf(contractor, contractor.length);
 	}
@@ -67,7 +64,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
-		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.write(recNo, data);
@@ -79,7 +75,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
-		System.out.println("Delete: " + recNo);
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.delete(recNo);
@@ -91,8 +86,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public int[] find(String[] criteria) throws RecordNotFoundException {
-		System.out.println("Find: " + Arrays.toString(criteria));
-
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < this.contractors.size(); n++) {
 			if (this.contractors.get(n)[0] == null) {
@@ -137,7 +130,6 @@ public class Data implements DBMain {
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
 		this.createLock.lock();
-		System.out.println("Create: " + Arrays.toString(data));
 		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
 			this.createLock.unlock();
 			throw new IllegalArgumentException("The Name & Address cannot be empty!");
