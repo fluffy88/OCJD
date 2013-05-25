@@ -17,6 +17,10 @@ public class App {
 	public static final String STANDALONE_INSTANCE = "standalone.instance";
 	public static final String TABLE_MODEL = "search.results.tablemodel";
 
+	public static final String PROP_SERVER_HOSTNAME = "server.hostname";
+	public static final String PROP_DB_LOCATION = "database.location";
+	public static final String PROP_EXACT_MATCH = "exact.match.enabled";
+
 	public static void publish(String key, Object value) {
 		injectableItems.put(key, value);
 	}

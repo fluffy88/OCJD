@@ -1,12 +1,11 @@
 package suncertify.db;
 
+import static suncertify.shared.App.PROP_DB_LOCATION;
 import suncertify.db.ui.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 public class DataAccessFactory {
-
-	public static final String DB_LOCATION = "database.location";
 
 	private static DataAccessFactory instance;
 
@@ -30,7 +29,7 @@ public class DataAccessFactory {
 	}
 
 	private void getDBLocation() {
-		this.location = Properties.get(DB_LOCATION);
+		this.location = Properties.get(PROP_DB_LOCATION);
 
 		if (this.location == null) {
 			this.location = DatabaseLocator.getLocation();

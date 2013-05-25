@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.db.DataAccessFactory.DB_LOCATION;
+import static suncertify.shared.App.PROP_DB_LOCATION;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,7 +42,7 @@ public abstract class ServerPage extends JPanel {
 		c.insets = inset;
 		middle.add(dbFileLocLbl, c);
 
-		dbFileLocTxt = new JTextField(Properties.get(DB_LOCATION));
+		dbFileLocTxt = new JTextField(Properties.get(PROP_DB_LOCATION));
 		dbFileLocTxt.setEditable(false);
 		c = new GridBagConstraints();
 		c.gridx = 1;

@@ -1,6 +1,7 @@
 package suncertify.client.ui;
 
 import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.PROP_EXACT_MATCH;
 import static suncertify.shared.App.TABLE_MODEL;
 
 import java.awt.Dimension;
@@ -24,8 +25,6 @@ import suncertify.shared.Contractor;
 import suncertify.shared.Properties;
 
 public class SearchPanel extends JPanel {
-
-	public static final String EXACT_MATCH = "exact.match.enabled";
 
 	private static final long serialVersionUID = 8203310258095403940L;
 
@@ -65,12 +64,12 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		boolean state = Properties.getBoolean(EXACT_MATCH, true);
+		boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
 		final JCheckBox exactMatch = new JCheckBox("Exact match", state);
 		exactMatch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Properties.set(EXACT_MATCH, exactMatch.isSelected());
+				Properties.set(PROP_EXACT_MATCH, exactMatch.isSelected());
 			}
 		});
 		this.add(exactMatch);
@@ -103,7 +102,7 @@ public class SearchPanel extends JPanel {
 				searchCriteria[4] = chargeField.getText().trim();
 				searchCriteria[5] = customerField.getText().trim();
 
-				boolean exactMatch = Properties.getBoolean(EXACT_MATCH);
+				boolean exactMatch = Properties.getBoolean(PROP_EXACT_MATCH);
 				final List<Contractor> records = dataService.find(searchCriteria, exactMatch);
 
 				for (final Contractor rec : records) {

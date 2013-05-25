@@ -1,6 +1,7 @@
 package suncertify;
 
 import static suncertify.shared.App.DATASERVICE;
+import static suncertify.shared.App.PROP_SERVER_HOSTNAME;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -40,9 +41,9 @@ public class Client implements Application {
 	private Registry getRegistry() throws RemoteException {
 		String host = null;
 		while (host == null || host.equals("")) {
-			host = JOptionPane.showInputDialog("Enter the server hostname", Properties.get("server.hostname"));
+			host = JOptionPane.showInputDialog("Enter the server hostname", Properties.get(PROP_SERVER_HOSTNAME));
 		}
-		Properties.set("server.hostname", host);
+		Properties.set(PROP_SERVER_HOSTNAME, host);
 		Registry registry = LocateRegistry.getRegistry(host);
 		return registry;
 	}

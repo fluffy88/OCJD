@@ -18,6 +18,7 @@ package suncertify.db;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
@@ -35,7 +36,7 @@ public class DataClassTest {
 
 	@BeforeClass
 	public static void setupClass() {
-		Properties.set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(App.PROP_DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Test(timeout = 10000)

@@ -1,6 +1,6 @@
 package suncertify.db.ui;
 
-import static suncertify.db.DataAccessFactory.DB_LOCATION;
+import static suncertify.shared.App.PROP_DB_LOCATION;
 
 import java.io.File;
 
@@ -20,7 +20,7 @@ public class DatabaseLocator {
 			File choice = chooser.getSelectedFile();
 			if (isDBFileValid(choice)) {
 				location = choice.getAbsolutePath();
-				Properties.set(DB_LOCATION, location);
+				Properties.set(PROP_DB_LOCATION, location);
 			}
 		}
 
