@@ -207,8 +207,7 @@ public class Data implements DBMain {
 		if (this.contractors.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
-		final String[] record = this.contractors.get(recNo);
-		if (record[0] == null && !this.isRecordLocked(recNo)) {
+		if (isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
 			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
 	}
