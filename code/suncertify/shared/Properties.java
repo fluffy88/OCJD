@@ -53,7 +53,12 @@ public class Properties {
 	}
 
 	public static String get(String key, String defaultValue) {
-		return instance.props.getProperty(key, defaultValue);
+		String value = instance.props.getProperty(key);
+		if (value == null) {
+			set(key, defaultValue);
+			value = defaultValue;
+		}
+		return value;
 	}
 
 	public static void set(String key, String value) {
