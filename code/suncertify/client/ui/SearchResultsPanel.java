@@ -3,11 +3,15 @@ package suncertify.client.ui;
 import static suncertify.shared.App.DEP_TABLE_MODEL;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -25,13 +29,14 @@ public class SearchResultsPanel extends JPanel {
 
 	public SearchResultsPanel() {
 		this.setLayout(new BorderLayout());
-		this.setBorder(new EmptyBorder(15, 10, 10, 10));
+		this.setBorder(new EmptyBorder(15, 10, 1, 10));
 
 		this.createTableArea();
+		this.createButtonArea();
 	}
 
 	private void createTableArea() {
-		final TableModel tableModel = new SearchResultsTableModel();
+		final SearchResultsTableModel tableModel = new SearchResultsTableModel();
 		App.publish(DEP_TABLE_MODEL, tableModel);
 
 		this.table = new JTable(tableModel);
@@ -49,6 +54,23 @@ public class SearchResultsPanel extends JPanel {
 
 		final JScrollPane scrollPane = new JScrollPane(this.table);
 		this.add(scrollPane, BorderLayout.CENTER);
+	}
+
+	private void createButtonArea() {
+		final JPanel bottomPanel = new JPanel();
+		final FlowLayout layout = (FlowLayout) bottomPanel.getLayout();
+		layout.setHgap(0);
+		layout.setAlignment(FlowLayout.LEFT);
+		final JButton deleteBtn = new JButton("Delete (0)");
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
+			}
+		});
+		deleteBtn.addActionListener(new DeleteActionListener(this.table));
+		bottomPanel.add(deleteBtn);
+		this.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
 	private void setColumnWidth(final int idx, final int width) {

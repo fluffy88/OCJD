@@ -39,6 +39,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		this.data.add(rec);
 	}
 
+	public Contractor getContractorAt(int row) {
+		return this.data.get(row);
+	}
+
 	@Override
 	public String getColumnName(final int column) {
 		return this.columnNames[column];
