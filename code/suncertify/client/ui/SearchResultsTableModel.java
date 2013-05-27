@@ -39,6 +39,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		this.data.add(rec);
 	}
 
+	public void remove(final Contractor rec) {
+		this.data.remove(rec);
+	}
+
 	public Contractor getContractorAt(int row) {
 		return this.data.get(row);
 	}

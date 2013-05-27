@@ -27,16 +27,22 @@ public class DeleteActionListener implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		for (int i : this.table.getSelectedRows()) {
-			Contractor contractor = this.tableModel.getContractorAt(i);
+	public void actionPerformed(ActionEvent event) {
+		int[] rows = this.table.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {
+			int selectedRow = rows[i] - i;
+			Contractor contractor = this.tableModel.getContractorAt(selectedRow);
 
 			try {
 				this.dataService.delete(contractor);
-			} catch (RemoteException | RecordNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				this.tableModel.remove(contractor);
+			} catch (RecordNotFoundException e) {
+				App.showError(e.getMessage());
+			} catch (RemoteException e) {
+				App.showErrorAndExit("Cannot connect to remote server.");
 			}
 		}
+
+		this.tableModel.fireTableDataChanged();
 	}
 }
