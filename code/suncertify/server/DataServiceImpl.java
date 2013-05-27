@@ -47,7 +47,7 @@ public class DataServiceImpl implements DataService {
 			if (exactMatch) {
 				String[] dataArray = record.toArray();
 				for (int i = 0; i < criteria.length; i++) {
-					if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equalsIgnoreCase(criteria[i])) {
+					if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equals(criteria[i])) {
 						continue add_loop;
 					}
 				}
