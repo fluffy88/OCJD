@@ -35,6 +35,8 @@ public class SearchPanel extends JPanel {
 	private JTextField chargeField;
 	private JTextField customerField;
 
+	private JButton button;
+
 	public SearchPanel() {
 		this.setLayout(new GridLayout(2, 7, 10, 1));
 		this.setMaximumSize(new Dimension(800, 100));
@@ -44,18 +46,25 @@ public class SearchPanel extends JPanel {
 	}
 
 	private void createSearchArea() {
+		final ActionListener enterAct = new EnterActionListener();
 		final JLabel nameLabel = new JLabel("Name:");
 		nameField = new JTextField(10);
+		nameField.addActionListener(enterAct);
 		final JLabel cityLabel = new JLabel("City:");
 		cityField = new JTextField(10);
+		cityField.addActionListener(enterAct);
 		final JLabel workLabel = new JLabel("Type of Work:");
 		workField = new JTextField(10);
+		workField.addActionListener(enterAct);
 		final JLabel staffLabel = new JLabel("Number of Staff:");
 		staffField = new JTextField(10);
+		staffField.addActionListener(enterAct);
 		final JLabel chargeLabel = new JLabel("Hourly Charge:");
 		chargeField = new JTextField(10);
+		chargeField.addActionListener(enterAct);
 		final JLabel customerLabel = new JLabel("Customer:");
 		customerField = new JTextField(10);
+		customerField.addActionListener(enterAct);
 
 		this.add(nameLabel);
 		this.add(cityLabel);
@@ -81,9 +90,16 @@ public class SearchPanel extends JPanel {
 		this.add(chargeField);
 		this.add(customerField);
 
-		final JButton button = new JButton("Search");
+		button = new JButton("Search");
 		button.addActionListener(new SearchButtonListener());
 		this.add(button);
+	}
+	
+	private class EnterActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			button.doClick();
+		}
 	}
 
 	private class SearchButtonListener implements ActionListener {
