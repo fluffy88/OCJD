@@ -83,17 +83,17 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				return;
 			}
 
-			hasRecordChanged(row);
+			if (!this.hasRecordChanged(row)) {
+				final String[] record = contractor.toArray();
+				record[col] = updatedValue;
 
-			final String[] record = contractor.toArray();
-			record[col] = updatedValue;
-
-			this.data.set(row, new Contractor(contractor.getRecordId(), record));
-			fireTableCellUpdated(row, col);
+				this.data.set(row, new Contractor(contractor.getRecordId(), record));
+				this.fireTableCellUpdated(row, col);
+			}
 		}
 	}
 
-	private void hasRecordChanged(int row) {
+	private boolean hasRecordChanged(final int row) {
 		final Contractor contractor = this.data.get(row);
 		try {
 			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
@@ -104,9 +104,9 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 			for (int i = 0; i < record.length; i++) {
 				if (!record[i].equals(cachedRecord[i])) {
 					this.data.set(row, cachedContractor);
-					fireTableRowsUpdated(row, row);
+					this.fireTableRowsUpdated(row, row);
 					App.showError("The record value has changed on the server!\nThe table has been automatically updated with the latest values, please try again.");
-					return;
+					return true;
 				}
 			}
 		} catch (RecordNotFoundException exp) {
@@ -114,22 +114,25 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		} catch (RemoteException exp) {
 			App.showErrorAndExit("Cannot connect to remote server.");
 		}
+		return false;
 	}
 
 	private class RecordUpdateListener implements TableModelListener {
-		@Override
-		public void tableChanged(final TableModelEvent e) {
-			final int row = e.getFirstRow();
 
-			if (row == e.getLastRow()) {
-				final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
-				final Contractor updatedData = data.get(row);
+		final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+
+		@Override
+		public void tableChanged(final TableModelEvent event) {
+			final int row = event.getFirstRow();
+
+			if (row == event.getLastRow()) {
+				final Contractor updatedData = SearchResultsTableModel.this.data.get(row);
 
 				try {
-					dataService.update(updatedData);
-				} catch (RecordNotFoundException exp) {
-					App.showError(exp.getMessage());
-				} catch (RemoteException e1) {
+					this.dataService.update(updatedData);
+				} catch (RecordNotFoundException e) {
+					App.showError(e.getMessage());
+				} catch (RemoteException e) {
 					App.showErrorAndExit("Cannot connect to remote server.");
 				}
 			}
