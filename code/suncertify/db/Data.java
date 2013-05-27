@@ -98,7 +98,7 @@ public class Data implements DBMain {
 						if (field != null) {
 							field = field.toLowerCase();
 							criteria[i] = criteria[i].toLowerCase();
-							if (!field.startsWith(criteria[i])) {
+							if (!field.contains(criteria[i])) {
 								match = false;
 							}
 						} else {
