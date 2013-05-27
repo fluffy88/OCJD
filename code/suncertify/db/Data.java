@@ -97,8 +97,8 @@ public class Data implements DBMain {
 						String field = this.contractors.get(n)[i];
 						if (field != null) {
 							field = field.toLowerCase();
-							criteria[i] = criteria[i].toLowerCase();
-							if (!field.contains(criteria[i])) {
+							final String critField = criteria[i].toLowerCase();
+							if (!field.contains(critField)) {
 								match = false;
 							}
 						} else {
