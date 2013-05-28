@@ -1,4 +1,4 @@
-package suncertify.db.ui;
+package suncertify.server.ui;
 
 import static suncertify.shared.App.PROP_DB_LOCATION;
 

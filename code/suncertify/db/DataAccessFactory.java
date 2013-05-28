@@ -1,7 +1,7 @@
 package suncertify.db;
 
 import static suncertify.shared.App.PROP_DB_LOCATION;
-import suncertify.db.ui.DatabaseLocator;
+import suncertify.server.ui.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
