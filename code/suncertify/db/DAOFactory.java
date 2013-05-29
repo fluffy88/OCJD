@@ -5,21 +5,21 @@ import suncertify.server.ui.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
-public class DataAccessFactory {
+public class DAOFactory {
 
-	private static DataAccessFactory instance;
+	private static DAOFactory instance;
 
 	private final DBMain dataService;
 	private String location;
 
-	private DataAccessFactory() {
+	private DAOFactory() {
 		this.getDBLocation();
 		dataService = new Data(location);
 	}
 
-	public static DataAccessFactory getInstance() {
+	public static DAOFactory getInstance() {
 		if (instance == null) {
-			instance = new DataAccessFactory();
+			instance = new DAOFactory();
 		}
 		return instance;
 	}

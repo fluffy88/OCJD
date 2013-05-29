@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import suncertify.db.DBMain;
-import suncertify.db.DataAccessFactory;
+import suncertify.db.DAOFactory;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.shared.Contractor;
 
 public class DataServiceImpl implements DataService {
 
-	DBMain data = DataAccessFactory.getInstance().getDataService();
+	DBMain data = DAOFactory.getInstance().getDataService();
 
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException, RemoteException {
