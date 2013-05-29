@@ -24,10 +24,6 @@ public class DataAccessFactory {
 		dataService = new Data(location);
 	}
 
-	public DBMain getDataServie() {
-		return this.dataService;
-	}
-
 	private void getDBLocation() {
 		this.location = Properties.get(PROP_DB_LOCATION);
 
