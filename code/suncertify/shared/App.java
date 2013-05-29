@@ -11,7 +11,7 @@ public class App {
 
 	public static final String LOGGER = "scr.logger";
 
-	private static Map<String, Object> injectableItems = new HashMap<String, Object>();
+	private static Map<String, Object> injectableItems = new HashMap<>();
 	public static final String DEP_DATASERVICE = "dataservice";
 	public static final String DEP_SERVER_INSTANCE = "server.instance";
 	public static final String DEP_STANDALONE_INSTANCE = "standalone.instance";

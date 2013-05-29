@@ -8,7 +8,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		sanitiseParams(args);
+		checkIsSupportedParam(args);
 
 		String mode = "";
 		if (args.length != 0) {
@@ -22,14 +22,10 @@ public class Main {
 		setShutdownHook();
 	}
 
-	private static void sanitiseParams(final String[] args) {
-		boolean tests = true;
-		tests = tests && args.length > 1;
-		tests = tests && args.length == 1;
-		tests = tests && !args[0].equalsIgnoreCase("server");
-		tests = tests && !args[0].equalsIgnoreCase("alone");
-
-		if (tests) {
+	private static void checkIsSupportedParam(final String[] args) {
+		if (args.length == 0 || args[0].equalsIgnoreCase("server") || args[0].equalsIgnoreCase("alone")) {
+			// do nothing
+		} else {
 			printUsage();
 		}
 	}
@@ -40,6 +36,7 @@ public class Main {
 		System.out.println("\\tserver:\\tTo start networked server.");
 		System.out.println("\\alone:\\tTo start unnetworked standalone application.");
 		System.out.println("\\No mode:\\tTo start networked client.");
+		System.exit(1);
 	}
 
 	private static void setShutdownHook() {
