@@ -3,15 +3,16 @@ package suncertify.server.ui;
 import static suncertify.shared.App.DEP_SERVER_INSTANCE;
 import static suncertify.shared.App.PROP_DB_LOCATION;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,8 +30,11 @@ public class ServerPage extends JPanel {
 	private AbstractButton shutdownBtn;
 	private JButton startBtn;
 
+	private Dimension buttonSize = new Dimension(75, 25);
+
 	public ServerPage() {
-		this.setLayout(new GridLayout(2, 1));
+		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
+		this.setLayout(layout);
 
 		createDBLocationPanel();
 		createServerButtons();
@@ -39,13 +43,12 @@ public class ServerPage extends JPanel {
 	private void createDBLocationPanel() {
 		JPanel middle = new JPanel();
 		GridBagLayout middleLayout = new GridBagLayout();
-		Insets inset = new Insets(5, 5, 5, 5);
 		middle.setLayout(middleLayout);
 
-		JLabel dbFileLocLbl = new JLabel("Database file: ");
+		JLabel dbFileLocLbl = new JLabel("Database file:");
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
-		c.insets = inset;
+		c.insets = new Insets(5, 5, 5, 5);
 		middle.add(dbFileLocLbl, c);
 
 		dbFileLocTxt = new JTextField(Properties.get(PROP_DB_LOCATION));
@@ -54,10 +57,11 @@ public class ServerPage extends JPanel {
 		c.gridx = 1;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
-		c.insets = inset;
+		c.insets = new Insets(5, 0, 5, 0);
 		middle.add(dbFileLocTxt, c);
 
 		browseBtn = new JButton("Locate");
+		browseBtn.setPreferredSize(this.buttonSize);
 		browseBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -69,7 +73,7 @@ public class ServerPage extends JPanel {
 		});
 		c = new GridBagConstraints();
 		c.gridx = 2;
-		c.insets = inset;
+		c.insets = new Insets(5, 5, 5, 5);
 		middle.add(browseBtn, c);
 		this.add(middle);
 	}
@@ -81,6 +85,7 @@ public class ServerPage extends JPanel {
 		bottom.setLayout(layout);
 
 		startBtn = new JButton("Start");
+		startBtn.setPreferredSize(this.buttonSize);
 		startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -98,6 +103,8 @@ public class ServerPage extends JPanel {
 		bottom.add(startBtn);
 
 		shutdownBtn = new JButton("Shutdown");
+		shutdownBtn.setMargin(new Insets(0, 5, 0, 5));
+		shutdownBtn.setPreferredSize(this.buttonSize);
 		shutdownBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
