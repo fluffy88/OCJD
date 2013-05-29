@@ -9,19 +9,23 @@ public class DataAccessFactory {
 
 	private static DataAccessFactory instance;
 
-	private DBMain dataService;
+	private final DBMain dataService;
 	private String location;
-
-	public static DBMain getDataService() {
-		if (instance == null) {
-			instance = new DataAccessFactory();
-		}
-		return instance.dataService;
-	}
 
 	private DataAccessFactory() {
 		this.getDBLocation();
 		dataService = new Data(location);
+	}
+
+	public static DataAccessFactory getInstance() {
+		if (instance == null) {
+			instance = new DataAccessFactory();
+		}
+		return instance;
+	}
+
+	public DBMain getDataService() {
+		return this.dataService;
 	}
 
 	private void getDBLocation() {

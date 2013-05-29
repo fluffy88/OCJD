@@ -15,8 +15,7 @@ public class Main {
 			mode = args[0];
 		}
 
-		final ApplicationFactory factory = new ApplicationFactory();
-		final Application app = factory.createApplication(mode);
+		final Application app = ApplicationFactory.getInstance().createApplication(mode);
 
 		app.launch();
 		setShutdownHook();

@@ -32,7 +32,7 @@ import suncertify.shared.Properties;
  */
 public class DataClassTest {
 
-	private final DBMain data = DataAccessFactory.getDataService();
+	private final DBMain data = DataAccessFactory.getInstance().getDataService();
 
 	@BeforeClass
 	public static void setupClass() {
