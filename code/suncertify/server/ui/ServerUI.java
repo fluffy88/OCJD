@@ -8,7 +8,7 @@ public class ServerUI extends JFrame {
 
 	public void open() {
 		this.setTitle("CSR Server application");
-		this.setSize(600, 125);
+		this.setSize(600, 100);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
