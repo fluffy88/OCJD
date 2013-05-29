@@ -1,16 +1,10 @@
 package suncertify;
 
-public class ApplicationFactory {
+public enum ApplicationFactory {
 
-	private static ApplicationFactory instance;
-
-	private ApplicationFactory() {
-	}
+	instance;
 
 	public static ApplicationFactory getInstance() {
-		if (instance == null) {
-			instance = new ApplicationFactory();
-		}
 		return instance;
 	}
 

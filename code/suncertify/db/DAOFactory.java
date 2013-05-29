@@ -5,9 +5,9 @@ import suncertify.server.ui.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
-public class DAOFactory {
+public enum DAOFactory {
 
-	private static DAOFactory instance;
+	instance;
 
 	private final DBMain dataService;
 	private String location;
@@ -18,9 +18,6 @@ public class DAOFactory {
 	}
 
 	public static DAOFactory getInstance() {
-		if (instance == null) {
-			instance = new DAOFactory();
-		}
 		return instance;
 	}
 
