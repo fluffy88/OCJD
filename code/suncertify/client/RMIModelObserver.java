@@ -3,18 +3,12 @@ package suncertify.client;
 import static suncertify.shared.App.DEP_TABLE_MODEL;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.client.ui.SearchResultsTableModel;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
-public class RMIModelObserver extends UnicastRemoteObject implements RemoteObserver {
-
-	public RMIModelObserver() throws RemoteException {
-	}
-
-	private static final long serialVersionUID = -856707684776889780L;
+public class RMIModelObserver implements RemoteObserver {
 
 	@Override
 	public void update(final Contractor contractor, final String cmd) throws RemoteException {

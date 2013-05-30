@@ -2,6 +2,10 @@ package suncertify;
 
 import static suncertify.shared.App.DEP_DATASERVICE;
 import static suncertify.shared.App.DEP_SERVER_INSTANCE;
+
+import java.rmi.RemoteException;
+
+import suncertify.client.RMIModelObserver;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
@@ -27,6 +31,13 @@ public class StandAlone implements Application, Startable {
 
 		serverUI.setVisible(false);
 		ClientUI.start();
+
+		try {
+			final RMIModelObserver modelCallback = new RMIModelObserver();
+			dataService.addObserver(modelCallback);
+		} catch (RemoteException e) {
+			App.showErrorAndExit("Could not register client for automatic updates from the server.");
+		}
 	}
 
 	private void publish(final DataService dataService) {

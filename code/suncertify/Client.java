@@ -7,6 +7,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JOptionPane;
 
@@ -27,6 +28,7 @@ public class Client implements Application {
 
 		try {
 			final RMIModelObserver rmiCallback = new RMIModelObserver();
+			UnicastRemoteObject.exportObject(rmiCallback);
 			dataService.addObserver(rmiCallback);
 		} catch (RemoteException e) {
 			App.showErrorAndExit("Could not register client for automatic updates from the server.");
