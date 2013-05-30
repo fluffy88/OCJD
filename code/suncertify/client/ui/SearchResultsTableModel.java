@@ -5,8 +5,6 @@ import static suncertify.shared.App.DEP_DATASERVICE;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -27,24 +25,43 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	public SearchResultsTableModel() {
 		// add empty data so table headers show up and can be resized.
 		this.data.add(new Contractor(0, null, null, null, null, null, null));
-
-		this.addTableModelListener(new RecordUpdateListener());
 	}
 
 	public void clearData() {
 		this.data.clear();
+		this.fireTableDataChanged();
 	}
 
 	public void add(final Contractor rec) {
 		this.data.add(rec);
+		int index = this.getContractorIndex(rec);
+		this.fireTableRowsInserted(index, index);
 	}
 
 	public void remove(final Contractor rec) {
-		this.data.remove(rec);
+		int index = this.getContractorIndex(rec);
+		this.data.remove(index);
+		this.fireTableRowsDeleted(index, index);
+	}
+
+	public void update(final Contractor rec) {
+		int index = this.getContractorIndex(rec);
+		this.data.set(index, rec);
+		this.fireTableRowsUpdated(index, index);
 	}
 
 	public Contractor getContractorAt(int row) {
 		return this.data.get(row);
+	}
+
+	private int getContractorIndex(final Contractor rec) {
+		for (int index = 0; index < this.data.size(); index++) {
+			Contractor c = this.data.get(index);
+			if (c.getRecordId() == rec.getRecordId()) {
+				return index;
+			}
+		}
+		return -1;
 	}
 
 	@Override
@@ -75,7 +92,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public void setValueAt(final Object value, final int row, final int col) {
 		if (this.data != null && row < this.data.size()) {
-			final Contractor contractor = this.data.get(row);
+			final Contractor currentContractor = this.data.get(row);
 			String updatedValue = (String) value;
 
 			if (col == columnNames.length - 1 && !updatedValue.matches("^(\\d{8}|)$")) {
@@ -83,58 +100,17 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				return;
 			}
 
-			if (!this.hasRecordChanged(row)) {
-				final String[] record = contractor.toArray();
-				record[col] = updatedValue;
+			final String[] record = currentContractor.toArray();
+			record[col] = updatedValue;
+			final Contractor updatedContractor = new Contractor(currentContractor.getRecordId(), record);
 
-				this.data.set(row, new Contractor(contractor.getRecordId(), record));
-				this.fireTableCellUpdated(row, col);
-			}
-		}
-	}
-
-	private boolean hasRecordChanged(final int row) {
-		final Contractor contractor = this.data.get(row);
-		try {
 			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
-			final Contractor cachedContractor = dataService.read(contractor.getRecordId());
-
-			final String[] record = contractor.toArray();
-			final String[] cachedRecord = cachedContractor.toArray();
-			for (int i = 0; i < record.length; i++) {
-				if (!record[i].equals(cachedRecord[i])) {
-					this.data.set(row, cachedContractor);
-					this.fireTableRowsUpdated(row, row);
-					App.showError("The record value has changed on the server!\nThe table has been automatically updated with the latest values, please try again.");
-					return true;
-				}
-			}
-		} catch (RecordNotFoundException exp) {
-			App.showError(exp.getMessage());
-		} catch (RemoteException exp) {
-			App.showErrorAndExit("Cannot connect to remote server.");
-		}
-		return false;
-	}
-
-	private class RecordUpdateListener implements TableModelListener {
-
-		final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
-
-		@Override
-		public void tableChanged(final TableModelEvent event) {
-			final int row = event.getFirstRow();
-
-			if (row == event.getLastRow()) {
-				final Contractor updatedData = SearchResultsTableModel.this.data.get(row);
-
-				try {
-					this.dataService.update(updatedData);
-				} catch (RecordNotFoundException e) {
-					App.showError(e.getMessage());
-				} catch (RemoteException e) {
-					App.showErrorAndExit("Cannot connect to remote server.");
-				}
+			try {
+				dataService.update(updatedContractor);
+			} catch (RecordNotFoundException e) {
+				App.showError(e.getMessage());
+			} catch (RemoteException e) {
+				App.showErrorAndExit("Cannot connect to remote server.");
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 
 import javax.swing.JOptionPane;
 
+import suncertify.client.RMIModelObserver;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.shared.App;
@@ -23,6 +24,13 @@ public class Client implements Application {
 		App.publish(DEP_DATASERVICE, dataService);
 
 		ClientUI.start();
+
+		try {
+			final RMIModelObserver rmiCallback = new RMIModelObserver();
+			dataService.addObserver(rmiCallback);
+		} catch (RemoteException e) {
+			App.showErrorAndExit("Could not register client for automatic updates from the server.");
+		}
 	}
 
 	private DataService getRemoteService() {

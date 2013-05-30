@@ -35,14 +35,11 @@ public class DeleteActionListener implements ActionListener {
 
 			try {
 				this.dataService.delete(contractor);
-				this.tableModel.remove(contractor);
 			} catch (RecordNotFoundException e) {
 				App.showError(e.getMessage());
 			} catch (RemoteException e) {
 				App.showErrorAndExit("Cannot connect to remote server.");
 			}
 		}
-
-		this.tableModel.fireTableDataChanged();
 	}
 }

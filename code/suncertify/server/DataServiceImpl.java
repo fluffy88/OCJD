@@ -4,8 +4,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import suncertify.db.DBMain;
+import suncertify.client.RemoteObserver;
 import suncertify.db.DAOFactory;
+import suncertify.db.DBMain;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.shared.Contractor;
@@ -13,6 +14,7 @@ import suncertify.shared.Contractor;
 public class DataServiceImpl implements DataService {
 
 	DBMain data = DAOFactory.getInstance().getDataService();
+	private List<RemoteObserver> observers = new ArrayList<>();
 
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException, RemoteException {
@@ -28,6 +30,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(data.getRecordId());
 		this.data.update(data.getRecordId(), data.toArray());
 		this.data.unlock(data.getRecordId());
+		this.notifyObservers(data, "update");
 	}
 
 	@Override
@@ -35,6 +38,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(record.getRecordId());
 		this.data.delete(record.getRecordId());
 		this.data.unlock(record.getRecordId());
+		this.notifyObservers(record, "delete");
 	}
 
 	@Override
@@ -60,7 +64,32 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public int create(final String[] data) throws DuplicateKeyException, RemoteException {
-		return this.data.create(data);
+		int recNo = this.data.create(data);
+		try {
+			this.notifyObservers(this.read(recNo), "create");
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return recNo;
 	}
 
+	public void notifyObservers(final Contractor contractor, final String cmd) {
+		for (RemoteObserver o : this.observers) {
+			try {
+				o.update(contractor, cmd);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addObserver(RemoteObserver o) throws RemoteException {
+		this.observers.add(o);
+	}
+
+	public void deleteObserver(RemoteObserver o) throws RemoteException {
+		this.observers.remove(o);
+	}
 }
