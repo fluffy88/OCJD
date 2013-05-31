@@ -11,7 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JOptionPane;
 
-import suncertify.client.RMIModelObserver;
+import suncertify.client.DataModelObserver;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.shared.App;
@@ -27,7 +27,7 @@ public class Client implements Application {
 		ClientUI.start();
 
 		try {
-			final RMIModelObserver rmiCallback = new RMIModelObserver();
+			final DataModelObserver rmiCallback = new DataModelObserver();
 			UnicastRemoteObject.exportObject(rmiCallback);
 			dataService.addObserver(rmiCallback);
 		} catch (RemoteException e) {

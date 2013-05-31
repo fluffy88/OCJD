@@ -8,7 +8,7 @@ import suncertify.client.ui.SearchResultsTableModel;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
-public class RMIModelObserver implements RemoteObserver {
+public class DataModelObserver implements RemoteObserver {
 
 	@Override
 	public void update(final Contractor contractor, final String cmd) throws RemoteException {
