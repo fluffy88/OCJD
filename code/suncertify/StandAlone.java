@@ -5,7 +5,7 @@ import static suncertify.shared.App.DEP_SERVER_INSTANCE;
 
 import java.rmi.RemoteException;
 
-import suncertify.client.DataModelObserver;
+import suncertify.client.ServerUpdateObserver;
 import suncertify.client.ui.ClientUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
@@ -33,7 +33,7 @@ public class StandAlone implements Application, Startable {
 		ClientUI.start();
 
 		try {
-			final DataModelObserver modelCallback = new DataModelObserver();
+			final ServerUpdateObserver modelCallback = new ServerUpdateObserver();
 			dataService.addObserver(modelCallback);
 		} catch (RemoteException e) {
 			App.showErrorAndExit("Could not register client for automatic updates from the server.");
