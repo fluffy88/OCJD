@@ -88,10 +88,12 @@ public class DataServiceImpl implements DataService {
 	}
 
 	public void addObserver(RemoteObserver o) {
+		App.logWarning("Client connected");
 		this.observers.add(o);
 	}
 
 	public void deleteObserver(RemoteObserver o) {
+		App.logWarning("Client disconnected");
 		this.observers.remove(o);
 	}
 }

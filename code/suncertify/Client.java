@@ -19,6 +19,8 @@ import suncertify.shared.Properties;
 
 public class Client implements Application {
 
+	private DataModelObserver rmiCallback;
+
 	@Override
 	public void launch() {
 		final DataService dataService = this.getRemoteService();
@@ -27,12 +29,14 @@ public class Client implements Application {
 		ClientUI.start();
 
 		try {
-			final DataModelObserver rmiCallback = new DataModelObserver();
+			rmiCallback = new DataModelObserver();
 			UnicastRemoteObject.exportObject(rmiCallback);
 			dataService.addObserver(rmiCallback);
 		} catch (RemoteException e) {
-			App.showErrorAndExit("Could not register client for automatic updates from the server.");
+			App.showErrorAndExit("Could not subscribe to Server updates.");
 		}
+
+		this.setShutdownHook();
 	}
 
 	private DataService getRemoteService() {
@@ -40,10 +44,10 @@ public class Client implements Application {
 			Registry registry = this.getRegistry();
 			DataService dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 			return dataService;
+		} catch (NotBoundException e) {
+			App.showErrorAndExit("Server found but cannot connect.");
 		} catch (RemoteException e) {
 			App.showErrorAndExit("Cannot connect to remote server.");
-		} catch (NotBoundException e) {
-			App.showErrorAndExit("Server not started.");
 		}
 		return null;
 	}
@@ -59,5 +63,19 @@ public class Client implements Application {
 		Properties.set(PROP_SERVER_HOSTNAME, host);
 		Registry registry = LocateRegistry.getRegistry(host);
 		return registry;
+	}
+
+	private void setShutdownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+				try {
+					dataService.deleteObserver(rmiCallback);
+				} catch (RemoteException e) {
+					App.logError("Could not contact the Server when attempting to unsubscribe.");
+				}
+			}
+		});
 	}
 }
