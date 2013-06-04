@@ -5,23 +5,17 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
 import suncertify.shared.App;
 
-/**
- * Singleton class to access the Database.
- * 
- * @author Sean Dunne
- * 
- */
 public class Data implements DBMain {
 
-	private List<Semaphore> locks;
-	private Semaphore createLock;
+	private List<ReentrantLock> locks;
+	private ReentrantLock createLock;
 
 	private RandomAccessFile is;
 	private List<String[]> contractors;
@@ -38,15 +32,19 @@ public class Data implements DBMain {
 			this.is = new RandomAccessFile(this.dbLocation, "rw");
 			final DBParser parser = new DBParser(this.is);
 			this.dbWriter = new DBWriter(this.is);
-			this.createLock = new Semaphore(1);
+			this.createLock = new ReentrantLock();
 
-			this.contractors = parser.getAllRecords();
-			this.locks = new ArrayList<Semaphore>(this.contractors.size());
-			for (int i = 0; i < this.contractors.size(); i++) {
-				locks.add(new Semaphore(1));
-			}
+			this.buildCache(parser);
 		} catch (FileNotFoundException e) {
 			App.showErrorAndExit("Cannot open database file.");
+		}
+	}
+
+	private void buildCache(DBParser parser) {
+		this.contractors = parser.getAllRecords();
+		this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
+		for (int i = 0; i < this.contractors.size(); i++) {
+			locks.add(new ReentrantLock());
 		}
 	}
 
@@ -57,7 +55,6 @@ public class Data implements DBMain {
 	public String[] read(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		final String[] contractor = this.contractors.get(recNo);
-		System.out.println("Read: " + recNo + " - " + Arrays.toString(contractor));
 
 		return Arrays.copyOf(contractor, contractor.length);
 	}
@@ -67,7 +64,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void update(int recNo, String[] data) throws RecordNotFoundException {
-		System.out.println("Update: " + recNo + " - " + Arrays.toString(data));
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.write(recNo, data);
@@ -79,7 +75,6 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public void delete(int recNo) throws RecordNotFoundException {
-		System.out.println("Delete: " + recNo);
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.delete(recNo);
@@ -91,36 +86,33 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public int[] find(String[] criteria) throws RecordNotFoundException {
-		System.out.println("Find: " + Arrays.toString(criteria));
-
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < this.contractors.size(); n++) {
-			if (this.contractors.get(n)[0] == null) {
-				continue;
-			}
-			this.lock(n);
+			if (!isRecordDeleted(n)) {
+				this.lock(n);
 
-			boolean match = true;
-			for (int i = 0; i < criteria.length; i++) {
-				if (criteria[i] != null) {
-					String record = this.contractors.get(n)[i];
-					if (record != null) {
-						record = record.toLowerCase();
-						final String recordTest = criteria[i].toLowerCase();
-						if (!record.startsWith(recordTest)) {
+				boolean match = true;
+				for (int i = 0; i < criteria.length; i++) {
+					if (criteria[i] != null) {
+						String field = this.contractors.get(n)[i];
+						if (field != null) {
+							field = field.toLowerCase();
+							final String critField = criteria[i].toLowerCase();
+							if (!field.contains(critField)) {
+								match = false;
+							}
+						} else {
 							match = false;
 						}
-					} else {
-						match = false;
 					}
 				}
-			}
 
-			if (match) {
-				results.add(n);
-			}
+				if (match) {
+					results.add(n);
+				}
 
-			this.unlock(n);
+				this.unlock(n);
+			}
 		}
 
 		final int[] intResults = new int[results.size()];
@@ -136,42 +128,40 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
-		try {
-			this.createLock.acquire();
-		} catch (InterruptedException e) {
-			App.showError("Thread interrupted while waiting to acquire the write lock.");
-			return -1;
-		}
-		System.out.println("Create: " + Arrays.toString(data));
-		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
-			this.createLock.release();
-			throw new IllegalArgumentException("The Name & Address cannot be empty!");
-		}
+		this.createLock.lock();
 
-		int deletedPos = -1;
-		for (int i = 0; i < this.contractors.size(); i++) {
-			final String[] record = this.contractors.get(i);
-			if (record[0] == null) {
-				deletedPos = i;
-				break;
-			} else if (record[0].equals(data[0]) && record[1].equals(data[1])) {
-				this.createLock.release();
-				throw new DuplicateKeyException("A record with this Name & Address already exists.");
-			}
-		}
+		checkCreateData(data);
 
-		this.dbWriter.create(data);
-
+		int deletedPos = this.dbWriter.create(data);
 		int recNo = deletedPos;
+
 		if (deletedPos != -1) {
 			this.contractors.set(deletedPos, data);
 		} else {
 			this.contractors.add(data);
-			this.locks.add(new Semaphore(1));
+			this.locks.add(new ReentrantLock());
 			recNo = this.contractors.size() - 1;
 		}
-		this.createLock.release();
+		this.createLock.unlock();
 		return recNo;
+	}
+
+	private boolean checkCreateData(String[] data) throws DuplicateKeyException {
+		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
+			this.createLock.unlock();
+			throw new IllegalArgumentException("The Name & Address cannot be empty!");
+		}
+
+		for (int i = 0; i < this.contractors.size(); i++) {
+			if (!isRecordDeleted(i)) {
+				String[] record = this.contractors.get(i);
+				if (record[0].equals(data[0]) && record[1].equals(data[1])) {
+					this.createLock.unlock();
+					throw new DuplicateKeyException("A record with this Name & Address already exists.");
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -180,11 +170,7 @@ public class Data implements DBMain {
 	@Override
 	public void lock(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
-		try {
-			this.locks.get(recNo).acquire();
-		} catch (InterruptedException e) {
-			App.showError("Thread interrupted while waiting to acquire the lock for " + recNo + ".");
-		}
+		this.locks.get(recNo).lock();
 	}
 
 	/**
@@ -193,7 +179,7 @@ public class Data implements DBMain {
 	@Override
 	public void unlock(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
-		this.locks.get(recNo).release();
+		this.locks.get(recNo).unlock();
 	}
 
 	/**
@@ -206,11 +192,11 @@ public class Data implements DBMain {
 	}
 
 	private boolean isRecordLocked(int recNo) {
-		int permits = this.locks.get(recNo).availablePermits();
-		if (permits == 0) {
-			return true;
-		}
-		return false;
+		return this.locks.get(recNo).isLocked();
+	}
+
+	private boolean isRecordDeleted(int recNo) {
+		return this.contractors.get(recNo)[0] == null;
 	}
 
 	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
@@ -220,8 +206,7 @@ public class Data implements DBMain {
 		if (this.contractors.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
-		final String[] record = this.contractors.get(recNo);
-		if (record[0] == null && !this.isRecordLocked(recNo)) {
+		if (isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
 			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
 	}

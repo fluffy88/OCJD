@@ -14,7 +14,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import suncertify.db.io.DBSchema;
-import suncertify.shared.Preferences;
+import suncertify.shared.App;
+import suncertify.shared.Properties;
 
 public class DataTest {
 
@@ -23,11 +24,11 @@ public class DataTest {
 	private static final int READ_NO = 11;
 	private static final int DELETE_TWICE_NO = 27;
 
-	private final DBMain dataService = DataAccessFactory.getDataService();
+	private final DBMain dataService = DAOFactory.getInstance().getDataService();
 
 	@BeforeClass
 	public static void setupClass() {
-		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(App.PROP_DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Test
@@ -147,6 +148,16 @@ public class DataTest {
 			assertThat(Integer.parseInt(record[3]), is(notNullValue()));
 			assertThat(Float.parseFloat(record[4].substring(1)), is(notNullValue()));
 		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEmpty() throws DuplicateKeyException {
+		dataService.create(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEmptyArray() throws DuplicateKeyException {
+		dataService.create(new String[] {});
 	}
 
 	@Test

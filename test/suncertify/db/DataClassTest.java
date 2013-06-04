@@ -18,7 +18,8 @@ package suncertify.db;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import suncertify.shared.Preferences;
+import suncertify.shared.App;
+import suncertify.shared.Properties;
 
 /**
  * The <code>DataClassTest</code> tests the main functionalities of the {@link Data} class. In order to simulate several clients trying to
@@ -31,11 +32,11 @@ import suncertify.shared.Preferences;
  */
 public class DataClassTest {
 
-	private final DBMain data = DataAccessFactory.getDataService();
+	private final DBMain data = DAOFactory.getInstance().getDataService();
 
 	@BeforeClass
 	public static void setupClass() {
-		Preferences.getInstance().set(DataAccessFactory.DB_LOCATION, DataTest.DATABASE_FILE);
+		Properties.set(App.PROP_DB_LOCATION, DataTest.DATABASE_FILE);
 	}
 
 	@Test(timeout = 10000)

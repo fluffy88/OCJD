@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import suncertify.client.RemoteObserver;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.shared.Contractor;
@@ -19,5 +20,9 @@ public interface DataService extends Remote {
 	List<Contractor> find(final String[] criteria, boolean exactMatch) throws RecordNotFoundException, RemoteException;
 
 	int create(final String[] data) throws DuplicateKeyException, RemoteException;
+
+	void addObserver(RemoteObserver o) throws RemoteException;
+
+	void deleteObserver(RemoteObserver o) throws RemoteException;
 
 }

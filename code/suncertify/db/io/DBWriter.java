@@ -50,16 +50,19 @@ public class DBWriter {
 		return true;
 	}
 
-	public boolean create(String[] data) {
+	public int create(String[] data) {
 		try {
 			this.lock.lock();
 			is.seek(START_OF_RECORDS);
 
 			while (is.getFilePointer() != is.length()) {
+				long recordPos = is.getFilePointer();
 				int flag = is.readShort();
-				if (flag != 0) {
-					this.writeRecord(is.getFilePointer() - NUM_BYTES_RECORD_DELETED_FLAG, data);
-					return true;
+				if (flag != RECORD_VALID) {
+					this.writeRecord(recordPos, data);
+
+					long recordIndex = (recordPos - START_OF_RECORDS) / RECORD_LENGTH;
+					return (int) recordIndex;
 				}
 				// skip the record
 				is.seek(is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
@@ -70,7 +73,7 @@ public class DBWriter {
 		} catch (IOException e) {
 			App.showErrorAndExit("Cannot write to database file.");
 		}
-		return true;
+		return -1;
 	}
 
 	private void writeRecord(long pos, String[] data) throws IOException {

@@ -12,7 +12,7 @@ import static suncertify.db.io.DBSchema.US_ASCII;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import suncertify.shared.App;
@@ -26,7 +26,7 @@ public class DBParser {
 	}
 
 	public List<String[]> getAllRecords() {
-		final List<String[]> contractors = new LinkedList<String[]>();
+		final List<String[]> contractors = new ArrayList<String[]>();
 		try {
 			this.checkMagicCookie();
 			this.readDataFileHeaders();

@@ -2,6 +2,6 @@ package suncertify;
 
 public interface Application {
 
-	void start();
+	void launch();
 
 }

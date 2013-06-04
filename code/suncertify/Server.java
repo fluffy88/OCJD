@@ -1,5 +1,7 @@
 package suncertify;
 
+import static suncertify.shared.App.DEP_SERVER_INSTANCE;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -10,18 +12,20 @@ import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
-public class Server implements Application {
+public class Server implements Application, Startable {
 
 	public static final String RMI_SERVER = "remote.database.server";
-	public static final String SERVER_INSTANCE = "server.instance";
+
+	@Override
+	public void launch() {
+		ServerUI ui = new ServerUI();
+		ui.open();
+
+		App.publish(DEP_SERVER_INSTANCE, this);
+	}
 
 	@Override
 	public void start() {
-		ServerUI.start();
-		App.publish(SERVER_INSTANCE, this);
-	}
-
-	public void init() {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 	}

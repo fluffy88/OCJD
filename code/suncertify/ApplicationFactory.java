@@ -1,6 +1,12 @@
 package suncertify;
 
-public class ApplicationFactory {
+public enum ApplicationFactory {
+
+	instance;
+
+	public static ApplicationFactory getInstance() {
+		return instance;
+	}
 
 	public Application createApplication(final String mode) {
 		final String appMode = mode.toLowerCase();
