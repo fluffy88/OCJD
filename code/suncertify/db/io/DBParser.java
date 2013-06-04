@@ -1,5 +1,6 @@
 package suncertify.db.io;
 
+import static suncertify.db.io.DBSchema.EXPECTED_MAGIC_COOKIE;
 import static suncertify.db.io.DBSchema.FIELD_HEADERS;
 import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
 import static suncertify.db.io.DBSchema.MAGIC_COOKIE;
@@ -27,7 +28,7 @@ public class DBParser {
 	public List<String[]> getAllRecords() {
 		final List<String[]> contractors = new LinkedList<String[]>();
 		try {
-
+			this.checkMagicCookie();
 			this.readDataFileHeaders();
 
 			// data
@@ -43,9 +44,15 @@ public class DBParser {
 		return contractors;
 	}
 
+	private void checkMagicCookie() throws IOException {
+		MAGIC_COOKIE = this.is.readInt();
+		if (MAGIC_COOKIE != EXPECTED_MAGIC_COOKIE) {
+			App.showErrorAndExit("The selected database file is not compatible with this application.");
+		}
+	}
+
 	private void readDataFileHeaders() throws IOException {
 		// headers
-		MAGIC_COOKIE = this.is.readInt();
 		START_OF_RECORDS = this.is.readInt();
 		NUMBER_OF_FIELDS = this.is.readShort();
 

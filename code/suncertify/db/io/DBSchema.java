@@ -19,6 +19,7 @@ public class DBSchema {
 	public static final int RECORD_DELETED = 0x8000;
 
 	// File Headers - Values
+	public static int EXPECTED_MAGIC_COOKIE = 514;
 	public static int MAGIC_COOKIE;
 	public static int START_OF_RECORDS;
 	public static int NUMBER_OF_FIELDS;
