@@ -1,8 +1,8 @@
 package suncertify.client.ui;
 
 import static suncertify.shared.App.DEP_DATASERVICE;
-import static suncertify.shared.App.PROP_EXACT_MATCH;
 import static suncertify.shared.App.DEP_TABLE_MODEL;
+import static suncertify.shared.App.PROP_EXACT_MATCH;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -37,6 +37,8 @@ public class SearchPanel extends JPanel {
 
 	private JButton button;
 
+	private JCheckBox exactMatch;
+
 	public SearchPanel() {
 		this.setLayout(new GridLayout(2, 7, 10, 1));
 		this.setMaximumSize(new Dimension(800, 100));
@@ -66,6 +68,13 @@ public class SearchPanel extends JPanel {
 		customerField = new JTextField(10);
 		customerField.addActionListener(enterAct);
 
+		boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
+		exactMatch = new JCheckBox("Exact match", state);
+		exactMatch.addActionListener(new ExactMatchListener());
+
+		button = new JButton("Search");
+		button.addActionListener(new SearchButtonListener());
+
 		this.add(nameLabel);
 		this.add(cityLabel);
 		this.add(workLabel);
@@ -73,14 +82,6 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
-		final JCheckBox exactMatch = new JCheckBox("Exact match", state);
-		exactMatch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Properties.set(PROP_EXACT_MATCH, exactMatch.isSelected());
-			}
-		});
 		this.add(exactMatch);
 
 		this.add(nameField);
@@ -90,15 +91,20 @@ public class SearchPanel extends JPanel {
 		this.add(chargeField);
 		this.add(customerField);
 
-		button = new JButton("Search");
-		button.addActionListener(new SearchButtonListener());
 		this.add(button);
 	}
-	
+
 	private class EnterActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			button.doClick();
+		}
+	}
+
+	private class ExactMatchListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Properties.set(PROP_EXACT_MATCH, exactMatch.isSelected());
 		}
 	}
 

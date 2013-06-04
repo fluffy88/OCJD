@@ -33,10 +33,10 @@ public class StandAlone implements Application, Startable {
 		ClientUI.start();
 
 		try {
-			final ServerUpdateObserver modelCallback = new ServerUpdateObserver();
-			dataService.addObserver(modelCallback);
+			final ServerUpdateObserver callback = new ServerUpdateObserver();
+			dataService.addObserver(callback);
 		} catch (RemoteException e) {
-			App.showErrorAndExit("Could not register client for automatic updates from the server.");
+			// will not be thrown in StandAlone mode
 		}
 	}
 
