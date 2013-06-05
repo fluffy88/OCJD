@@ -1,9 +1,13 @@
 package suncertify.client.ui;
 
+import static suncertify.shared.App.DEP_DATASERVICE;
 import static suncertify.shared.App.DEP_TABLE_MODEL;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,13 +19,17 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import suncertify.db.RecordNotFoundException;
+import suncertify.server.DataService;
 import suncertify.shared.App;
+import suncertify.shared.Contractor;
 
 public class SearchResultsPanel extends JPanel {
 
 	private static final long serialVersionUID = -2713791197021056298L;
 
 	private JTable table;
+	private JButton deleteBtn;
 
 	public SearchResultsPanel() {
 		this.setLayout(new BorderLayout());
@@ -50,14 +58,11 @@ public class SearchResultsPanel extends JPanel {
 		final FlowLayout layout = (FlowLayout) bottomPanel.getLayout();
 		layout.setHgap(0);
 		layout.setAlignment(FlowLayout.LEFT);
-		final JButton deleteBtn = new JButton("Delete (0)");
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
-			}
-		});
-		deleteBtn.addActionListener(new DeleteActionListener(this.table));
+
+		deleteBtn = new JButton("Delete (0)");
+		deleteBtn.addActionListener(new DeleteActionListener());
+		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
+
 		bottomPanel.add(deleteBtn);
 		this.add(bottomPanel, BorderLayout.SOUTH);
 	}
@@ -67,6 +72,36 @@ public class SearchResultsPanel extends JPanel {
 		if (columnModel != null) {
 			final TableColumn column = columnModel.getColumn(idx);
 			column.setPreferredWidth(width);
+		}
+	}
+
+	private class DeleteActionListener implements ActionListener {
+
+		private SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
+		private DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			int[] rows = SearchResultsPanel.this.table.getSelectedRows();
+			for (int i = 0; i < rows.length; i++) {
+				int selectedRow = rows[i] - i;
+				Contractor contractor = this.tableModel.getContractorAt(selectedRow);
+
+				try {
+					this.dataService.delete(contractor);
+				} catch (RecordNotFoundException e) {
+					App.showError(e.getMessage());
+				} catch (RemoteException e) {
+					App.showErrorAndExit("Cannot connect to remote server.");
+				}
+			}
+		}
+	}
+
+	private class TableSelectionListener implements ListSelectionListener {
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
 		}
 	}
 }
