@@ -110,28 +110,25 @@ public class SearchPanel extends JPanel {
 
 	private class SearchButtonListener implements ActionListener {
 
+		private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
-			final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
-			tableModel.clearData();
-			try {
-				final String[] searchCriteria = new String[6];
-				searchCriteria[0] = nameField.getText().trim();
-				searchCriteria[1] = cityField.getText().trim();
-				searchCriteria[2] = workField.getText().trim();
-				searchCriteria[3] = staffField.getText().trim();
-				searchCriteria[4] = chargeField.getText().trim();
-				searchCriteria[5] = customerField.getText().trim();
+			final String[] searchCriteria = new String[6];
+			searchCriteria[0] = nameField.getText().trim();
+			searchCriteria[1] = cityField.getText().trim();
+			searchCriteria[2] = workField.getText().trim();
+			searchCriteria[3] = staffField.getText().trim();
+			searchCriteria[4] = chargeField.getText().trim();
+			searchCriteria[5] = customerField.getText().trim();
+			boolean exactMatch = Properties.getBoolean(PROP_EXACT_MATCH);
 
-				boolean exactMatch = Properties.getBoolean(PROP_EXACT_MATCH);
+			try {
+				final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
 				final List<Contractor> records = dataService.find(searchCriteria, exactMatch);
 
-				for (final Contractor rec : records) {
-					tableModel.add(rec);
-				}
-				tableModel.fireTableDataChanged();
-
+				tableModel.clearData();
+				tableModel.addAll(records);
 			} catch (RecordNotFoundException exp) {
 				App.showError(exp.getMessage());
 			} catch (RemoteException exp) {

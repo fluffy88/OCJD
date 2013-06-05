@@ -22,7 +22,5 @@ public class ServerUpdateObserver implements RemoteObserver {
 			model.remove(contractor);
 			break;
 		}
-
-		model.fireTableDataChanged();
 	}
 }

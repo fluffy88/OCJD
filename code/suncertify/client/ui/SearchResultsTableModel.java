@@ -4,6 +4,7 @@ import static suncertify.shared.App.DEP_DATASERVICE;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -22,6 +23,8 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
 
+	private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+
 	public SearchResultsTableModel() {
 		// add empty data so table headers show up and can be resized.
 		this.data.add(new Contractor(0, null, null, null, null, null, null));
@@ -36,6 +39,13 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		this.data.add(rec);
 		int index = this.getContractorIndex(rec);
 		this.fireTableRowsInserted(index, index);
+	}
+
+	public void addAll(final List<Contractor> records) {
+		for (final Contractor rec : records) {
+			this.data.add(rec);
+		}
+		this.fireTableDataChanged();
 	}
 
 	public void remove(final Contractor rec) {
@@ -104,7 +114,6 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 			record[col] = updatedValue;
 			final Contractor updatedContractor = new Contractor(currentContractor.getRecordId(), record);
 
-			final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 			try {
 				dataService.update(updatedContractor);
 			} catch (RecordNotFoundException e) {
