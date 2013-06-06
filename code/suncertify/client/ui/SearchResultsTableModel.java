@@ -112,28 +112,34 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	@Override
 	public void setValueAt(final Object value, final int row, final int column) {
 		if (this.data != null && row < this.data.size()) {
-			final Contractor currentContractor = this.data.get(row);
-			String updatedValue = (String) value;
+			final Contractor contractor = this.data.get(row);
+			final String updatedValue = (String) value;
 
-			if (column == this.columns.indexOf(CUSTOMER_ID) && !updatedValue.matches("^(\\d{8}|)$")) {
-				App.showError("The Customer ID must be 8 digits.");
-				return;
-			} else if (column != this.columns.indexOf(CUSTOMER_ID) && updatedValue.equals("")) {
-				App.showError("You cannot leave the " + this.columns.get(column) + " field empty.");
-				return;
-			}
+			if (isValidValue(updatedValue, column)) {
+				final String[] record = contractor.toArray();
+				record[column] = updatedValue;
+				final Contractor updatedContractor = new Contractor(contractor.getRecordId(), record);
 
-			final String[] record = currentContractor.toArray();
-			record[column] = updatedValue;
-			final Contractor updatedContractor = new Contractor(currentContractor.getRecordId(), record);
-
-			try {
-				dataService.update(updatedContractor);
-			} catch (RecordNotFoundException e) {
-				App.showError(e.getMessage());
-			} catch (RemoteException e) {
-				App.showErrorAndExit("Cannot connect to remote server.");
+				try {
+					dataService.update(updatedContractor);
+				} catch (RecordNotFoundException e) {
+					App.showError(e.getMessage());
+				} catch (RemoteException e) {
+					App.showErrorAndExit("Cannot connect to remote server.");
+				}
 			}
 		}
+	}
+
+	private boolean isValidValue(final String value, final int column) {
+		if (column == this.columns.indexOf(CUSTOMER_ID) && !value.matches("^(\\d{8}|)$")) {
+			App.showError("The Customer ID must be 8 digits.");
+			return false;
+		} else if (column != this.columns.indexOf(CUSTOMER_ID) && value.equals("")) {
+			App.showError("You cannot leave the '" + this.columns.get(column) + "'" + " field empty.");
+			return false;
+		}
+
+		return true;
 	}
 }
