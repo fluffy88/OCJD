@@ -18,14 +18,24 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	private static final long serialVersionUID = -6527725876159983929L;
 
-	private final String[] columnNames = new String[] { "Subcontractor Name", "City", "Types of work", "Number of staff", "Hourly charge",
-			"Customer holding this record" };
-
-	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
-
 	private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
+	private final ArrayList<String> columns = new ArrayList<>();
+
+	static final String CONTRACTOR_NAME = "Name";
+	static final String CITY = "City";
+	static final String TYPES_OF_WORK = "Types of work";
+	static final String NUMBER_OF_STAFF = "Number of staff";
+	static final String HOURLY_CHARGE = "Hourly charge";
+	static final String CUSTOMER_ID = "Customer ID";
 
 	public SearchResultsTableModel() {
+		columns.add(CONTRACTOR_NAME);
+		columns.add(CITY);
+		columns.add(TYPES_OF_WORK);
+		columns.add(NUMBER_OF_STAFF);
+		columns.add(HOURLY_CHARGE);
+		columns.add(CUSTOMER_ID);
 		// add empty data so table headers show up and can be resized.
 		this.data.add(new Contractor(0, null, null, null, null, null, null));
 	}
@@ -76,7 +86,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	@Override
 	public String getColumnName(final int column) {
-		return this.columnNames[column];
+		return this.columns.get(column);
 	}
 
 	@Override
@@ -86,7 +96,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	@Override
 	public int getColumnCount() {
-		return this.columnNames.length;
+		return this.columns.size();
 	}
 
 	@Override
@@ -100,18 +110,21 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	}
 
 	@Override
-	public void setValueAt(final Object value, final int row, final int col) {
+	public void setValueAt(final Object value, final int row, final int column) {
 		if (this.data != null && row < this.data.size()) {
 			final Contractor currentContractor = this.data.get(row);
 			String updatedValue = (String) value;
 
-			if (col == columnNames.length - 1 && !updatedValue.matches("^(\\d{8}|)$")) {
+			if (column == this.columns.indexOf(CUSTOMER_ID) && !updatedValue.matches("^(\\d{8}|)$")) {
 				App.showError("The Customer ID must be 8 digits.");
+				return;
+			} else if (column != this.columns.indexOf(CUSTOMER_ID) && updatedValue.equals("")) {
+				App.showError("You cannot leave the " + this.columns.get(column) + " field empty.");
 				return;
 			}
 
 			final String[] record = currentContractor.toArray();
-			record[col] = updatedValue;
+			record[column] = updatedValue;
 			final Contractor updatedContractor = new Contractor(currentContractor.getRecordId(), record);
 
 			try {

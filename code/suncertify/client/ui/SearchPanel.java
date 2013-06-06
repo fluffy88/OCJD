@@ -1,5 +1,11 @@
 package suncertify.client.ui;
 
+import static suncertify.client.ui.SearchResultsTableModel.CITY;
+import static suncertify.client.ui.SearchResultsTableModel.CONTRACTOR_NAME;
+import static suncertify.client.ui.SearchResultsTableModel.CUSTOMER_ID;
+import static suncertify.client.ui.SearchResultsTableModel.HOURLY_CHARGE;
+import static suncertify.client.ui.SearchResultsTableModel.NUMBER_OF_STAFF;
+import static suncertify.client.ui.SearchResultsTableModel.TYPES_OF_WORK;
 import static suncertify.shared.App.DEP_DATASERVICE;
 import static suncertify.shared.App.DEP_TABLE_MODEL;
 import static suncertify.shared.App.PROP_EXACT_MATCH;
@@ -49,22 +55,22 @@ public class SearchPanel extends JPanel {
 
 	private void createSearchArea() {
 		final ActionListener enterAct = new EnterActionListener();
-		final JLabel nameLabel = new JLabel("Name:");
+		final JLabel nameLabel = new JLabel(CONTRACTOR_NAME + ":");
 		nameField = new JTextField(10);
 		nameField.addActionListener(enterAct);
-		final JLabel cityLabel = new JLabel("City:");
+		final JLabel cityLabel = new JLabel(CITY + ":");
 		cityField = new JTextField(10);
 		cityField.addActionListener(enterAct);
-		final JLabel workLabel = new JLabel("Type of Work:");
+		final JLabel workLabel = new JLabel(TYPES_OF_WORK + ":");
 		workField = new JTextField(10);
 		workField.addActionListener(enterAct);
-		final JLabel staffLabel = new JLabel("Number of Staff:");
+		final JLabel staffLabel = new JLabel(NUMBER_OF_STAFF + ":");
 		staffField = new JTextField(10);
 		staffField.addActionListener(enterAct);
-		final JLabel chargeLabel = new JLabel("Hourly Charge:");
+		final JLabel chargeLabel = new JLabel(HOURLY_CHARGE + ":");
 		chargeField = new JTextField(10);
 		chargeField.addActionListener(enterAct);
-		final JLabel customerLabel = new JLabel("Customer:");
+		final JLabel customerLabel = new JLabel(CUSTOMER_ID + ":");
 		customerField = new JTextField(10);
 		customerField.addActionListener(enterAct);
 
