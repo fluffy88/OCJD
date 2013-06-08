@@ -20,8 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import suncertify.Client;
 import suncertify.Server;
-import suncertify.Startable;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
@@ -127,7 +127,7 @@ public class NetworkedClientUI extends JFrame {
 					dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 					Properties.set(PROP_SERVER_HOSTNAME, hostname);
 
-					Startable client = (Startable) App.getDependancy(DEP_CLIENT_APPLICATION);
+					Client client = (Client) App.getDependancy(DEP_CLIENT_APPLICATION);
 					client.start();
 				} catch (RemoteException e) {
 					status.setText("Cannot connect to remote server.");

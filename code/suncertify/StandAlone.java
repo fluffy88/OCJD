@@ -12,7 +12,7 @@ import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
-public class StandAlone implements Application, Startable {
+public class StandAlone implements Application {
 
 	private ServerUI serverUI;
 

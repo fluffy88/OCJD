@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.Startable;
+import suncertify.Application;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
@@ -92,7 +92,7 @@ public class ServerPage extends JPanel {
 				if (dbFileLocTxt.getText().equals("")) {
 					App.showError("You must choose a database file first!");
 				} else {
-					Startable server = (Startable) App.getDependancy(DEP_SERVER_APPLICATION);
+					Application server = (Application) App.getDependancy(DEP_SERVER_APPLICATION);
 					server.start();
 
 					startBtn.setEnabled(false);

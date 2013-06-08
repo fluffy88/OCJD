@@ -12,7 +12,7 @@ import suncertify.client.ui.NetworkedClientUI;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 
-public class Client implements Application, Startable {
+public class Client implements Application {
 
 	private ServerUpdateObserver rmiCallback;
 	private NetworkedClientUI hostnameDialog;

@@ -4,4 +4,6 @@ public interface Application {
 
 	void launch();
 
+	void start();
+
 }

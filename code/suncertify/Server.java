@@ -12,7 +12,7 @@ import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
-public class Server implements Application, Startable {
+public class Server implements Application {
 
 	public static final String RMI_SERVER = "remote.database.server";
 
