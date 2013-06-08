@@ -1,3 +1,38 @@
+Overall architecture
+ - The main goal of this architecture is to have the majority of client and
+   Server code unaware whether it is running in networked or non-networked
+   mode.
+ - On startup of the application, using a factory it creates an instance of an
+   Application based on the start mode (Client, Server or StandAlone).
+ - These Applications are responsible for performing the differences between
+   the modes.
+	  
+ - The Server Application when started presents the ServerUI which is unaware
+   of the networking mode. The ServerUI allows the user to choose a database
+   location.
+ - When the user clicks Start the ServerUI gets the instance of Application (in
+   this case Server) via dependency injection and calls it's #start() method.
+ - In the Server#start() method it creates an instance of DataService. Which in
+   turn creates an instance of Data, which then builds up a cache based on the
+   database file chosen. The DataService is then published via RMI for use by
+   networked Client's.
+	
+ - The Client Application when started presents the user with a
+   NetworkedClientUI which allows the user to enter the location of the
+   networked Server. When the user clicks OK the Client then gets the RMI based
+   instance of DataService and publishes it via dependency injection. Finally
+   the Client starts the ClientUI which again is unaware of it's networking
+   state, using only the instance of DataService that was published via 
+   dependency injection to communicate with the server side code.
+	  
+ - The StandAlone Application, like the Server starts the ServerUI. The only
+   difference being when the ServerUI gets the published instance of 
+   Application it's the instance of StandAlone.
+ - In StandAlone#start() it creates an instance of DataService, like the Server
+   Application. Finally, like the networked Client Application the StandAlone
+   then publishes the DataService instance via dependency injection.
+	  
+
 Create *.io package
 	- Place all file IO classes into this .io package.
 	- Keeps the main Data.java class clean as it can delegate work to the .io classes.
