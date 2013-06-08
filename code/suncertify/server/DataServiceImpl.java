@@ -3,6 +3,8 @@ package suncertify.server;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import suncertify.client.RemoteObserver;
 import suncertify.db.DAOFactory;
@@ -14,8 +16,9 @@ import suncertify.shared.Contractor;
 
 public class DataServiceImpl implements DataService {
 
-	DBMain data = DAOFactory.getInstance().getDataService();
-	private List<RemoteObserver> observers = new ArrayList<>();
+	private final DBMain data = DAOFactory.getInstance().getDataService();
+	private final List<RemoteObserver> observers = new ArrayList<>();
+	private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException {
@@ -76,13 +79,18 @@ public class DataServiceImpl implements DataService {
 
 	public void notifyObservers(final Contractor contractor, final String cmd) {
 		final List<RemoteObserver> staleRefs = new ArrayList<>();
-		for (RemoteObserver o : this.observers) {
-			try {
-				o.update(contractor, cmd);
-			} catch (RemoteException e) {
-				App.logWarning("Found an uncontactable Client, removing it from the Server.");
-				staleRefs.add(o);
-			}
+		for (final RemoteObserver o : this.observers) {
+			executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						o.update(contractor, cmd);
+					} catch (RemoteException e) {
+						App.logWarning("Found an uncontactable Client, removing it from the Server.");
+						staleRefs.add(o);
+					}
+				}
+			});
 		}
 		this.observers.removeAll(staleRefs);
 	}
