@@ -71,15 +71,18 @@
 
   Read full DB into memory
    - Improves read performance drastically.
-   - Makes future code changes simpler as data look ups are done on a Java collection.
+   - Makes future code changes to Data.java simpler as data look ups are done
+     on a Java collection.
 
-  Data access layer records as String[]
+  Data access layer, records as String[]
    - String[] makes the DBParser.java more generic and transportable.
-   - If DB scheme ever changes, no need to change how the DB is read, only UI and server updates.
+   - If DB scheme ever changes, no need to change how the DB is read, only UI
+     and server updates.
 
   Server 'Service' layer uses Domain Object
-   - At the service layer the server converts the String[] taken from the data access layer to a Domain Object.
-   - Using a Domain object reduces complexity.
+   - At the service layer the server converts the String[] taken from the data
+     access layer to a Domain Object.
+   - Using a Domain object reduces code complexity.
 
   Made Data.java a Singleton
    - Data.java is the class exposed by the server to give clients access to the database info.
