@@ -1,119 +1,150 @@
-Overall architecture
- - The main goal of this architecture is to have the majority of client and
-   Server code unaware whether it is running in networked or non-networked
-   mode.
- - On startup of the application, using a factory it creates an instance of an
-   Application based on the start mode (Client, Server or StandAlone).
- - These Applications are responsible for performing the differences between
-   the modes.
-	  
- - The Server Application when started presents the ServerUI which is unaware
-   of the networking mode. The ServerUI allows the user to choose a database
-   location.
- - When the user clicks Start the ServerUI gets the instance of Application (in
-   this case Server) via dependency injection and calls it's #start() method.
- - In the Server#start() method it creates an instance of DataService. Which in
-   turn creates an instance of Data, which then builds up a cache based on the
-   database file chosen. The DataService is then published via RMI for use by
-   networked Client's.
-	
- - The Client Application when started presents the user with a
-   NetworkedClientUI which allows the user to enter the location of the
-   networked Server. When the user clicks OK the Client then gets the RMI based
-   instance of DataService and publishes it via dependency injection. Finally
-   the Client starts the ClientUI which again is unaware of it's networking
-   state, using only the instance of DataService that was published via 
-   dependency injection to communicate with the server side code.
-	  
- - The StandAlone Application, like the Server starts the ServerUI. The only
-   difference being when the ServerUI gets the published instance of 
-   Application it's the instance of StandAlone.
- - In StandAlone#start() it creates an instance of DataService, like the Server
-   Application. Finally, like the networked Client Application the StandAlone
-   then publishes the DataService instance via dependency injection.
-	  
+  Overall architecture
+  --------------------
 
-Create *.io package
-	- Place all file IO classes into this .io package.
-	- Keeps the main Data.java class clean as it can delegate work to the .io classes.
-	- Puts all the complex reading and writing to the DB into one place.
+  The main goal of this architecture is to have the majority of client and
+  Server code unaware whether it is running in networked or non-networked mode.
+  On startup of the application, using a factory it creates an instance of an
+  Application based on the start mode (Client, Server or StandAlone). These
+  Applications are responsible for performing the tasks that differentiate the
+  modes. All code outside these Applications have no awareness of networking.
 
-Read full DB into memory
-	- Improves read performance drastically.
-	- Makes future code changes simpler as data look ups are done on a Java collection.
+  Explanation of modes
+  --------------------
 
-Data access layer records as String[]
-	- String[] makes the DBParser.java more generic and transportable.
-	- If DB scheme ever changes, no need to change how the DB is read, only UI and server updates.
+  The Server Application when started presents the ServerUI which is unaware of
+  it's networking mode. The ServerUI allows the user to choose a database
+  location. When the user clicks Start the ServerUI gets the instance of
+  Application (in this case Server) via dependency injection and calls it's
+  #start() method. The Server#start() method creates an instance of DataService
+  which is then published via RMI for use by networked Client's.
 
-Server 'Service' layer uses Domain Object
-	- At the service layer the server converts the String[] taken from the data access layer to a Domain Object.
-	- Using a Domain object reduces complexity.
+  The Client Application when started presents the user with a 
+  NetworkedClientUI which allows the user to enter the location of the
+  networked Server. When the user clicks OK the Client then gets the RMI based
+  instance of DataService and publishes it via dependency injection for use by
+  the ClientUI. Finally the Client starts the ClientUI which is unaware of it's
+  networking state, using only the instance of DataService that was published
+  via dependency injection to communicate with the server side code.
 
-Made Data.java a Singleton
-	- Data.java is the class exposed by the server to give clients access to the database info.
-	  The server should only have one instance of this class as all clients should go through
-	  this singleton to read or write to the Database to maintain database integrity.
+  The StandAlone Application, like the Server starts the ServerUI. The only
+  difference being when the ServerUI gets the published instance of Application
+  it's the instance of StandAlone. In StandAlone#start() it creates an instance
+  of DataService, like the Server Application. Finally, like the networked
+  Client Application StandAlone then publishes the DataService instance via
+  dependency injection and starts a ClientUI.
 
-RMI
-	- RMI adds some initial 'setup' complexity, but after setup reduces code complexity substantially.
-	- Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
+  Server side architecture
+  ------------------------
 
-Main.java
-	- Server, Client & StandAlone implement a common interface.
-	- Use factory pattern to dynamically chose which to run based on command line flag. 
-	- Keeps main start class clean with single purpose.
-	- Makes it very simple to have Non-networked & Networked modes.
+  The server side architecture is composed of three layers, the DataService
+  layer, the Data layer and the IO layer.
 
-Client.java
-	- Use of factory pattern to get the Data.java instance.
-	- Keeps Client simple as it doesn't care if it's networked or not.
-	
-ClientUI.java
-	- Single class with sole responsibility to create a new JFrame for the client application.
-	- Makes Application extensible, as new 'pages' can be created & added easily.
-	
-UI Components, JPanels
-	- Extend JPanel for each Client area.
-	- This keeps each UI components separate, easily maintained, easily replaced.
-	- Sets up a good design flow to follow when adding new functionality.
+  The DataService layer is the server interface callable by clients. It is
+  responsible for updating all clients when changes occur to the server data,
+  managing the locking and thread safety of all reads and writes made by
+  clients and finally it is responsible for any business logic that needs to be
+  performed, i.e. exact match.
+  The DataService layer when constructed uses a factory method to get an
+  instance of Data which it makes calls to when reads or writes are necessary.
+  
+  The Data layer is responsible for managing all the data records for the
+  application. The Data object is created via a factory which retrieves the
+  database location from the application Properties file and passes the
+  location to the Data object. On construction the Data object uses the
+  DBParser to build a cache of the data records. This cache is used as a write
+  through cache which allows for fast and efficient reads while keeping the on
+  disk database constantly up-to-date.
+  The Data layer also provides the locking mechanisms that allow for thread
+  safety while reading/writing from the Data instance.
 
-TableModel
-	- Use of Swings inbuilt TableModel for displaying data.
-	- Model pattern is very simple to implement and use.
+  The IO layer is responsible for dumb reading and writing to the database
+  file.
 
-Injection.java
-	- A very basic Dependency Injection framework.
-	- Allows clean and simple access to objects that need to be accessed from multiple classes.
-	- Removes complicated passing of objects that's hard to follow.
+  Lower Level Considerations
+  --------------------------
 
-Server Side Architecture
-	- Server side design of application is as follows,
-	  suncertify.db.io, Low level database file access classes.
-	  suncertify.db, Data access classes (required interface).
-	  suncertify.server, Server 'Service' layer & publicized server interface.
-	- This architecture splits the server side complexity into different sections, allowing each layer to be focused on one task.
-	- Brings all application logic to server side, making the Client side 'dumb'.
-	  This architecture will help when moving to a web based application as the web client will be a dumb client.
+  Create *.io package
+   - Place all file IO classes into this .io package, keeping it in one place.
+   - Keeps the main Data.java class clean as it can delegate work to the .io
+     classes for all file reading/writing.
+   - Puts all the complex reading and writing to the DB into one place.
 
-Data.java Locking
-	- Made use of java.util.concurrent.* package to implement locking.
-	- No use of key word synchronized as it introduces a large performance hit.
-	- Locking implemented using a List of Semaphore objects for read, update & delete operations
-	  & a single Semaphore used for locking in the create operation.
-	- This lets multiple clients do reads, updates & deletes to different records at the same time.
-	  Only one Create can run at a time, but doesn't stop the above operations from running concurrently.
+  Read full DB into memory
+   - Improves read performance drastically.
+   - Makes future code changes simpler as data look ups are done on a Java collection.
 
-Data#find()
-	- Made search case insensitive.
-	- Makes use of application simpler & faster for the end users with less learning curve.
-	
-Data#read()
-	- Does not return actual result, returns a copy.
-	- This stops the Standalone application UI from modifying the cache indirectly.
-	- All read/modifications of the cache are to be handled through Data.java and will be synchronized.
-	
-DBSchema.java
-	- Created a Class to store Database information.
-	- Stores schema info, but also contains dynamic information, i.e. Total number of records, full byte length of a record.
-	  This makes it easy to read/write to database, as we have the full structure info at hand.
+  Data access layer records as String[]
+   - String[] makes the DBParser.java more generic and transportable.
+   - If DB scheme ever changes, no need to change how the DB is read, only UI and server updates.
+
+  Server 'Service' layer uses Domain Object
+   - At the service layer the server converts the String[] taken from the data access layer to a Domain Object.
+   - Using a Domain object reduces complexity.
+
+  Made Data.java a Singleton
+   - Data.java is the class exposed by the server to give clients access to the database info.
+     The server should only have one instance of this class as all clients should go through
+     this singleton to read or write to the Database to maintain database integrity.
+
+  RMI
+   - RMI adds some initial 'setup' complexity, but after setup reduces code complexity substantially.
+   - Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
+
+  Main.java
+   - Server, Client & StandAlone implement a common interface.
+   - Use factory pattern to dynamically chose which to run based on command line flag. 
+   - Keeps main start class clean with single purpose.
+   - Makes it very simple to have Non-networked & Networked modes.
+
+  Client.java
+   - Use of factory pattern to get the Data.java instance.
+   - Keeps Client simple as it doesn't care if it's networked or not.
+
+  ClientUI.java
+   - Single class with sole responsibility to create a new JFrame for the client application.
+   - Makes Application extensible, as new 'pages' can be created & added easily.
+
+  UI Components, JPanels
+   - Extend JPanel for each Client area.
+   - This keeps each UI components separate, easily maintained, easily replaced.
+   - Sets up a good design flow to follow when adding new functionality.
+
+  TableModel
+   - Use of Swings inbuilt TableModel for displaying data.
+   - Model pattern is very simple to implement and use.
+
+  Injection.java
+   - A very basic Dependency Injection framework.
+   - Allows clean and simple access to objects that need to be accessed from multiple classes.
+   - Removes complicated passing of objects that's hard to follow.
+
+  Server Side Architecture
+   - Server side design of application is as follows,
+     suncertify.db.io, Low level database file access classes.
+     suncertify.db, Data access classes (required interface).
+     suncertify.server, Server 'Service' layer & publicized server interface.
+   - This architecture splits the server side complexity into different sections, allowing each layer to be focused on one task.
+   - Brings all application logic to server side, making the Client side 'dumb'.
+     This architecture will help when moving to a web based application as the web client will be a dumb client.
+
+  Data.java Locking
+   - Made use of java.util.concurrent.* package to implement locking.
+   - No use of key word synchronized as it introduces a large performance hit.
+   - Locking implemented using a List of Semaphore objects for read, update & delete operations
+     & a single Semaphore used for locking in the create operation.
+   - This lets multiple clients do reads, updates & deletes to different records at the same time.
+     Only one Create can run at a time, but doesn't stop the above operations from running concurrently.
+
+  Data#find()
+   - Made search case insensitive.
+   - Makes use of application simpler & faster for the end users with less learning curve.
+
+  Data#read()
+   - Does not return actual result, returns a copy.
+   - This stops the Standalone application UI from modifying the cache indirectly.
+   - All read/modifications of the cache are to be handled through Data.java and will be synchronized.
+
+  DBSchema.java
+   - Created a Class to store Database information.
+   - Stores schema info, but also contains dynamic information, i.e. Total number of records, full byte length of a record.
+     This makes it easy to read/write to database, as we have the full structure info at hand.
