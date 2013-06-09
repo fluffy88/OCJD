@@ -62,7 +62,7 @@
   locking. So a server side business layer was a simple solution.
   The DataService layer when constructed uses a factory method to get an
   instance of Data which it passes calls to when reads/writes are necessary.
-  
+
   The Data layer is responsible for managing all the data records for the
   application. The Data object is created via a factory which retrieves the
   database location from the application Properties file and passes the
@@ -82,7 +82,12 @@
   having all that complexity separated from the logic of the application means
   future changes to the file schema will isolate code changes to this layer.
   This greatly improves maintainability and helps those unfamiliar with the
-  code understand it. 
+  code understand it.
+
+  Client side architecture
+  ------------------------
+
+  
 
   Lower Level Considerations
   --------------------------
