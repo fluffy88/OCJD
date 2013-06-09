@@ -1,30 +1,43 @@
   Overall architecture
   --------------------
 
+  The main problem I was concerned with from the outset of this project was how
+  to manage the split between Networked and Non-networked mode. I wanted to
+  have very little code replication. This would reduce code complexity and
+  improve maintainability. Therefore I conceived the following architecture.
   The main goal of this architecture is to have the majority of client and
   Server code unaware whether it is running in networked or non-networked mode.
   On startup of the application, using a factory it creates an instance of an
   Application based on the start mode (Client, Server or StandAlone). These
   Applications are responsible for performing the tasks that differentiate the
-  modes. All code outside these Applications have no awareness of networking.
+  modes. The value of this architecture is all code outside these Applications
+  have no awareness of their networking mode allowing complete code re-use.
 
   Explanation of modes
   --------------------
 
   The Server Application when started presents the ServerUI which is unaware of
-  it's networking mode. The ServerUI allows the user to choose a database
-  location. When the user clicks Start the ServerUI gets the instance of
+  it's networking mode. The main problem I faced with keeping the ServerUI
+  networking unaware was how to allow the server side code be completely 
+  re-usable while allowing the Application correctly publish the server
+  interface. I managed this by using dependency injection to allow the ServerUI
+  code call the #start() method of the Application that created the ServerUI.
+  When the user clicks the Start button the ServerUI gets the instance of
   Application (in this case Server) via dependency injection and calls it's
   #start() method. The Server#start() method creates an instance of DataService
   which is then published via RMI for use by networked Client's.
 
   The Client Application when started presents the user with a 
   NetworkedClientUI which allows the user to enter the location of the
-  networked Server. When the user clicks OK the Client then gets the RMI based
-  instance of DataService and publishes it via dependency injection for use by
-  the ClientUI. Finally the Client starts the ClientUI which is unaware of it's
-  networking state, using only the instance of DataService that was published
-  via dependency injection to communicate with the server side code.
+  networked Server. The problem I faced keeping the client side code network 
+  unaware was how it would connect to the server side without knowing if it was
+  using RMI or not, to solve this I let the client code get a reference to the
+  server via dependency inject. When the user clicks OK the Client then gets
+  the RMI based instance of DataService and publishes it via dependency
+  injection for use by the ClientUI. Finally the Client starts the ClientUI
+  which is unaware of it's networking state, using only the instance of
+  DataService that was published via dependency injection to communicate with
+  the server side code.
 
   The StandAlone Application, like the Server starts the ServerUI. The only
   difference being when the ServerUI gets the published instance of Application
@@ -44,21 +57,32 @@
   managing the locking and thread safety of all reads and writes made by
   clients and finally it is responsible for any business logic that needs to be
   performed, i.e. exact match.
+  The DataService layer was introduced to removed a problem I was facing. I 
+  wanted clients to be able to talk to the server without having to do any
+  locking. So a server side business layer was a simple solution.
   The DataService layer when constructed uses a factory method to get an
-  instance of Data which it makes calls to when reads or writes are necessary.
+  instance of Data which it passes calls to when reads/writes are necessary.
   
   The Data layer is responsible for managing all the data records for the
   application. The Data object is created via a factory which retrieves the
   database location from the application Properties file and passes the
   location to the Data object. On construction the Data object uses the
-  DBParser to build a cache of the data records. This cache is used as a write
-  through cache which allows for fast and efficient reads while keeping the on
-  disk database constantly up-to-date.
+  DBParser to build a cache of the data records. I decided to use a cache as I
+  wanted to keep all the methods of the DBMain interface to be simple and clean
+  and using a cache enabled this. The cache is used as a write through cache
+  which allows for fast and efficient reads while keeping the on disk database
+  constantly up-to-date. This was also a key concern I had, as I didn't want
+  the database file out of sync with what was shown on the clients.
   The Data layer also provides the locking mechanisms that allow for thread
   safety while reading/writing from the Data instance.
 
   The IO layer is responsible for dumb reading and writing to the database
-  file.
+  file. I decided to abstract the file IO to a separate layer as reading and
+  writing to the database file using the proper schema can be complex. So
+  having all that complexity separated from the logic of the application means
+  future changes to the file schema will isolate code changes to this layer.
+  This greatly improves maintainability and helps those unfamiliar with the
+  code understand it. 
 
   Lower Level Considerations
   --------------------------
