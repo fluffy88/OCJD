@@ -123,6 +123,31 @@
   clients. This simplified the client side code greatly as I wasn't trying to
   make server calls and update the UI at the same time.
 
+  Data.java Locking
+  -----------------
+
+  When I was planning how I was going to implement the locking for the server
+  side my biggest goal was simplicity, speed & reliable. I opted to use
+  ReentrantLocks as this greatly out performs the use of the synchronized
+  keyword. Using locks also allowed me more flexibility in how I manage locking
+  of records. I decided to use two separate locking mechanisms, one for reads,
+  updates and deletes and a separate lock for creates. The reason for this is
+  it allows clients to be able to make a call to create without blocking any of
+  the other read, update or delete commands giving the server higher
+  throughput.
+  The create lock is a single ReentrantLock, this lock is private to Data.java
+  and cannot be directly manipulated by other classes. When the user calls the
+  Data#create() method the thread attempts to lock the write lock. Only one
+  thread can enter the create method at a time.
+  The read/update/delete locking is comprised of a collection of ReentrantLocks
+  one lock for each record in the database. This allows for multiple clients to
+  make updates to separate records at the same time.
+  However as I used a write through cache this caused issues as when two
+  clients tried to write to two different records there was contention between
+  the two threads for writing to the file. Therefore I implemented another lock
+  in the DBWriter class that ensures only one thread can write to the database
+  file at a time while still allowing threads make changes to the cache.
+
   Lower Level Considerations
   --------------------------
 
