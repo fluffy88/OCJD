@@ -88,12 +88,16 @@
   ------------------------
 
   The client side UI is split up into multiple Panels that extend JPanel, which
-  are the collected into a 'Page' which is just another JPanel comprised of the
-  Panels. I done this so if for instance the search functionality was to be
-  replaced a new JPanel containing the Components could be created and swapped
-  in making extending the application simpler.
+  are then collected into a 'Page' which is just another JPanel comprised of
+  the Panels. I done this so if for instance the search functionality was to be
+  replaced a new JPanel containing the new search Components could be created
+  and swapped for the existing SearchPanel making extending the application
+  simpler.
   Any part of the client application can make calls to the server side via the
-  DataService which is published via dependency injection. 
+  DataService which is published via dependency injection. This allows for
+  freedom in the design of the client application as a reference to the server
+  interface does not need to be passed around to all objects that make calls to
+  the server side.
 
   Lower Level Considerations
   --------------------------
