@@ -99,6 +99,30 @@
   interface does not need to be passed around to all objects that make calls to
   the server side.
 
+  Keeping Clients up-to-date
+  --------------------------
+
+  As this can be a distributed application with multiple clients running on
+  multiple machines simultaneously I wanted to fix the problem of clients
+  having stale data when another client updates/deletes a record. To solve this
+  problem I used the observer pattern to allow clients register with the server
+  for updates on startup. When the server receives a call to any of it's
+  methods that change the data on the server it then goes through it's
+  registered clients and updates them with the updated record.
+  So far this is a simple implementation of the observer pattern however when
+  trying to implement this over RMI there were other considerations to be made.
+  Again like my main architecture I wanted to code once and use twice therefore
+  I created a RemoteObserver interface that was capable of being called over
+  RMI and it could be used in StandAlone mode without being exported to the RMI
+  registry.
+  With this implementation when a client (networked or not) made a change to
+  the data, the server would make a call back to all clients to update them
+  with the latest data. This also had the positive impact where there was no
+  need to update the Client UI when editing a record. All I had to do was send
+  a call the server with the update being made and it dealt with updating all
+  clients. This simplified the client side code greatly as I wasn't trying to
+  make server calls and update the UI at the same time.
+
   Lower Level Considerations
   --------------------------
 
