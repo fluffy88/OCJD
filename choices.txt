@@ -148,6 +148,37 @@
   in the DBWriter class that ensures only one thread can write to the database
   file at a time while still allowing threads make changes to the cache.
 
+  Domain Objects
+  --------------
+
+  As I see it I had two options on how I was to store the data records read
+  from the database. My first option was to adhere to the limitations of the
+  DBMain interface and use String[]'s everywhere for storing the data records.
+  My other choice was using a domain object for data storage. I arrived at a
+  decision to make the best of both approaches.
+  At the IO & Data layer I would keep the reading and writing of the data records
+  generic, using only String arrays. This allowed these two low level tiers be
+  completely generic therefore if changes to the database schema ever occur it
+  should not have any impact of these two tiers once the new schema is
+  reflected in the DBSchema class.
+  Then the DataService layer would convert to and from a Contractor domain
+  object. This gives me greater control over the data stored in the records and
+  makes all the client side code more readable and maintainable as it only
+  deals with these well structured Contractor objects.
+
+  Network Communication
+  ---------------------
+
+  I opted to use RMI and my network communication device. In my opinion RMI
+  offered greater code simplicity, extensibility, and allowed me to easily
+  implement my desired architecture where I could reuse as much code as
+  possible without having to implement the same functionality twice.
+  With RMI I can have a single server interface used in both networked and
+  standalone mode and the only difference in the two modes was, networked
+  published the interface via RMI whereas standalone mode creates a local
+  instance of the interface implementation. To achieve this with serialization
+  would be extremely complicated.
+
   Lower Level Considerations
   --------------------------
 
