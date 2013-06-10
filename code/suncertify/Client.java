@@ -12,6 +12,11 @@ import suncertify.client.ui.NetworkedClientUI;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for establishing a networked client.
+ * 
+ * @author Sean Dunne
+ */
 public class Client implements Application {
 
 	private ServerUpdateObserver rmiCallback;
@@ -41,6 +46,10 @@ public class Client implements Application {
 		this.setShutdownHook();
 	}
 
+	/**
+	 * This method is a simple method to add a shutdown hook that is responsible for cleaning up before this application is ready to
+	 * shutdown.
+	 */
 	private void setShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override

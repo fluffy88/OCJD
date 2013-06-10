@@ -12,6 +12,11 @@ import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for starting a non-networked client and server..
+ * 
+ * @author Sean Dunne
+ */
 public class StandAlone implements Application {
 
 	private ServerUI serverUI;
@@ -40,6 +45,12 @@ public class StandAlone implements Application {
 		}
 	}
 
+	/**
+	 * This method is responsible for publishing the {@link DataService} interface via dependency injection for the local client to use.
+	 * 
+	 * @param dataService
+	 *            The local server interface to be published.
+	 */
 	private void publish(final DataService dataService) {
 		App.publish(DEP_DATASERVICE, dataService);
 	}

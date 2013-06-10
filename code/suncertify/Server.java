@@ -12,6 +12,11 @@ import suncertify.server.DataServiceImpl;
 import suncertify.server.ui.ServerUI;
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for establishing a networked server.
+ * 
+ * @author Sean Dunne
+ */
 public class Server implements Application {
 
 	public static final String RMI_SERVER = "remote.database.server";
@@ -30,6 +35,12 @@ public class Server implements Application {
 		this.publish(dataService);
 	}
 
+	/**
+	 * This method is responsible for publishing the {@link DataService} interface via RMI for networked clients to connect to.
+	 * 
+	 * @param dataService
+	 *            The remote server interface to be published.
+	 */
 	private void publish(final DataService dataService) {
 		try {
 			final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService, Registry.REGISTRY_PORT);
@@ -40,13 +51,14 @@ public class Server implements Application {
 		}
 	}
 
+	/**
+	 * This method is responsible for creating a new RMI registry.
+	 * 
+	 * @return A reference to an RMI registry that can be used to publish objects over RMI.
+	 * @throws RemoteException
+	 *             If an RMI registry is already started on the default RMI port.
+	 */
 	private Registry getRMIRegistry() throws RemoteException {
-		Registry registry = null;
-		try {
-			registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-		} catch (Exception e) {
-			registry = LocateRegistry.getRegistry(Registry.REGISTRY_PORT);
-		}
-		return registry;
+		return LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 	}
 }
