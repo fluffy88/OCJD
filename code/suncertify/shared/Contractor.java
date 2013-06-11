@@ -111,7 +111,7 @@ public class Contractor implements Serializable {
 	 * 
 	 * @return This Contractors specialties.
 	 */
-	public String getSpecialites() {
+	public String getSpecialties() {
 		return this.specialties;
 	}
 

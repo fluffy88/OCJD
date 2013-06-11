@@ -41,7 +41,7 @@ public class DataServiceImplTest {
 		Contractor record = this.dataService.read(READ_REC_NO);
 		assertThat(record.getName(), is(equalTo("Bitter Homes & Gardens")));
 		assertThat(record.getLocation(), is(equalTo("EmeraldCity")));
-		assertThat(record.getSpecialites(), is(equalTo("Heating, Plumbing, Painting")));
+		assertThat(record.getSpecialties(), is(equalTo("Heating, Plumbing, Painting")));
 		assertThat(record.getNoStaff(), is(equalTo("6")));
 		assertThat(record.getRate(), is(equalTo("$90.00")));
 		assertThat(record.getCustomerId(), is(equalTo("")));
@@ -53,7 +53,7 @@ public class DataServiceImplTest {
 		Contractor origRecord = this.dataService.read(UPDATE_REC_NO);
 		assertThat(origRecord.getName(), is(equalTo("Hamner & Tong")));
 		assertThat(origRecord.getLocation(), is(equalTo("EmeraldCity")));
-		assertThat(origRecord.getSpecialites(), is(equalTo("Roofing, Electrical")));
+		assertThat(origRecord.getSpecialties(), is(equalTo("Roofing, Electrical")));
 		assertThat(origRecord.getNoStaff(), is(equalTo("7")));
 		assertThat(origRecord.getRate(), is(equalTo("$45.00")));
 		assertThat(origRecord.getCustomerId(), is(equalTo("")));
