@@ -23,8 +23,7 @@ public class StandAlone implements Application {
 
 	@Override
 	public void launch() {
-		serverUI = new ServerUI();
-		serverUI.open();
+		serverUI = ServerUI.start();
 
 		App.publish(DEP_SERVER_APPLICATION, this);
 	}

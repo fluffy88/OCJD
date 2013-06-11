@@ -23,8 +23,7 @@ public class Server implements Application {
 
 	@Override
 	public void launch() {
-		ServerUI ui = new ServerUI();
-		ui.open();
+		ServerUI.start();
 
 		App.publish(DEP_SERVER_APPLICATION, this);
 	}

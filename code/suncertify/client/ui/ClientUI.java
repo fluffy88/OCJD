@@ -7,11 +7,11 @@ public class ClientUI extends JFrame {
 
 	private static final long serialVersionUID = 4914465385167890566L;
 
-	public static void start() {
-		new ClientUI();
+	public static ClientUI start() {
+		return new ClientUI();
 	}
 
-	public ClientUI() {
+	private ClientUI() {
 		this.setTitle("CSR Application");
 		this.setSize(900, 500);
 		this.setLocationRelativeTo(null);
