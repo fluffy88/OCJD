@@ -24,6 +24,11 @@ import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
+/**
+ * This class contains the components that display and enable manipulating of the search results.
+ * 
+ * @author Sean Dunne
+ */
 public class SearchResultsPanel extends JPanel {
 
 	private static final long serialVersionUID = -2713791197021056298L;
@@ -31,6 +36,9 @@ public class SearchResultsPanel extends JPanel {
 	private JTable table;
 	private JButton deleteBtn;
 
+	/**
+	 * Create the components responsible for displaying the search results.
+	 */
 	public SearchResultsPanel() {
 		this.setLayout(new BorderLayout());
 		this.setBorder(new EmptyBorder(15, 10, 1, 10));
@@ -39,6 +47,9 @@ public class SearchResultsPanel extends JPanel {
 		this.createButtonArea();
 	}
 
+	/**
+	 * This method creates a JTable to display the search results.
+	 */
 	private void createTableArea() {
 		final SearchResultsTableModel tableModel = new SearchResultsTableModel();
 		App.publish(DEP_TABLE_MODEL, tableModel);
@@ -53,6 +64,9 @@ public class SearchResultsPanel extends JPanel {
 		this.add(scrollPane, BorderLayout.CENTER);
 	}
 
+	/**
+	 * This method creates the buttons to manipulate the search results.
+	 */
 	private void createButtonArea() {
 		final JPanel bottomPanel = new JPanel();
 		final FlowLayout layout = (FlowLayout) bottomPanel.getLayout();
@@ -67,6 +81,14 @@ public class SearchResultsPanel extends JPanel {
 		this.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * This method resizes a column of the JTable.
+	 * 
+	 * @param idx
+	 *            The column index to resize.
+	 * @param width
+	 *            The new width of the column.
+	 */
 	private void setColumnWidth(final int idx, final int width) {
 		final TableColumnModel columnModel = this.table.getColumnModel();
 		if (columnModel != null) {
@@ -75,6 +97,11 @@ public class SearchResultsPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * This listener deletes the data records that are selected in the JTable from the server.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class DeleteActionListener implements ActionListener {
 
 		private SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
@@ -98,6 +125,11 @@ public class SearchResultsPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * This listener sets the count of selected rows on the delete button.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class TableSelectionListener implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {

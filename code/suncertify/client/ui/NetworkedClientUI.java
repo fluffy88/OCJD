@@ -26,6 +26,12 @@ import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
+/**
+ * This class is responsible for creating, displaying and populating the networked client user interface. This UI's purpose is to allow the
+ * user specify the hostname of the remote server to connect to.
+ * 
+ * @author Sean Dunne
+ */
 public class NetworkedClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
@@ -34,10 +40,18 @@ public class NetworkedClientUI extends JFrame {
 	private DataService dataService;
 	private JButton ok;
 
+	/**
+	 * This method is responsible for creating the NetworkedClientUI JFrame.
+	 * 
+	 * @return A reference to the NetworkedClientUI JFrame.
+	 */
 	public static NetworkedClientUI start() {
 		return new NetworkedClientUI();
 	}
 
+	/**
+	 * Creates the JFrame, sets it's properties, adds the contents and displays the JFrame.
+	 */
 	private NetworkedClientUI() {
 		this.setTitle("Server Hostname");
 		this.setSize(300, 130);
@@ -45,12 +59,14 @@ public class NetworkedClientUI extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		final JPanel panel = this.getContentPanel();
-		this.getContentPane().add(panel);
+		initUIElements();
 		this.setVisible(true);
 	}
 
-	private JPanel getContentPanel() {
+	/**
+	 * This method is responsible for adding the components of the NetworkedClientUI to the JFrame.
+	 */
+	private void initUIElements() {
 		final GridBagLayout layout = new GridBagLayout();
 		final GridBagConstraints c = new GridBagConstraints();
 		final JPanel panel = new JPanel(layout);
@@ -97,13 +113,23 @@ public class NetworkedClientUI extends JFrame {
 		c.gridx = 0;
 		panel.add(leftBlank, c);
 
-		return panel;
+		this.getContentPane().add(panel);
 	}
 
+	/**
+	 * Getter for the remote DataService which is created when the user clicks the OK button.
+	 * 
+	 * @return The remote DataService.
+	 */
 	public DataService getDataService() {
 		return dataService;
 	}
 
+	/**
+	 * A listener that emulates clicking the OK button when the user presses enter in the hostname text box.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class TextFieldActionListener implements ActionListener {
 
 		@Override
@@ -112,6 +138,11 @@ public class NetworkedClientUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK button.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class OKActionListener implements ActionListener {
 
 		@Override
@@ -138,6 +169,11 @@ public class NetworkedClientUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Listener to exit the application when the user clicks the Cancel button.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class CancelActionListener implements ActionListener {
 
 		@Override

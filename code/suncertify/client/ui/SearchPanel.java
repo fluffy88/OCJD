@@ -30,6 +30,11 @@ import suncertify.shared.App;
 import suncertify.shared.Contractor;
 import suncertify.shared.Properties;
 
+/**
+ * This class contains all the components responsible for allowing the user to search for data records.
+ * 
+ * @author Sean Dunne
+ */
 public class SearchPanel extends JPanel {
 
 	private static final long serialVersionUID = 8203310258095403940L;
@@ -42,9 +47,11 @@ public class SearchPanel extends JPanel {
 	private JTextField customerField;
 
 	private JButton button;
-
 	private JCheckBox exactMatch;
 
+	/**
+	 * Create a new JPanel containing the search components.
+	 */
 	public SearchPanel() {
 		this.setLayout(new GridLayout(2, 7, 10, 1));
 		this.setMaximumSize(new Dimension(800, 100));
@@ -53,6 +60,9 @@ public class SearchPanel extends JPanel {
 		this.createSearchArea();
 	}
 
+	/**
+	 * Create the search components and add them to this JPanel.
+	 */
 	private void createSearchArea() {
 		final ActionListener enterAct = new EnterActionListener();
 		final JLabel nameLabel = new JLabel(CONTRACTOR_NAME + ":");
@@ -100,6 +110,11 @@ public class SearchPanel extends JPanel {
 		this.add(button);
 	}
 
+	/**
+	 * This listener emulates the pressing of the Search button.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class EnterActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -107,6 +122,11 @@ public class SearchPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * This listener persists the state of the exact match checkbox when it's state changes.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class ExactMatchListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -114,6 +134,11 @@ public class SearchPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * This listener does a search of the server and adds the results to the TableModel when the user clicks the Search button.
+	 * 
+	 * @author Sean Dunne
+	 */
 	private class SearchButtonListener implements ActionListener {
 
 		private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
