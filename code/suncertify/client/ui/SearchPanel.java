@@ -110,7 +110,7 @@ public class SearchPanel extends JPanel {
 	private class ExactMatchListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Properties.set(PROP_EXACT_MATCH, exactMatch.isSelected());
+			Properties.setBoolean(PROP_EXACT_MATCH, exactMatch.isSelected());
 		}
 	}
 
