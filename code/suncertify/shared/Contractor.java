@@ -14,7 +14,7 @@ public class Contractor implements Serializable {
 	private final int recordId;
 	private String name;
 	private String location;
-	private String specialites;
+	private String specialties;
 	private String noStaff;
 	private String rate;
 	private String custId;
@@ -28,7 +28,7 @@ public class Contractor implements Serializable {
 	 *            The Contractor name.
 	 * @param location
 	 *            The Contractor location.
-	 * @param specialites
+	 * @param specialties
 	 *            The work the Contractor specializes in.
 	 * @param noStaff
 	 *            The number of people that work for this Contractor.
@@ -37,12 +37,12 @@ public class Contractor implements Serializable {
 	 * @param custId
 	 *            The ID of the customer that has booked this Contractor.
 	 */
-	public Contractor(final int recordId, final String name, final String location, final String specialites, final String noStaff,
+	public Contractor(final int recordId, final String name, final String location, final String specialties, final String noStaff,
 			final String rate, final String custId) {
 		this.recordId = recordId;
 		this.name = name;
 		this.location = location;
-		this.specialites = specialites;
+		this.specialties = specialties;
 		this.noStaff = noStaff;
 		this.rate = rate;
 		this.custId = custId;
@@ -72,7 +72,7 @@ public class Contractor implements Serializable {
 		final String[] data = new String[6];
 		data[0] = this.name;
 		data[1] = this.location;
-		data[2] = this.specialites;
+		data[2] = this.specialties;
 		data[3] = this.noStaff;
 		data[4] = this.rate;
 		data[5] = this.custId;
@@ -112,7 +112,7 @@ public class Contractor implements Serializable {
 	 * @return This Contractors specialties.
 	 */
 	public String getSpecialites() {
-		return this.specialites;
+		return this.specialties;
 	}
 
 	/**
@@ -168,8 +168,8 @@ public class Contractor implements Serializable {
 	 * @param name
 	 *            The new specialties of this Contractor.
 	 */
-	public void setSpecialites(final String specialites) {
-		this.specialites = specialites;
+	public void setSpecialites(final String specialties) {
+		this.specialties = specialties;
 	}
 
 	/**
