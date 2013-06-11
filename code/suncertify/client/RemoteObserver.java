@@ -5,8 +5,24 @@ import java.rmi.RemoteException;
 
 import suncertify.shared.Contractor;
 
+/**
+ * This interface describes an object that can listen for updates to {@link Contractor} objects which are stored in the server database. It
+ * also allows for implementing classes to register for and receive updates via RMI.
+ * 
+ * @author Sean Dunne
+ */
 public interface RemoteObserver extends Remote {
 
-	void update(Contractor contractor, String cmd) throws RemoteException;
+	/**
+	 * The method called by the server when a {@link Contractor} has changed in the database.
+	 * 
+	 * @param contractor
+	 *            The updated Contractor.
+	 * @param cmd
+	 *            A String representing in what way the Contractor changed, create, update or delete.
+	 * @throws RemoteException
+	 *             Thrown when being called via RMI and registered client cannot be contacted.
+	 */
+	void update(final Contractor contractor, final String cmd) throws RemoteException;
 
 }

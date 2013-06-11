@@ -5,6 +5,11 @@ import suncertify.client.ui.SearchResultsTableModel;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
+/**
+ * Class to handle the updating of the client when an update occurs to the server database.
+ * 
+ * @author Sean Dunne
+ */
 public class ServerUpdateObserver implements RemoteObserver {
 
 	@Override
