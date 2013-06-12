@@ -20,13 +20,13 @@ public class ServerUpdateObserver implements RemoteObserver {
 		final SearchResultsTableModel model = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
 
 		switch (cmd) {
-		case "create":
+		case CREATE:
 			model.add(contractor);
 			break;
-		case "update":
+		case UPDATE:
 			model.update(contractor);
 			break;
-		case "delete":
+		case DELETE:
 			model.remove(contractor);
 			break;
 		}
