@@ -5,7 +5,6 @@ package suncertify.db;
  * to the database, if the database Key of the new record is not unique the a DuplicateKeyException will be thrown.
  * 
  * @author Sean Dunne
- * 
  */
 public class DuplicateKeyException extends Exception {
 

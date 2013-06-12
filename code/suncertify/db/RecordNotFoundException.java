@@ -5,7 +5,6 @@ package suncertify.db;
  * marked as deleted then a RecordNotFoundException is thrown.
  * 
  * @author Sean Dunne
- * 
  */
 public class RecordNotFoundException extends Exception {
 

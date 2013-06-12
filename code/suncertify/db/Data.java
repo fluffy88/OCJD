@@ -12,6 +12,11 @@ import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for the servers data records. It maintains a write through cache of the database records.
+ * 
+ * @author Sean Dunne
+ */
 public class Data implements DBMain {
 
 	private List<ReentrantLock> locks;
@@ -22,11 +27,21 @@ public class Data implements DBMain {
 	private DBWriter dbWriter;
 	private final String dbLocation;
 
+	/**
+	 * Construct a new instance connected to the passed file. You should not directly construct instances of this class, instead use the
+	 * {@link DAOFactory} to get an instance.
+	 * 
+	 * @param dbLoc
+	 *            The location of the database file.
+	 */
 	Data(String dbLoc) {
 		this.dbLocation = dbLoc;
 		init();
 	}
 
+	/**
+	 * Initialize the Data instance. This method will create and populate the cache.
+	 */
 	private void init() {
 		try {
 			this.is = new RandomAccessFile(this.dbLocation, "rw");
@@ -40,7 +55,13 @@ public class Data implements DBMain {
 		}
 	}
 
-	private void buildCache(DBParser parser) {
+	/**
+	 * This method will read all the records from the database and populate the cache with them.
+	 * 
+	 * @param parser
+	 *            The database parser used to read the database records.
+	 */
+	private void buildCache(final DBParser parser) {
 		this.contractors = parser.getAllRecords();
 		this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
 		for (int i = 0; i < this.contractors.size(); i++) {
@@ -146,6 +167,16 @@ public class Data implements DBMain {
 		return recNo;
 	}
 
+	/**
+	 * This method is used to validate that the data passed to {@link #create(String[])} is correct. It checks the primary key of this new
+	 * record isn't already used.
+	 * 
+	 * @param data
+	 *            The new record to be created.
+	 * @return true if this record can be created, otherwise false.
+	 * @throws DuplicateKeyException
+	 *             If a record with the primary key of name & location already exists.
+	 */
 	private boolean checkCreateData(String[] data) throws DuplicateKeyException {
 		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
 			this.createLock.unlock();
@@ -191,14 +222,36 @@ public class Data implements DBMain {
 		return this.isRecordLocked(recNo);
 	}
 
+	/**
+	 * This method checks if a record is already locked.
+	 * 
+	 * @param recNo
+	 *            The record number to check.
+	 * @return true if the record is locked, otherwise false.
+	 */
 	private boolean isRecordLocked(int recNo) {
 		return this.locks.get(recNo).isLocked();
 	}
 
+	/**
+	 * This method checks if a recordis marked as deleted.
+	 * 
+	 * @param recNo
+	 *            The record number to check.
+	 * @return true if the record has been deleted, otherwise false.
+	 */
 	private boolean isRecordDeleted(int recNo) {
 		return this.contractors.get(recNo)[0] == null;
 	}
 
+	/**
+	 * This method checks is a record exists and is not deleted.
+	 * 
+	 * @param recNo
+	 *            The record number to check.
+	 * @throws RecordNotFoundException
+	 *             If the record can't be found in the cache.
+	 */
 	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
 		if (recNo < 0) {
 			throw new IllegalArgumentException("The record number cannot be negative.");
