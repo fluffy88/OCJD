@@ -46,24 +46,28 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<Contractor> find(final String[] criteria, final boolean exactMatch) throws RecordNotFoundException {
+	public List<Contractor> find(final String[] criteria, final boolean findExactMatches) throws RecordNotFoundException {
 		final int[] rawResults = this.data.find(criteria);
 		final List<Contractor> finalResults = new ArrayList<Contractor>();
 
-		add_loop: for (int recNo : rawResults) {
+		for (int recNo : rawResults) {
 			Contractor record = this.read(recNo);
-			if (exactMatch) {
-				String[] dataArray = record.toArray();
-				for (int i = 0; i < criteria.length; i++) {
-					if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equals(criteria[i])) {
-						continue add_loop;
-					}
-				}
+			if (!findExactMatches || isExactMatch(record, criteria)) {
+				finalResults.add(record);
 			}
-			finalResults.add(record);
 		}
 
 		return finalResults;
+	}
+
+	private boolean isExactMatch(final Contractor record, final String[] criteria) {
+		final String[] dataArray = record.toArray();
+		for (int i = 0; i < criteria.length; i++) {
+			if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equals(criteria[i])) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
