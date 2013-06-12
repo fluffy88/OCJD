@@ -9,8 +9,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import suncertify.shared.Properties;
 
+/**
+ * This class is responsible for prompting the user to enter the location of the database file.
+ * 
+ * @author Sean Dunne
+ */
 public class DatabaseLocator {
 
+	/**
+	 * This method will display a file chooser dialog to the user allowing the user chose a new database file.
+	 * 
+	 * @return The location of the file the user picked.
+	 */
 	public static String getLocation() {
 		JFileChooser chooser = createDialog();
 
@@ -18,15 +28,18 @@ public class DatabaseLocator {
 		int action = chooser.showOpenDialog(null);
 		if (action == JFileChooser.APPROVE_OPTION) {
 			File choice = chooser.getSelectedFile();
-			if (isDBFileValid(choice)) {
-				location = choice.getAbsolutePath();
-				Properties.set(PROP_DB_LOCATION, location);
-			}
+			location = choice.getAbsolutePath();
+			Properties.set(PROP_DB_LOCATION, location);
 		}
 
 		return location;
 	}
 
+	/**
+	 * This method creates the {@link JFileChooser} with the correct properties.
+	 * 
+	 * @return A JFileChooser allowing selection of .db files.
+	 */
 	private static JFileChooser createDialog() {
 		JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
 
@@ -34,14 +47,5 @@ public class DatabaseLocator {
 		chooser.setDialogTitle("Database location");
 
 		return chooser;
-	}
-
-	private static boolean isDBFileValid(File choice) {
-		if (!choice.exists()) {
-			return false;
-		}
-		// TODO: Check if Magic Cookie matches
-		// TODO: Check if File is a valid DB file
-		return true;
 	}
 }

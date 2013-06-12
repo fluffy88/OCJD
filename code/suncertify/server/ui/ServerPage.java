@@ -3,7 +3,6 @@ package suncertify.server.ui;
 import static suncertify.shared.App.DEP_SERVER_APPLICATION;
 import static suncertify.shared.App.PROP_DB_LOCATION;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,6 +21,11 @@ import suncertify.Application;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
+/**
+ * This class contains all the UI components that make up the server user interface.
+ * 
+ * @author Sean Dunne
+ */
 public class ServerPage extends JPanel {
 
 	private static final long serialVersionUID = 5317757024984525594L;
@@ -30,8 +34,9 @@ public class ServerPage extends JPanel {
 	private AbstractButton shutdownBtn;
 	private JButton startBtn;
 
-	private Dimension buttonSize = new Dimension(75, 25);
-
+	/**
+	 * Create a Page containing the server ui components.
+	 */
 	public ServerPage() {
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
@@ -40,6 +45,9 @@ public class ServerPage extends JPanel {
 		createServerButtons();
 	}
 
+	/**
+	 * This method will create the ui to display and change the database location.
+	 */
 	private void createDBLocationPanel() {
 		JPanel middle = new JPanel();
 		GridBagLayout middleLayout = new GridBagLayout();
@@ -61,16 +69,7 @@ public class ServerPage extends JPanel {
 		middle.add(dbFileLocTxt, c);
 
 		browseBtn = new JButton("Locate");
-		browseBtn.setPreferredSize(this.buttonSize);
-		browseBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String location = DatabaseLocator.getLocation();
-				if (location != null) {
-					dbFileLocTxt.setText(location);
-				}
-			}
-		});
+		browseBtn.addActionListener(new BrowseListener());
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.insets = new Insets(5, 5, 5, 5);
@@ -78,40 +77,70 @@ public class ServerPage extends JPanel {
 		this.add(middle);
 	}
 
-	void createServerButtons() {
+	/**
+	 * This method creates a servers buttons, start and stop.
+	 */
+	private void createServerButtons() {
 		JPanel bottom = new JPanel();
 		FlowLayout layout = new FlowLayout();
 		layout.setAlignment(FlowLayout.RIGHT);
 		bottom.setLayout(layout);
 
 		startBtn = new JButton("Start");
-		startBtn.setPreferredSize(this.buttonSize);
-		startBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (dbFileLocTxt.getText().equals("")) {
-					App.showError("You must choose a database file first!");
-				} else {
-					Application server = (Application) App.getDependancy(DEP_SERVER_APPLICATION);
-					server.start();
-
-					startBtn.setEnabled(false);
-					browseBtn.setEnabled(false);
-				}
-			}
-		});
+		startBtn.addActionListener(new StartListener());
 		bottom.add(startBtn);
 
 		shutdownBtn = new JButton("Shutdown");
 		shutdownBtn.setMargin(new Insets(0, 5, 0, 5));
-		shutdownBtn.setPreferredSize(this.buttonSize);
-		shutdownBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		shutdownBtn.addActionListener(new ShutdownListener());
 		bottom.add(shutdownBtn);
 		this.add(bottom);
+	}
+
+	/**
+	 * This listener handles how to locate a new database file.
+	 * 
+	 * @author Sean Dunne
+	 */
+	private class BrowseListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String location = DatabaseLocator.getLocation();
+			if (location != null) {
+				dbFileLocTxt.setText(location);
+			}
+		}
+	}
+
+	/**
+	 * This listener handles how to start the server.
+	 * 
+	 * @author Sean Dunne
+	 */
+	private class StartListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (dbFileLocTxt.getText().equals("")) {
+				App.showError("You must choose a database file first!");
+			} else {
+				Application server = (Application) App.getDependancy(DEP_SERVER_APPLICATION);
+				server.start();
+
+				startBtn.setEnabled(false);
+				browseBtn.setEnabled(false);
+			}
+		}
+	}
+
+	/**
+	 * This listener will shutdown the application.
+	 * 
+	 * @author Sean Dunne
+	 */
+	private class ShutdownListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
 	}
 }
