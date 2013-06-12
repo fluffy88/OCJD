@@ -14,6 +14,11 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
+/**
+ * This class is the main implementation of the Server interface.
+ * 
+ * @author Sean Dunne
+ */
 public class DataServiceImpl implements DataService {
 
 	private final DBMain data = DAOFactory.getInstance().getDataService();
@@ -46,20 +51,37 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<Contractor> find(final String[] criteria, final boolean findExactMatches) throws RecordNotFoundException {
-		final int[] rawResults = this.data.find(criteria);
+	public List<Contractor> find(final String[] criteria, final boolean findExactMatches) {
 		final List<Contractor> finalResults = new ArrayList<Contractor>();
-
-		for (int recNo : rawResults) {
-			Contractor record = this.read(recNo);
-			if (!findExactMatches || isExactMatch(record, criteria)) {
-				finalResults.add(record);
-			}
+		int[] rawResults = new int[0];
+		try {
+			rawResults = this.data.find(criteria);
+		} catch (RecordNotFoundException e) {
+			// cannot happen
 		}
 
+		for (int recNo : rawResults) {
+			try {
+				Contractor record = this.read(recNo);
+				if (!findExactMatches || isExactMatch(record, criteria)) {
+					finalResults.add(record);
+				}
+			} catch (RecordNotFoundException e) {
+				// record has been deleted, ignore it
+			}
+		}
 		return finalResults;
 	}
 
+	/**
+	 * This method is used to determine if a Contractor exactly matches search criteria.
+	 * 
+	 * @param record
+	 *            The Contractor to check.
+	 * @param criteria
+	 *            The search criteria used to check the Contractor.
+	 * @return true if the Contractor is an exact match otherwise false.
+	 */
 	private boolean isExactMatch(final Contractor record, final String[] criteria) {
 		final String[] dataArray = record.toArray();
 		for (int i = 0; i < criteria.length; i++) {
@@ -81,7 +103,15 @@ public class DataServiceImpl implements DataService {
 		return recNo;
 	}
 
-	public void notifyObservers(final Contractor contractor, final String cmd) {
+	/**
+	 * This method is responsible for updating all the clients that registered for updates when an update occurs to the database.
+	 * 
+	 * @param contractor
+	 *            The Contractor object that has been updated.
+	 * @param cmd
+	 *            A String indicating how the Contractor has changed, create, update, delete.
+	 */
+	private void notifyObservers(final Contractor contractor, final String cmd) {
 		final List<RemoteObserver> staleRefs = new ArrayList<>();
 		for (final RemoteObserver o : this.observers) {
 			executor.execute(new Runnable() {
@@ -99,11 +129,13 @@ public class DataServiceImpl implements DataService {
 		this.observers.removeAll(staleRefs);
 	}
 
+	@Override
 	public void addObserver(RemoteObserver o) {
 		App.logWarning("Client connected");
 		this.observers.add(o);
 	}
 
+	@Override
 	public void deleteObserver(RemoteObserver o) {
 		App.logWarning("Client disconnected");
 		this.observers.remove(o);

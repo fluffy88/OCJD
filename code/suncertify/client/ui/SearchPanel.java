@@ -24,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
@@ -160,8 +159,6 @@ public class SearchPanel extends JPanel {
 
 				tableModel.clearData();
 				tableModel.addAll(records);
-			} catch (RecordNotFoundException exp) {
-				App.showError(exp.getMessage());
 			} catch (RemoteException exp) {
 				App.showErrorAndExit("Cannot connect to remote server.");
 			}
