@@ -74,7 +74,7 @@ public class SearchResultsPanel extends JPanel {
 		layout.setAlignment(FlowLayout.LEFT);
 
 		deleteBtn = new JButton("Delete (0)");
-		deleteBtn.addActionListener(new DeleteActionListener());
+		deleteBtn.addActionListener(new DeleteListener());
 		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 
 		bottomPanel.add(deleteBtn);
@@ -102,7 +102,7 @@ public class SearchResultsPanel extends JPanel {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class DeleteActionListener implements ActionListener {
+	private class DeleteListener implements ActionListener {
 
 		private SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
 		private DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);

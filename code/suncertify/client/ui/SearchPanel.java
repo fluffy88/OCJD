@@ -64,7 +64,7 @@ public class SearchPanel extends JPanel {
 	 * Create the search components and add them to this JPanel.
 	 */
 	private void createSearchArea() {
-		final ActionListener enterAct = new EnterActionListener();
+		final ActionListener enterAct = new EnterListener();
 		final JLabel nameLabel = new JLabel(CONTRACTOR_NAME + ":");
 		nameField = new JTextField(10);
 		nameField.addActionListener(enterAct);
@@ -89,7 +89,7 @@ public class SearchPanel extends JPanel {
 		exactMatch.addActionListener(new ExactMatchListener());
 
 		button = new JButton("Search");
-		button.addActionListener(new SearchButtonListener());
+		button.addActionListener(new SearchListener());
 
 		this.add(nameLabel);
 		this.add(cityLabel);
@@ -115,7 +115,7 @@ public class SearchPanel extends JPanel {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class EnterActionListener implements ActionListener {
+	private class EnterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			button.doClick();
@@ -139,7 +139,7 @@ public class SearchPanel extends JPanel {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class SearchButtonListener implements ActionListener {
+	private class SearchListener implements ActionListener {
 
 		private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 

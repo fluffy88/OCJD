@@ -80,7 +80,7 @@ public class NetworkedClientUI extends JFrame {
 		panel.add(label, c);
 
 		textField = new JTextField(Properties.get(PROP_SERVER_HOSTNAME, "localhost"));
-		textField.addActionListener(new TextFieldActionListener());
+		textField.addActionListener(new TextFieldListener());
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(textField, c);
@@ -91,7 +91,7 @@ public class NetworkedClientUI extends JFrame {
 		panel.add(status, c);
 
 		ok = new JButton("OK");
-		ok.addActionListener(new OKActionListener());
+		ok.addActionListener(new OKListener());
 		c.gridx = 1;
 		c.gridy = 3;
 		c.gridwidth = 1;
@@ -99,7 +99,7 @@ public class NetworkedClientUI extends JFrame {
 		panel.add(ok, c);
 
 		final JButton cancel = new JButton("Cancel");
-		cancel.addActionListener(new CancelActionListener());
+		cancel.addActionListener(new CancelListener());
 		c.gridx = 2;
 		c.gridy = 3;
 		panel.add(cancel, c);
@@ -130,7 +130,7 @@ public class NetworkedClientUI extends JFrame {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class TextFieldActionListener implements ActionListener {
+	private class TextFieldListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -143,7 +143,7 @@ public class NetworkedClientUI extends JFrame {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class OKActionListener implements ActionListener {
+	private class OKListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -174,7 +174,7 @@ public class NetworkedClientUI extends JFrame {
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class CancelActionListener implements ActionListener {
+	private class CancelListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
