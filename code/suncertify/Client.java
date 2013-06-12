@@ -22,12 +22,18 @@ public class Client implements Application {
 	private ServerUpdateObserver rmiCallback;
 	private NetworkedClientUI hostnameDialog;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void launch() {
 		hostnameDialog = NetworkedClientUI.start();
 		App.publish(DEP_CLIENT_APPLICATION, this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void start() {
 		final DataService dataService = hostnameDialog.getDataService();
@@ -52,6 +58,9 @@ public class Client implements Application {
 	 */
 	private void setShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+			/**
+			 * {@inheritDoc}
+			 */
 			@Override
 			public void run() {
 				final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);

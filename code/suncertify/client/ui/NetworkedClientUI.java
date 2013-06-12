@@ -132,6 +132,9 @@ public class NetworkedClientUI extends JFrame {
 	 */
 	private class TextFieldListener implements ActionListener {
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ok.doClick();
@@ -145,6 +148,9 @@ public class NetworkedClientUI extends JFrame {
 	 */
 	private class OKListener implements ActionListener {
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			status.setText(" ");
@@ -176,6 +182,9 @@ public class NetworkedClientUI extends JFrame {
 	 */
 	private class CancelListener implements ActionListener {
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);

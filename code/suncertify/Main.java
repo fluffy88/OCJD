@@ -61,6 +61,9 @@ public class Main {
 	 */
 	private static void setShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+			/**
+			 * {@inheritDoc}
+			 */
 			@Override
 			public void run() {
 				Properties.save();

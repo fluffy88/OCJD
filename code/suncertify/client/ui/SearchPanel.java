@@ -115,6 +115,9 @@ public class SearchPanel extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class EnterListener implements ActionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			button.doClick();
@@ -127,6 +130,9 @@ public class SearchPanel extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class ExactMatchListener implements ActionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Properties.setBoolean(PROP_EXACT_MATCH, exactMatch.isSelected());
@@ -142,6 +148,9 @@ public class SearchPanel extends JPanel {
 
 		private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			final String[] searchCriteria = new String[6];

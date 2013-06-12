@@ -25,6 +25,9 @@ public class DataServiceImpl implements DataService {
 	private final List<RemoteObserver> observers = new ArrayList<>();
 	private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException {
 		this.data.lock(recNo);
@@ -34,6 +37,9 @@ public class DataServiceImpl implements DataService {
 		return record;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void update(final Contractor data) throws RecordNotFoundException {
 		this.data.lock(data.getRecordId());
@@ -42,6 +48,9 @@ public class DataServiceImpl implements DataService {
 		this.notifyObservers(data, "update");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(final Contractor record) throws RecordNotFoundException {
 		this.data.lock(record.getRecordId());
@@ -50,6 +59,9 @@ public class DataServiceImpl implements DataService {
 		this.notifyObservers(record, "delete");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Contractor> find(final String[] criteria, final boolean findExactMatches) {
 		final List<Contractor> finalResults = new ArrayList<Contractor>();
@@ -92,6 +104,9 @@ public class DataServiceImpl implements DataService {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int create(final String[] data) throws DuplicateKeyException {
 		int recNo = this.data.create(data);
@@ -115,6 +130,9 @@ public class DataServiceImpl implements DataService {
 		final List<RemoteObserver> staleRefs = new ArrayList<>();
 		for (final RemoteObserver o : this.observers) {
 			executor.execute(new Runnable() {
+				/**
+				 * {@inheritDoc}
+				 */
 				@Override
 				public void run() {
 					try {
@@ -129,12 +147,18 @@ public class DataServiceImpl implements DataService {
 		this.observers.removeAll(staleRefs);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addObserver(RemoteObserver o) {
 		App.logWarning("Client connected");
 		this.observers.add(o);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteObserver(RemoteObserver o) {
 		App.logWarning("Client disconnected");

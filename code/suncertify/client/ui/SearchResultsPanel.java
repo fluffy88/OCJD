@@ -107,6 +107,9 @@ public class SearchResultsPanel extends JPanel {
 		private SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
 		private DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			int[] rows = SearchResultsPanel.this.table.getSelectedRows();
@@ -131,6 +134,9 @@ public class SearchResultsPanel extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class TableSelectionListener implements ListSelectionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");

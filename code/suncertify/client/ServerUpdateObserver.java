@@ -12,6 +12,9 @@ import suncertify.shared.Contractor;
  */
 public class ServerUpdateObserver implements RemoteObserver {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void update(final Contractor contractor, final String cmd) {
 		final SearchResultsTableModel model = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);

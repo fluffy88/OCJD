@@ -21,6 +21,9 @@ public class StandAlone implements Application {
 
 	private ServerUI serverUI;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void launch() {
 		serverUI = ServerUI.start();
@@ -28,6 +31,9 @@ public class StandAlone implements Application {
 		App.publish(DEP_SERVER_APPLICATION, this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void start() {
 		final DataService dataService = new DataServiceImpl();

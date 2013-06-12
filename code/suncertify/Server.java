@@ -21,6 +21,9 @@ public class Server implements Application {
 
 	public static final String RMI_SERVER = "remote.database.server";
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void launch() {
 		ServerUI.start();
@@ -28,6 +31,9 @@ public class Server implements Application {
 		App.publish(DEP_SERVER_APPLICATION, this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void start() {
 		final DataService dataService = new DataServiceImpl();

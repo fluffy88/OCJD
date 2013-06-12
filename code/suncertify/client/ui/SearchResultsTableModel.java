@@ -139,31 +139,49 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		return -1;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getColumnName(final int column) {
 		return this.columns.get(column);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getRowCount() {
 		return this.data.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getColumnCount() {
 		return this.columns.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
 		return this.data.get(rowIndex).toArray()[columnIndex];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setValueAt(final Object value, final int row, final int column) {
 		if (this.data != null && row < this.data.size()) {

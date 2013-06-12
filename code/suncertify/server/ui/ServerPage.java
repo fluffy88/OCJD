@@ -102,6 +102,9 @@ public class ServerPage extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class BrowseListener implements ActionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String location = DatabaseLocator.getLocation();
@@ -117,6 +120,9 @@ public class ServerPage extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class StartListener implements ActionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (dbFileLocTxt.getText().equals("")) {
@@ -137,6 +143,9 @@ public class ServerPage extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class ShutdownListener implements ActionListener {
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
