@@ -13,6 +13,10 @@ import suncertify.shared.Contractor;
  */
 public interface RemoteObserver extends Remote {
 
+	String CREATE = "create";
+	String DELETE = "delete";
+	String UPDATE = "update";
+
 	/**
 	 * The method called by the server when a {@link Contractor} has changed in the database.
 	 * 

@@ -1,5 +1,9 @@
 package suncertify.server;
 
+import static suncertify.client.RemoteObserver.CREATE;
+import static suncertify.client.RemoteObserver.DELETE;
+import static suncertify.client.RemoteObserver.UPDATE;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(data.getRecordId());
 		this.data.update(data.getRecordId(), data.toArray());
 		this.data.unlock(data.getRecordId());
-		this.notifyObservers(data, "update");
+		this.notifyObservers(data, UPDATE);
 	}
 
 	/**
@@ -56,7 +60,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(record.getRecordId());
 		this.data.delete(record.getRecordId());
 		this.data.unlock(record.getRecordId());
-		this.notifyObservers(record, "delete");
+		this.notifyObservers(record, DELETE);
 	}
 
 	/**
@@ -111,7 +115,7 @@ public class DataServiceImpl implements DataService {
 	public int create(final String[] data) throws DuplicateKeyException {
 		int recNo = this.data.create(data);
 		try {
-			this.notifyObservers(this.read(recNo), "create");
+			this.notifyObservers(this.read(recNo), CREATE);
 		} catch (RecordNotFoundException e) {
 			// contractor deleted, no need to update clients
 		}
