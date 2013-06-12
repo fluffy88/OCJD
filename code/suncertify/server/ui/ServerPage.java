@@ -91,7 +91,6 @@ public class ServerPage extends JPanel {
 		bottom.add(startBtn);
 
 		shutdownBtn = new JButton("Shutdown");
-		shutdownBtn.setMargin(new Insets(0, 5, 0, 5));
 		shutdownBtn.addActionListener(new ShutdownListener());
 		bottom.add(shutdownBtn);
 		this.add(bottom);
