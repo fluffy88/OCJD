@@ -17,14 +17,30 @@ import java.util.List;
 
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for the reading of the database file.
+ * 
+ * @author Sean Dunne
+ */
 public class DBParser {
 
 	private final RandomAccessFile is;
 
+	/**
+	 * Create a new instance of this class to parse the database file.
+	 * 
+	 * @param is
+	 *            The database file to be parsed.
+	 */
 	public DBParser(final RandomAccessFile is) {
 		this.is = is;
 	}
 
+	/**
+	 * This method reads all records from the database file.
+	 * 
+	 * @return A List containing all the database records.
+	 */
 	public List<String[]> getAllRecords() {
 		final List<String[]> contractors = new ArrayList<String[]>();
 		try {
@@ -44,6 +60,13 @@ public class DBParser {
 		return contractors;
 	}
 
+	/**
+	 * This method checks that the value of the magic cookie in the database file matches the cookie value of the database for this
+	 * application.
+	 * 
+	 * @throws IOException
+	 *             If reading the magic cookie value from the file fails.
+	 */
 	private void checkMagicCookie() throws IOException {
 		MAGIC_COOKIE = this.is.readInt();
 		if (MAGIC_COOKIE != EXPECTED_MAGIC_COOKIE) {
@@ -51,6 +74,12 @@ public class DBParser {
 		}
 	}
 
+	/**
+	 * This method is used to read all the metadata file headers. It stores all the read values in {@link DBSchema}.
+	 * 
+	 * @throws IOException
+	 *             If reading from the database file fails.
+	 */
 	private void readDataFileHeaders() throws IOException {
 		// headers
 		START_OF_RECORDS = this.is.readInt();
@@ -73,6 +102,13 @@ public class DBParser {
 		}
 	}
 
+	/**
+	 * This method is used to read one full record from the database. It assumes the file-pointer is at the beginning of a record.
+	 * 
+	 * @return An array containing the fields for this record.
+	 * @throws IOException
+	 *             If reading from the database file fails.
+	 */
 	private String[] readNextRecord() throws IOException {
 		final short flag = this.is.readShort();
 
@@ -91,13 +127,11 @@ public class DBParser {
 	/**
 	 * Simple implementation of a RandomAccessFile#readString() as it's not included by default.
 	 * 
-	 * @param is
-	 *            The RandomAccessFile instance to read from.
 	 * @param n
 	 *            The number of bytes to be read for the String.
 	 * @return The trimmed result of reading n bytes from the RandomAccessFile and converting to a String.
 	 * @throws IOException
-	 *             If something does wrong when reading from the RandomAccessFile.
+	 *             If something goes wrong when reading from the RandomAccessFile.
 	 */
 	private String readString(final int n) throws IOException {
 		final byte[] bytes = new byte[n];

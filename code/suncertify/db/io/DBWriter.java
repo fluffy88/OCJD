@@ -15,15 +15,35 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import suncertify.shared.App;
 
+/**
+ * This class is responsible for writing records to the database file.
+ * 
+ * @author Sean Dunne
+ */
 public class DBWriter {
 
 	private RandomAccessFile is;
 	private ReentrantLock lock = new ReentrantLock();
 
+	/**
+	 * Create new instance of the database writer.
+	 * 
+	 * @param is
+	 *            The file which to write too.
+	 */
 	public DBWriter(RandomAccessFile is) {
 		this.is = is;
 	}
 
+	/**
+	 * This method writes a record to the database.
+	 * 
+	 * @param recNo
+	 *            The record number of the record to be written.
+	 * @param data
+	 *            The fields of the record to be written.
+	 * @return true if the write succeeded otherwise false.
+	 */
 	public boolean write(int recNo, String[] data) {
 		try {
 			int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
@@ -37,6 +57,13 @@ public class DBWriter {
 		return true;
 	}
 
+	/**
+	 * Delete a record in the database. This will only mark a record as deleted, it does not remove the records data from the file.
+	 * 
+	 * @param recNo
+	 *            The record number of the record to be deleted.
+	 * @return true if the delete succeeded otherwise false.
+	 */
 	public boolean delete(int recNo) {
 		int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 		try {
@@ -50,6 +77,13 @@ public class DBWriter {
 		return true;
 	}
 
+	/**
+	 * Create a new record in the database. This is reuse a deleted record if it finds a record marked as deleted.
+	 * 
+	 * @param data
+	 *            The fields of the new record to be created.
+	 * @return The record number of the newly created record.
+	 */
 	public int create(String[] data) {
 		try {
 			this.lock.lock();
@@ -76,6 +110,16 @@ public class DBWriter {
 		return -1;
 	}
 
+	/**
+	 * This method does the actually writing of a record to the database file.
+	 * 
+	 * @param pos
+	 *            The position in the file to start the writing.
+	 * @param data
+	 *            The fields for this record to be written.
+	 * @throws IOException
+	 *             If the method fails to write to the database file.
+	 */
 	private void writeRecord(long pos, String[] data) throws IOException {
 		is.seek(pos);
 
