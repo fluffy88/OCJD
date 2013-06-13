@@ -1,6 +1,7 @@
 package suncertify.client.ui;
 
 import static suncertify.shared.App.DEP_DATASERVICE;
+import static suncertify.shared.App.PROP_EXACT_MATCH;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Contractor;
+import suncertify.shared.Properties;
 
 /**
  * This class is responsible for maintaining the data records on the client UI.
@@ -41,7 +43,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	static final String CUSTOMER_ID = "Customer ID";
 
 	/**
-	 * Create the table model.
+	 * Create and populate the table model.
 	 */
 	public SearchResultsTableModel() {
 		columns.add(CONTRACTOR_NAME);
@@ -50,8 +52,15 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		columns.add(NUMBER_OF_STAFF);
 		columns.add(HOURLY_CHARGE);
 		columns.add(CUSTOMER_ID);
-		// add empty data so table headers show up and can be resized.
-		this.data.add(new Contractor(0, null, null, null, null, null, null));
+
+		try {
+			final List<Contractor> contractors = dataService.find(new String[1],
+					Properties.getBoolean(PROP_EXACT_MATCH));
+			this.addAll(contractors);
+		} catch (RemoteException e) {
+			// could not get records, add empty data so table headers show up and can be resized.
+			this.data.add(new Contractor(0, null, null, null, null, null, null));
+		}
 	}
 
 	/**
