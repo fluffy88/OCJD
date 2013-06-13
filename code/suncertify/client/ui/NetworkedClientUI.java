@@ -3,7 +3,6 @@ package suncertify.client.ui;
 import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.PROP_SERVER_HOSTNAME;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -36,7 +35,6 @@ public class NetworkedClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 	private JTextField textField;
-	private JLabel status;
 	private DataService dataService;
 	private JButton ok;
 
@@ -85,15 +83,10 @@ public class NetworkedClientUI extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(textField, c);
 
-		status = new JLabel(" ");
-		status.setForeground(new Color(255, 50, 50));
-		c.gridy = 2;
-		panel.add(status, c);
-
 		ok = new JButton("OK");
 		ok.addActionListener(new OKListener());
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
 		panel.add(ok, c);
@@ -101,7 +94,7 @@ public class NetworkedClientUI extends JFrame {
 		final JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new CancelListener());
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 2;
 		panel.add(cancel, c);
 
 		final JLabel blank = new JLabel("");
@@ -154,11 +147,10 @@ public class NetworkedClientUI extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			status.setText(" ");
 			final String hostname = textField.getText();
 
 			if (hostname.equals("")) {
-				status.setText("You must enter a location for the server.");
+				App.showError("You must enter a location for the server.");
 			} else {
 				try {
 					final Registry registry = LocateRegistry.getRegistry(hostname);
@@ -168,9 +160,9 @@ public class NetworkedClientUI extends JFrame {
 					Client client = (Client) App.getDependancy(DEP_APPLICATION);
 					client.start();
 				} catch (RemoteException e) {
-					status.setText("Cannot connect to remote server.");
+					App.showError("Cannot connect to the remote server.\nCheck the hostname is correct.");
 				} catch (NotBoundException e) {
-					status.setText("Server found but cannot connect.");
+					App.showError("Server found but cannot connect.\nThe server may not have started correctly.");
 				}
 			}
 		}
