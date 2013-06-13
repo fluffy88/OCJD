@@ -13,8 +13,11 @@ import suncertify.shared.Contractor;
  */
 public interface RemoteObserver extends Remote {
 
+	/** The command used to notify observers a new Contractor has been created */
 	String CREATE = "create";
+	/** The command used to notify observers a Contractor has been deleted */
 	String DELETE = "delete";
+	/** The command used to notify observers a Contractor has been updated */
 	String UPDATE = "update";
 
 	/**
