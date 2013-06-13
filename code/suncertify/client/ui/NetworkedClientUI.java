@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.Client;
+import suncertify.Application;
 import suncertify.Server;
 import suncertify.server.DataService;
 import suncertify.shared.App;
@@ -157,8 +157,10 @@ public class NetworkedClientUI extends JFrame {
 					dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 					Properties.set(PROP_SERVER_HOSTNAME, hostname);
 
-					Client client = (Client) App.getDependancy(DEP_APPLICATION);
+					Application client = (Application) App.getDependancy(DEP_APPLICATION);
 					client.start();
+
+					NetworkedClientUI.this.setVisible(false);
 				} catch (RemoteException e) {
 					App.showError("Cannot connect to the remote server.\nCheck the hostname is correct.");
 				} catch (NotBoundException e) {
