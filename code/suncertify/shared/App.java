@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import suncertify.Application;
+
 /**
  * This class is a utility class for the overall application. Providing convenience methods for dependency injection, logging and displaying
  * error messages.
@@ -20,20 +22,18 @@ public class App {
 
 	private static Map<String, Object> injectableItems = new HashMap<>();
 
-	/** The name used to publish the DataService instance */
+	/** The name used to publish the DataService instance. */
 	public static final String DEP_DATASERVICE = "dataservice";
-	/** The name used to publish the Client instance */
-	public static final String DEP_CLIENT_APPLICATION = "client.application";
-	/** The name used to publish the Server instance */
-	public static final String DEP_SERVER_APPLICATION = "server.application";
-	/** The name used to publish the TableModel instance */
+	/** The name used to publish the currently running instance of {@link Application}. */
+	public static final String DEP_APPLICATION = "application";
+	/** The name used to publish the TableModel instance. */
 	public static final String DEP_TABLE_MODEL = "search.results.tablemodel";
 
-	/** The name used to persist the hostname of the remote server */
+	/** The name used to persist the hostname of the remote server. */
 	public static final String PROP_SERVER_HOSTNAME = "server.hostname";
-	/** The name used to persist the location of the database file */
+	/** The name used to persist the location of the database file. */
 	public static final String PROP_DB_LOCATION = "database.location";
-	/** The name used to persist the whether the state of the Exact match checkbox on the Client UI */
+	/** The name used to persist the whether the state of the Exact match checkbox on the Client UI. */
 	public static final String PROP_EXACT_MATCH = "exact.match.enabled";
 
 	/**

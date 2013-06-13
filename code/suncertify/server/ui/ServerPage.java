@@ -1,6 +1,6 @@
 package suncertify.server.ui;
 
-import static suncertify.shared.App.DEP_SERVER_APPLICATION;
+import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.PROP_DB_LOCATION;
 
 import java.awt.FlowLayout;
@@ -128,7 +128,7 @@ public class ServerPage extends JPanel {
 			if (dbFileLocTxt.getText().equals("")) {
 				App.showError("You must choose a database file first!");
 			} else {
-				Application server = (Application) App.getDependancy(DEP_SERVER_APPLICATION);
+				Application server = (Application) App.getDependancy(DEP_APPLICATION);
 				server.start();
 
 				startBtn.setEnabled(false);

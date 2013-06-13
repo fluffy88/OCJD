@@ -1,6 +1,6 @@
 package suncertify.client.ui;
 
-import static suncertify.shared.App.DEP_CLIENT_APPLICATION;
+import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.PROP_SERVER_HOSTNAME;
 
 import java.awt.Color;
@@ -164,7 +164,7 @@ public class NetworkedClientUI extends JFrame {
 					dataService = (DataService) registry.lookup(Server.RMI_SERVER);
 					Properties.set(PROP_SERVER_HOSTNAME, hostname);
 
-					Client client = (Client) App.getDependancy(DEP_CLIENT_APPLICATION);
+					Client client = (Client) App.getDependancy(DEP_APPLICATION);
 					client.start();
 				} catch (RemoteException e) {
 					status.setText("Cannot connect to remote server.");

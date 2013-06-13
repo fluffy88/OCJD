@@ -1,7 +1,7 @@
 package suncertify;
 
+import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.DEP_DATASERVICE;
-import static suncertify.shared.App.DEP_SERVER_APPLICATION;
 
 import java.rmi.RemoteException;
 
@@ -28,7 +28,7 @@ public class StandAlone implements Application {
 	public void launch() {
 		serverUI = ServerUI.start();
 
-		App.publish(DEP_SERVER_APPLICATION, this);
+		App.publish(DEP_APPLICATION, this);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package suncertify;
 
-import static suncertify.shared.App.DEP_CLIENT_APPLICATION;
+import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.DEP_DATASERVICE;
 
 import java.rmi.RemoteException;
@@ -28,7 +28,7 @@ public class Client implements Application {
 	@Override
 	public void launch() {
 		hostnameDialog = NetworkedClientUI.start();
-		App.publish(DEP_CLIENT_APPLICATION, this);
+		App.publish(DEP_APPLICATION, this);
 	}
 
 	/**
