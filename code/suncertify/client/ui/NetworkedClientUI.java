@@ -27,8 +27,8 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This class is responsible for creating, displaying and populating the networked client user interface. This UI's purpose is to allow the
- * user specify the hostname of the remote server to connect to.
+ * This class is responsible for creating, displaying and populating the networked client user interface. This UI's
+ * purpose is to allow the user specify the hostname of the remote server to connect to.
  * 
  * @author Sean Dunne
  */
@@ -142,7 +142,8 @@ public class NetworkedClientUI extends JFrame {
 	}
 
 	/**
-	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK button.
+	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK
+	 * button.
 	 * 
 	 * @author Sean Dunne
 	 */

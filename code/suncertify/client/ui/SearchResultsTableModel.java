@@ -186,7 +186,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	public void setValueAt(final Object value, final int row, final int column) {
 		if (this.data != null && row < this.data.size()) {
 			final Contractor contractor = this.data.get(row);
-			final String updatedValue = (String) value;
+			final String updatedValue = ((String) value).trim();
 
 			if (isValidValue(updatedValue, column)) {
 				final String[] record = contractor.toArray();
@@ -216,6 +216,12 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	private boolean isValidValue(final String value, final int column) {
 		if (column == this.columns.indexOf(CUSTOMER_ID) && !value.matches("^(\\d{8}|)$")) {
 			App.showError("The Customer ID must be 8 digits.");
+			return false;
+		} else if (column == this.columns.indexOf(HOURLY_CHARGE) && !value.matches("^\\$\\d+(\\.\\d{1,2})?$")) {
+			App.showError("You must enter a valid dollar amount.");
+			return false;
+		} else if (column == this.columns.indexOf(NUMBER_OF_STAFF) && !value.matches("^\\d+$")) {
+			App.showError("You can only enter digits for the number of staff.");
 			return false;
 		} else if (column != this.columns.indexOf(CUSTOMER_ID) && value.equals("")) {
 			App.showError("You cannot leave the '" + this.columns.get(column) + "'" + " field empty.");
