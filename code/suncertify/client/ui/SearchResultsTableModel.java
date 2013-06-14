@@ -27,7 +27,9 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 
 	private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
 	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
+
 	private final ArrayList<String> columns = new ArrayList<>();
+	private final int[] columnLengths = new int[] { 32, 64, 64, 6, 8, 8 };
 
 	/** Display name for the Contractor name */
 	static final String CONTRACTOR_NAME = "Name";
@@ -222,6 +224,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 * @return true if this value is acceptable otherwise false.
 	 */
 	private boolean isValidValue(final String value, final int column) {
+
 		if (column == this.columns.indexOf(CUSTOMER_ID) && !value.matches("^(\\d{8}|)$")) {
 			App.showError("The Customer ID must be 8 digits.");
 			return false;
@@ -232,7 +235,12 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 			App.showError("You can only enter digits for the number of staff.");
 			return false;
 		} else if (column != this.columns.indexOf(CUSTOMER_ID) && value.equals("")) {
-			App.showError("You cannot leave the '" + this.columns.get(column) + "'" + " field empty.");
+			App.showError("You cannot leave the '" + this.columns.get(column) + "' field empty.");
+			return false;
+		} else if (value.length() > columnLengths[column]) {
+			final StringBuilder msg = new StringBuilder().append("The value of the column '").append(this.columns.get(column))
+					.append("' cannot be greater than ").append(columnLengths[column]).append(" characters long.");
+			App.showError(msg.toString());
 			return false;
 		}
 
