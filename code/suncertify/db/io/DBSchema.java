@@ -38,17 +38,17 @@ public class DBSchema {
 	public static int EXPECTED_MAGIC_COOKIE = 514;
 	/** The actual magic cookie read from the database file by {@link DBParser}. */
 	public static int MAGIC_COOKIE;
-	/** The position where the records begin in the database file. Read in my {@link DBParser}. */
+	/** The position where the records begin in the database file. Read in by {@link DBParser}. */
 	public static int START_OF_RECORDS;
-	/** The number of fields each record has. Read in my {@link DBParser}. */
+	/** The number of fields each record has. Read in by {@link DBParser}. */
 	public static int NUMBER_OF_FIELDS;
 
 	// Fields
-	/** The headers of each field in the database. Read in my {@link DBParser}. */
+	/** The headers of each field in the database. Read in by {@link DBParser}. */
 	public static String[] FIELD_HEADERS;
-	/** The length in bytes of each field in the database. Read in my {@link DBParser}. */
+	/** The length in bytes of each field in the database. Read in by {@link DBParser}. */
 	public static int[] FIELD_LENGTHS;
-	/** The length of each record in the database. Read in my {@link DBParser}. */
+	/** The length of each record in the database. Read in by {@link DBParser}. */
 	public static int RECORD_LENGTH = NUM_BYTES_RECORD_DELETED_FLAG;
 
 }
