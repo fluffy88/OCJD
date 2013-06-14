@@ -203,41 +203,50 @@
      access layer to a Domain Object.
    - Using a Domain object reduces code complexity.
 
-  Made Data.java a Singleton
-   - Data.java is the class exposed by the server to give clients access to the database info.
-     The server should only have one instance of this class as all clients should go through
-     this singleton to read or write to the Database to maintain database integrity.
+  Made Data.java Package private
+   - Data.java is the class exposed by the server to give clients access to the
+     database info. The server should only have one instance of this class as
+     all clients should go through this instance to read or write to the
+     Database or else there would be no way to maintain database integrity. To
+     do this a factory pattern is used to construct Data.java.
 
   RMI
-   - RMI adds some initial 'setup' complexity, but after setup reduces code complexity substantially.
-   - Using RMI keeps remote server calls clean, easy to understand(junior programmers) and easier to maintain.
+   - RMI adds some initial 'setup' complexity, but after setup reduces code
+     complexity substantially.
+   - Using RMI keeps remote server calls clean, easy to understand
+     (junior programmers) and easier to maintain.
 
   Main.java
    - Server, Client & StandAlone implement a common interface.
-   - Use factory pattern to dynamically chose which to run based on command line flag. 
+   - Use factory pattern to dynamically chose which to run based on command
+     line flag.
    - Keeps main start class clean with single purpose.
    - Makes it very simple to have Non-networked & Networked modes.
 
   Client.java
-   - Use of factory pattern to get the Data.java instance.
-   - Keeps Client simple as it doesn't care if it's networked or not.
+   - Use of basic dependency injection to get the Data.java instance. Keeps
+     Client simple & reusable as it doesn't care if it's networked or not.
 
   ClientUI.java
-   - Single class with sole responsibility to create a new JFrame for the client application.
-   - Makes Application extensible, as new 'pages' can be created & added easily.
+   - Single class with sole responsibility to create a new JFrame for the
+     client application.
+   - Makes Application extensible, as new 'pages' can be created & added
+     easily.
 
   UI Components, JPanels
    - Extend JPanel for each Client area.
-   - This keeps each UI components separate, easily maintained, easily replaced.
+   - This keeps each UI components separate, easily maintained, easily
+     replaced.
    - Sets up a good design flow to follow when adding new functionality.
 
   TableModel
    - Use of Swings inbuilt TableModel for displaying data.
-   - Model pattern is very simple to implement and use.
+   - The model is very simple to implement and use.
 
   Injection.java
    - A very basic Dependency Injection framework.
-   - Allows clean and simple access to objects that need to be accessed from multiple classes.
+   - Allows clean and simple access to objects that need to be accessed from
+     multiple classes.
    - Removes complicated passing of objects that's hard to follow.
 
   Server Side Architecture
@@ -245,28 +254,34 @@
      suncertify.db.io, Low level database file access classes.
      suncertify.db, Data access classes (required interface).
      suncertify.server, Server 'Service' layer & publicized server interface.
-   - This architecture splits the server side complexity into different sections, allowing each layer to be focused on one task.
-   - Brings all application logic to server side, making the Client side 'dumb'.
-     This architecture will help when moving to a web based application as the web client will be a dumb client.
+   - This architecture splits the server side complexity into different
+     sections, allowing each layer to be focused on one task.
+   - Brings all application logic to server side, making the client side dumb.
+     This architecture will help when moving to a web based application as the
+     web client will be a dumb client.
 
   Data.java Locking
    - Made use of java.util.concurrent.* package to implement locking.
    - No use of key word synchronized as it introduces a large performance hit.
-   - Locking implemented using a List of Semaphore objects for read, update & delete operations
-     & a single Semaphore used for locking in the create operation.
-   - This lets multiple clients do reads, updates & deletes to different records at the same time.
-     Only one Create can run at a time, but doesn't stop the above operations from running concurrently.
+   - Locking implemented using a List of ReentrantLock objects for read, update
+     & delete operations & a single ReentrantLock used for locking in the
+     create operation.
+   - This lets multiple clients do reads, updates & deletes to different
+     records at the same time. Only one Create can run at a time, but doesn't
+     stop the above operations from running concurrently.
 
   Data#find()
    - Made search case insensitive.
-   - Makes use of application simpler & faster for the end users with less learning curve.
+   - Makes use of application simpler & faster for the end users with less of a
+     learning curve.
 
   Data#read()
    - Does not return actual result, returns a copy.
-   - This stops the Standalone application UI from modifying the cache indirectly.
-   - All read/modifications of the cache are to be handled through Data.java and will be synchronized.
+   - This stops the Standalone application UI from modifying the cache
+     indirectly without a call to the server side.
 
   DBSchema.java
    - Created a Class to store Database information.
-   - Stores schema info, but also contains dynamic information, i.e. Total number of records, full byte length of a record.
-     This makes it easy to read/write to database, as we have the full structure info at hand.
+   - Stores schema info, but also contains dynamic information, i.e. Total
+     number of records, full byte length of a record. This makes it easy to
+     read/write to database, as we have the full structure info at hand.
