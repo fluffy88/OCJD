@@ -122,7 +122,7 @@ public class SearchResultsPanel extends JPanel {
 				} catch (RecordNotFoundException e) {
 					App.showError(e.getMessage());
 				} catch (RemoteException e) {
-					App.showErrorAndExit("Cannot connect to remote server.");
+					App.showErrorAndExit("The remote server is no longer available.");
 				}
 			}
 		}

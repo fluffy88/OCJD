@@ -51,7 +51,7 @@ public class Data implements DBMain {
 
 			this.buildCache(parser);
 		} catch (FileNotFoundException e) {
-			App.showErrorAndExit("Cannot open database file.");
+			App.showErrorAndExit("Cannot open database file for reading.");
 		}
 	}
 

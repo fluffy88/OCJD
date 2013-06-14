@@ -45,9 +45,9 @@ public class Properties {
 			try (InputStream stream = new BufferedInputStream(new FileInputStream(propsFile))) {
 				this.props.load(stream);
 			} catch (IllegalArgumentException e) {
-				App.showError("Cannot read the properties file, it is corrupted.");
+				App.showError("Cannot read the properties file, it is corrupted.\nTherefore all application settings will return to default.");
 			} catch (IOException e) {
-				App.showError("Cannot open the properties file for reading.");
+				App.showError("Cannot open the properties file for reading.\nTherefore all application settings will return to default.");
 			}
 		}
 	}
@@ -59,7 +59,7 @@ public class Properties {
 		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(PROPS_FILE))) {
 			instance.props.store(stream, null);
 		} catch (IOException e) {
-			App.showError("Could not write to the properties file.");
+			App.showError("Could not write to the properties file.\nNo changes to application properties will be recorded.");
 		}
 	}
 

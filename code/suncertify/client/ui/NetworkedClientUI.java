@@ -26,8 +26,8 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This class is responsible for creating, displaying and populating the networked client user interface. This UI's
- * purpose is to allow the user specify the hostname of the remote server to connect to.
+ * This class is responsible for creating, displaying and populating the networked client user interface. This UI's purpose is to allow the
+ * user specify the hostname of the remote server to connect to.
  * 
  * @author Sean Dunne
  */
@@ -135,8 +135,7 @@ public class NetworkedClientUI extends JFrame {
 	}
 
 	/**
-	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK
-	 * button.
+	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK button.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -150,7 +149,7 @@ public class NetworkedClientUI extends JFrame {
 			final String hostname = textField.getText();
 
 			if (hostname.equals("")) {
-				App.showError("You must enter a location for the server.");
+				App.showError("You must enter a hostname for the server.");
 			} else {
 				try {
 					final Registry registry = LocateRegistry.getRegistry(hostname);
@@ -162,9 +161,9 @@ public class NetworkedClientUI extends JFrame {
 
 					NetworkedClientUI.this.setVisible(false);
 				} catch (RemoteException e) {
-					App.showError("Cannot connect to the remote server.\nCheck the hostname is correct.");
+					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (NotBoundException e) {
-					App.showError("Server found but cannot connect.\nThe server may not have started correctly.");
+					App.showError("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
 				}
 			}
 		}

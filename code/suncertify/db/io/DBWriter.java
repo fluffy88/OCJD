@@ -52,7 +52,7 @@ public class DBWriter {
 			this.writeRecord(pos, data);
 			this.lock.unlock();
 		} catch (IOException e) {
-			App.showErrorAndExit("Cannot write to database file.");
+			App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}
@@ -72,7 +72,7 @@ public class DBWriter {
 			is.writeShort(RECORD_DELETED);
 			this.lock.unlock();
 		} catch (IOException e) {
-			App.showErrorAndExit("Cannot write to database file.");
+			App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}

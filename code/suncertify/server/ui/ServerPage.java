@@ -126,7 +126,7 @@ public class ServerPage extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (dbFileLocTxt.getText().equals("")) {
-				App.showError("You must choose a database file first!");
+				App.showError("You must choose a database file before the server can start.");
 			} else {
 				Application server = (Application) App.getDependancy(DEP_APPLICATION);
 				server.start();

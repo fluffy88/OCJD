@@ -46,7 +46,7 @@ public class Client implements Application {
 			UnicastRemoteObject.exportObject(rmiCallback);
 			dataService.addObserver(rmiCallback);
 		} catch (RemoteException e) {
-			App.showErrorAndExit("Could not subscribe to Server updates.");
+			App.showErrorAndExit("Could not subscribe to Server.");
 		}
 
 		this.setShutdownHook();

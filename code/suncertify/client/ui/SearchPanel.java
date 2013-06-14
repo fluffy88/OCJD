@@ -169,7 +169,7 @@ public class SearchPanel extends JPanel {
 				tableModel.clearData();
 				tableModel.addAll(records);
 			} catch (RemoteException exp) {
-				App.showErrorAndExit("Cannot connect to remote server.");
+				App.showErrorAndExit("The remote server is no longer available.");
 			}
 		}
 	}

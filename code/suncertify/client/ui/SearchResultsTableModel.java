@@ -54,8 +54,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 		columns.add(CUSTOMER_ID);
 
 		try {
-			final List<Contractor> contractors = dataService.find(new String[1],
-					Properties.getBoolean(PROP_EXACT_MATCH));
+			final List<Contractor> contractors = dataService.find(new String[1], Properties.getBoolean(PROP_EXACT_MATCH));
 			this.addAll(contractors);
 		} catch (RemoteException e) {
 			// could not get records, add empty data so table headers show up and can be resized.
@@ -207,7 +206,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 				} catch (RecordNotFoundException e) {
 					App.showError(e.getMessage());
 				} catch (RemoteException e) {
-					App.showErrorAndExit("Cannot connect to remote server.");
+					App.showErrorAndExit("The remote server is no longer available.");
 				}
 			}
 		}
