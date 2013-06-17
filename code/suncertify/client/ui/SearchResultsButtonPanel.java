@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -130,11 +131,12 @@ public class SearchResultsButtonPanel extends JPanel {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			int[] rows = table.getSelectedRows();
-			for (int i = 0; i < rows.length; i++) {
-				int selectedRow = rows[i] - i;
-				Contractor contractor = this.tableModel.getContractorAt(selectedRow);
+			final ArrayList<Contractor> deletedContractors = new ArrayList<>();
+			for (int i : table.getSelectedRows()) {
+				deletedContractors.add(this.tableModel.getContractorAt(i));
+			}
 
+			for (Contractor contractor : deletedContractors) {
 				try {
 					this.dataService.delete(contractor);
 				} catch (RecordNotFoundException e) {
