@@ -30,12 +30,8 @@ public class SearchResultsPanel extends JPanel {
 	 */
 	public SearchResultsPanel() {
 		this.setLayout(new BorderLayout());
-		this.setBorder(new EmptyBorder(15, 10, 1, 10));
-
+		this.setBorder(new EmptyBorder(10, 5, 1, 5));
 		this.add(this.createTableArea(), BorderLayout.CENTER);
-		App.publish(DEP_TABLE, this.table);
-
-		this.add(new SearchResultsButtonPanel(), BorderLayout.SOUTH);
 	}
 
 	/**
@@ -48,14 +44,13 @@ public class SearchResultsPanel extends JPanel {
 		App.publish(DEP_TABLE_MODEL, tableModel);
 
 		this.table = new JTable(tableModel);
+		App.publish(DEP_TABLE, this.table);
 		this.table.setFillsViewportHeight(true);
 		this.setColumnWidth(3, 20);
 		this.setColumnWidth(4, 20);
 		this.setColumnWidth(5, 120);
 
 		final JScrollPane scrollPane = new JScrollPane(this.table);
-		this.add(scrollPane);
-
 		return scrollPane;
 	}
 

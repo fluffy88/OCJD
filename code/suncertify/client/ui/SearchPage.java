@@ -23,5 +23,6 @@ public class SearchPage extends JPanel {
 		this.add(Box.createVerticalStrut(10));
 		this.add(new SearchPanel());
 		this.add(new SearchResultsPanel());
+		this.add(new SearchResultsButtonPanel());
 	}
 }
