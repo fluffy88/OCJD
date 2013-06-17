@@ -116,7 +116,7 @@ public class SearchResultsButtonPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			final String id = JOptionPane.showInputDialog("Enter Customer ID");
 			if (id != null) {
-				if (id.matches("^(\\d{8}|)$")) {
+				if (id.matches("^\\d{8}$")) {
 					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
 					table.requestFocus();
 				} else {
