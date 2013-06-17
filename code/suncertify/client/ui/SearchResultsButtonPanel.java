@@ -36,8 +36,6 @@ public class SearchResultsButtonPanel extends JPanel {
 	private JButton deleteBtn;
 	private JButton bookBtn;
 	private JButton unbookBtn;
-	private JButton createBtn;
-	private JButton editBtn;
 
 	private JTable table = (JTable) App.getDependancy(DEP_TABLE);
 
@@ -84,11 +82,6 @@ public class SearchResultsButtonPanel extends JPanel {
 		final JPanel rPanel = new JPanel(layout);
 		layout.setAlignment(FlowLayout.RIGHT);
 
-		createBtn = new JButton("Create");
-		editBtn = new JButton("Edit");
-		rPanel.add(createBtn);
-		rPanel.add(editBtn);
-
 		deleteBtn = new JButton("Delete (0)");
 		deleteBtn.addActionListener(new DeleteListener());
 		rPanel.add(deleteBtn);
@@ -102,17 +95,11 @@ public class SearchResultsButtonPanel extends JPanel {
 	private void setButtonState() {
 		deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
 
-		boolean isOneRowSelected = table.getSelectedRowCount() == 1;
-		bookBtn.setEnabled(isOneRowSelected);
-		unbookBtn.setEnabled(isOneRowSelected);
-		editBtn.setEnabled(isOneRowSelected);
-
 		final String custId = (String) table.getValueAt(table.getSelectedRow(), table.getColumnCount() - 1);
-		if (custId != null && custId.isEmpty()) {
-			unbookBtn.setEnabled(false);
-		} else {
-			bookBtn.setEnabled(false);
-		}
+		boolean isOneRowSelected = table.getSelectedRowCount() == 1;
+		boolean isRecordFree = custId != null && custId.isEmpty();
+		bookBtn.setEnabled(isOneRowSelected && isRecordFree);
+		unbookBtn.setEnabled(isOneRowSelected && !isRecordFree);
 	}
 
 	/**
