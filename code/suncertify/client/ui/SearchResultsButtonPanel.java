@@ -47,8 +47,8 @@ public class SearchResultsButtonPanel extends JPanel {
 	public SearchResultsButtonPanel() {
 		final GridLayout layout = new GridLayout(1, 2);
 		this.setLayout(layout);
-		this.add(this.createLeftButtonArea());
-		this.add(this.createRightButtonArea());
+		this.add(this.createBookButtonArea());
+		this.add(this.createCRUDButtonArea());
 
 		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 		table.getModel().addTableModelListener(new TableModelListener());
@@ -59,10 +59,10 @@ public class SearchResultsButtonPanel extends JPanel {
 	 * 
 	 * @return A JPanel containing the booking and un-booking buttons.
 	 */
-	private JPanel createLeftButtonArea() {
-		final FlowLayout lLayout = new FlowLayout();
-		final JPanel lPanel = new JPanel(lLayout);
-		lLayout.setAlignment(FlowLayout.LEFT);
+	private JPanel createBookButtonArea() {
+		final FlowLayout layout = new FlowLayout();
+		final JPanel lPanel = new JPanel(layout);
+		layout.setAlignment(FlowLayout.LEFT);
 
 		bookBtn = new JButton("Book");
 		bookBtn.addActionListener(new BookListener());
@@ -79,10 +79,10 @@ public class SearchResultsButtonPanel extends JPanel {
 	 * 
 	 * @return A JPanel with buttons allowing the user interact with search results.
 	 */
-	private JPanel createRightButtonArea() {
-		final FlowLayout rLayout = new FlowLayout();
-		final JPanel rPanel = new JPanel(rLayout);
-		rLayout.setAlignment(FlowLayout.RIGHT);
+	private JPanel createCRUDButtonArea() {
+		final FlowLayout layout = new FlowLayout();
+		final JPanel rPanel = new JPanel(layout);
+		layout.setAlignment(FlowLayout.RIGHT);
 
 		createBtn = new JButton("Create");
 		editBtn = new JButton("Edit");
@@ -112,6 +112,47 @@ public class SearchResultsButtonPanel extends JPanel {
 			unbookBtn.setEnabled(false);
 		} else {
 			bookBtn.setEnabled(false);
+		}
+	}
+
+	/**
+	 * This listener books the selected Contractor on the JTable.
+	 * 
+	 * @author Sean Dunne
+	 */
+	private class BookListener implements ActionListener {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			final String id = JOptionPane.showInputDialog("Enter Customer ID");
+			if (id != null) {
+				if (id.matches("^(\\d{8}|)$")) {
+					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
+					table.requestFocus();
+				} else {
+					App.showError("The Customer ID must be 8 digits.");
+				}
+			}
+		}
+	}
+
+	/**
+	 * This listener removes the booking on the selected Contractor in the JTable.
+	 * 
+	 * @author Sean Dunne
+	 */
+	private class UnBookListener implements ActionListener {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			table.setValueAt("", table.getSelectedRow(), table.getColumnCount() - 1);
+			table.requestFocus();
 		}
 	}
 
@@ -174,47 +215,6 @@ public class SearchResultsButtonPanel extends JPanel {
 		@Override
 		public void tableChanged(TableModelEvent e) {
 			setButtonState();
-		}
-	}
-
-	/**
-	 * This listener books the selected Contractor on the JTable.
-	 * 
-	 * @author Sean Dunne
-	 */
-	private class BookListener implements ActionListener {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			final String id = JOptionPane.showInputDialog("Enter Customer ID");
-			if (id != null) {
-				if (id.matches("^(\\d{8}|)$")) {
-					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
-					table.requestFocus();
-				} else {
-					App.showError("The Customer ID must be 8 digits.");
-				}
-			}
-		}
-	}
-
-	/**
-	 * This listener removes the booking on the selected Contractor in the JTable.
-	 * 
-	 * @author Sean Dunne
-	 */
-	private class UnBookListener implements ActionListener {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			table.setValueAt("", table.getSelectedRow(), table.getColumnCount() - 1);
-			table.requestFocus();
 		}
 	}
 }
