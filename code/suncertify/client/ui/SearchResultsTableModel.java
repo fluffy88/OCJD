@@ -178,15 +178,10 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 */
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		return this.data.get(rowIndex).toArray()[columnIndex];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
-		return true;
+		if (rowIndex >= 0 && rowIndex < this.data.size()) {
+			return this.data.get(rowIndex).toArray()[columnIndex];
+		}
+		return null;
 	}
 
 	/**
