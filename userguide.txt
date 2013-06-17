@@ -21,9 +21,8 @@
      a. Overview
      b. Connecting to the Server
      c. Using the search function
-     d. Editing a Contractor
-     e. Booking a Contractor
-     f. Deleting a Contractor
+     d. Booking a Contractor
+     e. Deleting a Contractor
 
   4. StandAlone mode
 
@@ -113,25 +112,22 @@
   'Whoville'.
   If you leave all search boxes empty the search will display all Contractors.
 
-  Editing a Contractor
-  To edit a Contractor in the search results table, select the Contractor and
-  double click on the field you wish to edit. This will enable editing for that
-  field. Type in the new value for the field and press the Return button on
-  your keyboard.
-
   Booking a Contractor
-  To book a Contractor you should edit the last column in the search results
-  table, 'Customer ID'. See "Editing a Contractor" above for details on how to
-  enter values.
-  When booking a Contractor you must enter an 8 digit number which represents
-  the customer that is booking the Contractor. Only 8 digit numbers will be
-  accepted.
+  To book a Contractor, select the Contractor in the search results table that
+  you wish to book. Click the 'Book' button to the bottom left of the search
+  results table. This will present you with a new dialog allowing you enter the
+  ID of the customer booking the Contractor.
+  When booking a Contractor you must enter an 8 digit number as the customer
+  ID. No other text will be accepted. The 'Book' button will only be enabled if
+  there is only one unbooked Contractor selected.
+  If you select a Contractor that is already booked, you will get the option to
+  remove that booking allowing the Contractor to be booked by another customer.
 
   Deleting a Contractor
   To delete a Contractor select the Contractor in the search results table and
   click the 'Delete' button found below the table. You will notice the 'Delete'
   button indicates the number of selected rows in the table. It is possible to
-  select more than one Contractor in the table, when multipe Contractors are
+  select more than one Contractor in the table, when multiple Contractors are
   selected simultaneously the 'Delete' button will indicate the total number of
   selected rows. Pressing 'Delete' when multiple rows are selected will delete
   all the selected Contractors.
