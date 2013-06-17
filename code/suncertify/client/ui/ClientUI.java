@@ -1,5 +1,7 @@
 package suncertify.client.ui;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -27,6 +29,7 @@ public class ClientUI extends JFrame {
 	private ClientUI() {
 		this.setTitle("CSR Application");
 		this.setSize(900, 500);
+		this.setMinimumSize(new Dimension(800, 400));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
