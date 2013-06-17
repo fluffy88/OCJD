@@ -15,6 +15,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,7 +33,7 @@ import suncertify.shared.Properties;
  * 
  * @author Sean Dunne
  */
-public class NetworkedClientUI extends JFrame {
+public class NetworkedClientUI extends JDialog {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 	private JTextField textField;
@@ -56,7 +57,7 @@ public class NetworkedClientUI extends JFrame {
 		this.setSize(300, 130);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		initUIElements();
 		this.setVisible(true);
@@ -162,7 +163,7 @@ public class NetworkedClientUI extends JFrame {
 					Application client = (Application) App.getDependancy(DEP_APPLICATION);
 					client.start();
 
-					NetworkedClientUI.this.setVisible(false);
+					NetworkedClientUI.this.dispose();
 				} catch (RemoteException e) {
 					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (NotBoundException e) {

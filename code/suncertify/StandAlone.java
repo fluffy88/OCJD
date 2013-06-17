@@ -39,7 +39,7 @@ public class StandAlone implements Application {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 
-		serverUI.setVisible(false);
+		serverUI.dispose();
 		ClientUI.start();
 
 		try {
