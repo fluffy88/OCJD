@@ -1,17 +1,17 @@
   Overall architecture
   --------------------
 
-  The main problem I was concerned with from the outset of this project was how
+  From the outset of this project the main problem I was concerned with was how
   to manage the split between Networked and Non-networked mode. I wanted to
-  have very little code replication. This would reduce code complexity and
-  improve maintainability. Therefore I conceived the following architecture.
-  The main goal of this architecture is to have the majority of client and
-  Server code unaware whether it is running in networked or non-networked mode.
-  On startup of the application, using a factory it creates an instance of an
-  Application based on the start mode (Client, Server or StandAlone). These
-  Applications are responsible for performing the tasks that differentiate the
-  modes. The value of this architecture is all code outside these Applications
-  have no awareness of their networking mode allowing complete code re-use.
+  have very little code replication to reduce code complexity and improve
+  maintainability. Therefore I conceived the following architecture. The main
+  goal of this architecture is to have the majority of client and Server code
+  unaware whether it is running in networked or non-networked mode. On startup
+  of the application, using a factory it creates an instance of an Application
+  based on the start mode (Client, Server or StandAlone). These Applications
+  are responsible for performing the tasks that differentiate the modes. The
+  value of this architecture is all code outside these Applications have no
+  awareness of their networking mode allowing complete code re-use.
 
   Explanation of modes
   --------------------
