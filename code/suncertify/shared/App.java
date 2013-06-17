@@ -26,6 +26,8 @@ public class App {
 	public static final String DEP_DATASERVICE = "dataservice";
 	/** The name used to publish the currently running instance of {@link Application}. */
 	public static final String DEP_APPLICATION = "application";
+	/** The name used to publish the JTable instance. */
+	public static final String DEP_TABLE = "search.results.table";
 	/** The name used to publish the TableModel instance. */
 	public static final String DEP_TABLE_MODEL = "search.results.tablemodel";
 

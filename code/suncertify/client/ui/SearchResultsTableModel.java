@@ -29,7 +29,6 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
 
 	private final ArrayList<String> columns = new ArrayList<>();
-	private final int[] columnLengths = new int[] { 32, 64, 64, 6, 8, 8 };
 
 	/** Display name for the Contractor name */
 	static final String CONTRACTOR_NAME = "Name";
@@ -193,52 +192,17 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 			final Contractor contractor = this.data.get(row);
 			final String updatedValue = ((String) value).trim();
 
-			if (isValidValue(updatedValue, column)) {
-				final String[] record = contractor.toArray();
-				record[column] = updatedValue;
-				final Contractor updatedContractor = new Contractor(contractor.getRecordId(), record);
+			final String[] record = contractor.toArray();
+			record[column] = updatedValue;
+			final Contractor updatedContractor = new Contractor(contractor.getRecordId(), record);
 
-				try {
-					dataService.update(updatedContractor);
-				} catch (RecordNotFoundException e) {
-					App.showError(e.getMessage());
-				} catch (RemoteException e) {
-					App.showErrorAndExit("The remote server is no longer available.");
-				}
+			try {
+				dataService.update(updatedContractor);
+			} catch (RecordNotFoundException e) {
+				App.showError(e.getMessage());
+			} catch (RemoteException e) {
+				App.showErrorAndExit("The remote server is no longer available.");
 			}
 		}
-	}
-
-	/**
-	 * Determines if a value entered in a table cell is valid based on it's column.
-	 * 
-	 * @param value
-	 *            The updated value to validate.
-	 * @param column
-	 *            The column at which the value was entered.
-	 * @return true if this value is acceptable otherwise false.
-	 */
-	private boolean isValidValue(final String value, final int column) {
-
-		if (column == this.columns.indexOf(CUSTOMER_ID) && !value.matches("^(\\d{8}|)$")) {
-			App.showError("The Customer ID must be 8 digits.");
-			return false;
-		} else if (column == this.columns.indexOf(HOURLY_CHARGE) && !value.matches("^\\$\\d+(\\.\\d{1,2})?$")) {
-			App.showError("You must enter a valid dollar amount.");
-			return false;
-		} else if (column == this.columns.indexOf(NUMBER_OF_STAFF) && !value.matches("^\\d+$")) {
-			App.showError("You can only enter digits for the number of staff.");
-			return false;
-		} else if (column != this.columns.indexOf(CUSTOMER_ID) && value.equals("")) {
-			App.showError("You cannot leave the '" + this.columns.get(column) + "' field empty.");
-			return false;
-		} else if (value.length() > columnLengths[column]) {
-			final StringBuilder msg = new StringBuilder().append("The value of the column '").append(this.columns.get(column))
-					.append("' cannot be greater than ").append(columnLengths[column]).append(" characters long.");
-			App.showError(msg.toString());
-			return false;
-		}
-
-		return true;
 	}
 }
