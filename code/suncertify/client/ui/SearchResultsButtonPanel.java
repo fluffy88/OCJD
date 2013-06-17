@@ -97,7 +97,7 @@ public class SearchResultsButtonPanel extends JPanel {
 	}
 
 	/**
-	 * This method is responsible for enabling and disabling of the buttons based on the selection in the JTable.
+	 * This method is responsible for setting the state of the buttons based on the selection in the JTable.
 	 */
 	private void setButtonState() {
 		deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
@@ -105,7 +105,6 @@ public class SearchResultsButtonPanel extends JPanel {
 		boolean isOneRowSelected = table.getSelectedRowCount() == 1;
 		bookBtn.setEnabled(isOneRowSelected);
 		unbookBtn.setEnabled(isOneRowSelected);
-		createBtn.setEnabled(isOneRowSelected);
 		editBtn.setEnabled(isOneRowSelected);
 
 		final String custId = (String) table.getValueAt(table.getSelectedRow(), table.getColumnCount() - 1);
