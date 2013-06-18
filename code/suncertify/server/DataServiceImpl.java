@@ -6,6 +6,8 @@ import static suncertify.client.RemoteObserver.UPDATE;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,9 +27,18 @@ import suncertify.shared.Contractor;
  */
 public class DataServiceImpl implements DataService {
 
-	private final DBMain data = DAOFactory.getInstance().getDataService();
-	private final List<RemoteObserver> observers = new ArrayList<>();
-	private final ExecutorService executor = Executors.newFixedThreadPool(5);
+	private final DBMain data;
+	private final ExecutorService executor;
+	private final Collection<RemoteObserver> observers;
+
+	/**
+	 * Construct a new {@link DataService} object that acts as an adapter for {@link DBMain}.
+	 */
+	public DataServiceImpl() {
+		this.data = DAOFactory.getInstance().getDataService();
+		this.executor = Executors.newFixedThreadPool(5);
+		this.observers = Collections.synchronizedList(new ArrayList<RemoteObserver>());
+	}
 
 	/**
 	 * {@inheritDoc}
