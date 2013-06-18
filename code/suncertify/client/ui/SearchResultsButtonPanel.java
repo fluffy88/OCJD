@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -50,6 +51,8 @@ public class SearchResultsButtonPanel extends JPanel {
 
 		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 		table.getModel().addTableModelListener(new TableModelListener());
+
+		this.setButtonState();
 	}
 
 	/**
@@ -63,8 +66,10 @@ public class SearchResultsButtonPanel extends JPanel {
 		layout.setAlignment(FlowLayout.LEFT);
 
 		bookBtn = new JButton("Book");
+		bookBtn.setMnemonic(KeyEvent.VK_B);
 		bookBtn.addActionListener(new BookListener());
 		unbookBtn = new JButton("Remove Booking");
+		unbookBtn.setMnemonic(KeyEvent.VK_R);
 		unbookBtn.addActionListener(new UnBookListener());
 		lPanel.add(bookBtn);
 		lPanel.add(unbookBtn);
@@ -83,6 +88,7 @@ public class SearchResultsButtonPanel extends JPanel {
 		layout.setAlignment(FlowLayout.RIGHT);
 
 		deleteBtn = new JButton("Delete (0)");
+		deleteBtn.setMnemonic(KeyEvent.VK_D);
 		deleteBtn.addActionListener(new DeleteListener());
 		rPanel.add(deleteBtn);
 
@@ -115,7 +121,7 @@ public class SearchResultsButtonPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			final String id = JOptionPane.showInputDialog("Enter Customer ID");
 			if (id != null) {
-				if (id.matches("^(\\d{8}|)$")) {
+				if (id.matches("^\\d{8}$")) {
 					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
 					table.requestFocus();
 				} else {

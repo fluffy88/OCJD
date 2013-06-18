@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
@@ -28,8 +29,12 @@ public class DatabaseLocator {
 		int action = chooser.showOpenDialog(null);
 		if (action == JFileChooser.APPROVE_OPTION) {
 			File choice = chooser.getSelectedFile();
-			location = choice.getAbsolutePath();
-			Properties.set(PROP_DB_LOCATION, location);
+			if (choice.getName().endsWith(".db")) {
+				location = choice.getAbsolutePath();
+				Properties.set(PROP_DB_LOCATION, location);
+			} else {
+				App.showError("The selected file is not a valid database file.");
+			}
 		}
 
 		return location;

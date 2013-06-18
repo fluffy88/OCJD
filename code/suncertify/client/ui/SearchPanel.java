@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -85,9 +86,11 @@ public class SearchPanel extends JPanel {
 
 		boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
 		exactMatch = new JCheckBox("Exact match", state);
+		exactMatch.setMnemonic(KeyEvent.VK_E);
 		exactMatch.addActionListener(new ExactMatchListener());
 
 		button = new JButton("Search");
+		button.setMnemonic(KeyEvent.VK_S);
 		button.addActionListener(new SearchListener());
 
 		this.add(nameLabel);

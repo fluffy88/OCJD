@@ -8,12 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +33,7 @@ import suncertify.shared.Properties;
  * 
  * @author Sean Dunne
  */
-public class NetworkedClientUI extends JFrame {
+public class NetworkedClientUI extends JDialog {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 	private JTextField textField;
@@ -55,7 +57,7 @@ public class NetworkedClientUI extends JFrame {
 		this.setSize(300, 130);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		initUIElements();
 		this.setVisible(true);
@@ -84,6 +86,7 @@ public class NetworkedClientUI extends JFrame {
 		panel.add(textField, c);
 
 		ok = new JButton("OK");
+		ok.setMnemonic(KeyEvent.VK_O);
 		ok.addActionListener(new OKListener());
 		c.gridx = 1;
 		c.gridy = 2;
@@ -92,6 +95,7 @@ public class NetworkedClientUI extends JFrame {
 		panel.add(ok, c);
 
 		final JButton cancel = new JButton("Cancel");
+		cancel.setMnemonic(KeyEvent.VK_C);
 		cancel.addActionListener(new CancelListener());
 		c.gridx = 2;
 		c.gridy = 2;
@@ -157,7 +161,7 @@ public class NetworkedClientUI extends JFrame {
 					Application client = (Application) App.getDependancy(DEP_APPLICATION);
 					client.start();
 
-					NetworkedClientUI.this.setVisible(false);
+					NetworkedClientUI.this.dispose();
 				} catch (RemoteException e) {
 					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (NotBoundException e) {
