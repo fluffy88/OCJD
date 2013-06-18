@@ -1,8 +1,5 @@
                          Bodgitt and Scarper User Guide
 
-  This document describes the main functions of the Bodgitt and Scarper, LLC
-  customer service representative application and how to use it.
-
   Table of contents
   -----------------
 
@@ -28,46 +25,49 @@
 
   5. Troubleshooting
 
-  Starting the application
-  ------------------------
+  This document describes the main functions of the Bodgitt and Scarper, LLC
+  customer service representative application and how to use it.
 
-  Prerequisites to starting the application
+  1. Starting the application
+  ---------------------------
+
+  a. Prerequisites to starting the application
   Before starting the application you must first have the Java Runtime
   Environment (JRE) installed on your computer. Download this from the Oracle
   website.
   You will also need to runme.jar file that contains the Bodgitt and Scarper
   application.
 
-  Starting the networked Server
+  b. Starting the networked Server
   To start the application in networked server mode run the application with a
-  "server" parameter, shown below.
+  "server" parameter:
   java -jar runme.jar server
 
-  Starting the networked Client
+  c. Starting the networked Client
   To start the application in networked client mode run the application with no
-  starting parameters, shown below.
+  starting parameters:
   java -jar runme.jar
 
-  Starting the StandAlone application
-  To start the application in standalone mode run the application with no an
-  "alone" starting parameters, shown below.
+  d. Starting the StandAlone application
+  To start the application in standalone mode run the application with an
+  "alone" starting parameter:
   java -jar runme.jar alone
 
-  Working with the Server
-  -----------------------
+  2. Working with the Server
+  --------------------------
 
-  Overview
+  a. Overview
   When the server starts you will be presented with a very simple user
   interface allowing you to enter the location of a database file and start the
   server so it can start accepting client calls.
 
-  Database location
+  b. Database location
   To chose a database location press the 'Locate' button in the UI. It opens a
   dialog allowing you to select any file with a .db extension. Once you select
   a file in the dialog you will notice the text field to the left of the
   'Locate' button will display the location of the file you selected.
 
-  Starting and stopping the Server
+  c. Starting and stopping the Server
   Once a database location has been selected press the 'Start' button on the UI
   to start the server. Once the server is started you will notice the 'Locate'
   and 'Start' buttons become grayed out and are no longer selectable. This
@@ -76,17 +76,17 @@
   the application completely. If the server had been started previously it will
   now stop and will no longer be able to receive connections.
 
-  Working with the Client
-  -----------------------
+  3. Working with the Client
+  --------------------------
 
-  Overview
+  a. Overview
   When the client starts you will be presented with the client UI. This allows
   you as the application user to search for Contractors based on any fields, it
   allows you to edit the Contractors details, it allows you to remove
   Contractors and finally it allows you to book a Contractor on behalf of a
   customer.
 
-  Connecting to the Server
+  b. Connecting to the Server
   When the application is started in client mode the first action you must take
   is specifying the location of the networked server. This is done via the
   server location dialog which gets presented to you on start up.
@@ -96,7 +96,7 @@
   client UI. Otherwise an error message will be displayed and you can enter the
   correct hostname or exit.
 
-  Using the search function
+  c. Using the search function
   The search feature allows you to search for Contractors based on the
   following fields, Name, Location, Type of work, Number of staff, Rate per
   hour and customer ID. Each field has a text box where you can enter the value
@@ -112,7 +112,7 @@
   'Whoville'.
   If you leave all search boxes empty the search will display all Contractors.
 
-  Booking a Contractor
+  d. Booking a Contractor
   To book a Contractor, select the Contractor in the search results table that
   you wish to book. Click the 'Book' button to the bottom left of the search
   results table. This will present you with a new dialog allowing you enter the
@@ -123,7 +123,7 @@
   If you select a Contractor that is already booked, you will get the option to
   remove that booking allowing the Contractor to be booked by another customer.
 
-  Deleting a Contractor
+  e. Deleting a Contractor
   To delete a Contractor select the Contractor in the search results table and
   click the 'Delete' button found below the table. You will notice the 'Delete'
   button indicates the number of selected rows in the table. It is possible to
@@ -132,8 +132,8 @@
   selected rows. Pressing 'Delete' when multiple rows are selected will delete
   all the selected Contractors.
 
-  StandAlone mode
-  ---------------
+  4. StandAlone mode
+  ------------------
 
   When the application is started in standalone mode first you will be
   presented with this same server user interface as detailed in the
@@ -145,8 +145,8 @@
   When you exit the client application in standalone mode both the server and
   client will be shutdown.
 
-  Troubleshooting
-  ---------------
+  5. Troubleshooting
+  ------------------
 
   If an error occurs on the Client, Server or StandAlone application you will
   be presented with a popup message detailing the fault.
