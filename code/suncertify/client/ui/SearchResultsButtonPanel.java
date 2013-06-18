@@ -119,7 +119,7 @@ public class SearchResultsButtonPanel extends JPanel {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			final String id = JOptionPane.showInputDialog("Enter Customer ID");
+			final String id = JOptionPane.showInputDialog(null, "Enter Customer ID", "Book Contractor", JOptionPane.QUESTION_MESSAGE);
 			if (id != null) {
 				if (id.matches("^\\d{8}$")) {
 					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
