@@ -81,15 +81,16 @@
 
   a. Overview
   When the client starts you will be presented with the client UI. This allows
-  you as the application user to search for Contractors based on any fields, it
-  allows you to edit the Contractors details, it allows you to remove
-  Contractors and finally it allows you to book a Contractor on behalf of a
-  customer.
+  you as the application user to:
+   - Search for a Contractor based on details from any field
+   - Edit Contractor details
+   - Remove Contractors
+   - Book Contractor on behalf of a customer
 
   b. Connecting to the Server
   When the application is started in client mode the first action you must take
   is specifying the location of the networked server. This is done via the
-  server location dialog which gets presented to you on start up.
+  server location dialog which is presented to you on start up.
   There is a single text box allowing you to enter to hostname of the remote
   server. When clicking 'OK' the client will attempt to connect to the server
   at the specified hostname. If this succeeds you will be presented with the

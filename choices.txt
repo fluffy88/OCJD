@@ -17,9 +17,9 @@
   --------------------
 
   The Server Application when started presents the ServerUI which is unaware of
-  it's networking mode. The main problem I faced with keeping the ServerUI
-  networking unaware was how to allow the server side code be completely 
-  re-usable while allowing the Application correctly publish the server
+  its networking mode. The main problem I faced with keeping the ServerUI
+  networking unaware was how to allow the server side code to be completely
+  re-usable while allowing the Application to correctly publish the server
   interface. I managed this by using dependency injection to allow the ServerUI
   code call the #start() method of the Application that created the ServerUI.
   When the user clicks the Start button the ServerUI gets the instance of
@@ -39,7 +39,7 @@
   DataService that was published via dependency injection to communicate with
   the server side code.
 
-  The StandAlone Application, like the Server starts the ServerUI. The only
+  The StandAlone Application, like the Server, starts the ServerUI. The only
   difference being when the ServerUI gets the published instance of Application
   it's the instance of StandAlone. In StandAlone#start() it creates an instance
   of DataService, like the Server Application. Finally, like the networked
@@ -72,7 +72,7 @@
   and using a cache enabled this. The cache is used as a write through cache
   which allows for fast and efficient reads while keeping the on disk database
   constantly up-to-date. This was also a key concern I had, as I didn't want
-  the database file out of sync with what was shown on the clients.
+  the database file out of sync with what was shown on the clients'.
   The Data layer also provides the locking mechanisms that allow for thread
   safety while reading/writing from the Data instance.
 
