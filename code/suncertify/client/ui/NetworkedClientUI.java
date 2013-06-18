@@ -15,7 +15,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +32,7 @@ import suncertify.shared.Properties;
  * 
  * @author Sean Dunne
  */
-public class NetworkedClientUI extends JDialog {
+public class NetworkedClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 	private JTextField textField;
@@ -57,7 +56,7 @@ public class NetworkedClientUI extends JDialog {
 		this.setSize(300, 130);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		initUIElements();
 		this.setVisible(true);
