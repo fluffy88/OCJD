@@ -124,7 +124,6 @@ public class NetworkedClientUI extends JFrame {
 	 * @author Sean Dunne
 	 */
 	private class TextFieldListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
@@ -140,7 +139,6 @@ public class NetworkedClientUI extends JFrame {
 	 * @author Sean Dunne
 	 */
 	private class OKListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
@@ -175,7 +173,6 @@ public class NetworkedClientUI extends JFrame {
 	 * @author Sean Dunne
 	 */
 	private class CancelListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */

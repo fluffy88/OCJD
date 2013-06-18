@@ -108,7 +108,6 @@ public class SearchResultsButtonPanel extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class BookListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
@@ -132,7 +131,6 @@ public class SearchResultsButtonPanel extends JPanel {
 	 * @author Sean Dunne
 	 */
 	private class UnBookListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
