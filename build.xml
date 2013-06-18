@@ -30,7 +30,7 @@
     <property name="jar.assignment" value="instructions-232.jar" description="the assignment jar file (used to copy instructions and database file)" />
     <property name="jar.executable" value="${dir.submission}/runme.jar" description="the executable jar file" />
     <property name="jar.executable.main.class" value="suncertify.Main" description="the full qualified name of the main class" />
-    <property name="jar.submission" value="SR2483386.jar" description="the submission jar file" />
+    <property name="jar.submission" value="OCMJD_Sean_Dunne_OC1015017.jar" description="the submission jar file" />
 
     <property name="javadoc.title" value="Bodgitt and Scarper, LLC" description="the title of the generated overview page" />
 
