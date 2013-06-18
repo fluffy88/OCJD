@@ -15,7 +15,8 @@ import javax.swing.table.TableColumnModel;
 import suncertify.shared.App;
 
 /**
- * This class contains the components that display and enable manipulating of the search results.
+ * This class contains the components that display and enable manipulating of
+ * the search results.
  * 
  * @author Sean Dunne
  */

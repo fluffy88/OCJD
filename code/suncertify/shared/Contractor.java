@@ -3,7 +3,8 @@ package suncertify.shared;
 import java.io.Serializable;
 
 /**
- * This class is the Domain object class for the application. It represents a Contractor record in the database.
+ * This class is the Domain object class for the application. It represents a
+ * Contractor record in the database.
  * 
  * @author Sean Dunne
  */
@@ -37,8 +38,9 @@ public class Contractor implements Serializable {
 	 * @param custId
 	 *            The ID of the customer that has booked this Contractor.
 	 */
-	public Contractor(final int recordId, final String name, final String location, final String specialties, final String noStaff,
-			final String rate, final String custId) {
+	public Contractor(final int recordId, final String name,
+			final String location, final String specialties,
+			final String noStaff, final String rate, final String custId) {
 		this.recordId = recordId;
 		this.name = name;
 		this.location = location;
@@ -49,9 +51,11 @@ public class Contractor implements Serializable {
 	}
 
 	/**
-	 * A construct provide for convenience to create a new Contractor object instantiating all it's fields, using an array. The array must
-	 * contain only 6 elements and the elements must be found in the order same order as
-	 * {@link Contractor#Contractor(int, String, String, String, String, String, String)}.
+	 * A construct provide for convenience to create a new Contractor object
+	 * instantiating all it's fields, using an array. The array must contain
+	 * only 6 elements and the elements must be found in the order same order as
+	 * {@link Contractor#Contractor(int, String, String, String, String, String, String)}
+	 * .
 	 * 
 	 * @param recordId
 	 *            The ID of this record.
@@ -59,12 +63,14 @@ public class Contractor implements Serializable {
 	 *            A String array containing the 6 data fields.
 	 */
 	public Contractor(final int recordId, final String[] record) {
-		this(recordId, record[0], record[1], record[2], record[3], record[4], record[5]);
+		this(recordId, record[0], record[1], record[2], record[3], record[4],
+				record[5]);
 	}
 
 	/**
-	 * This method is used to convert a Contracter object back to a String array. It is used to get the data of this Contractor in a format
-	 * ready for writing to the database.
+	 * This method is used to convert a Contracter object back to a String
+	 * array. It is used to get the data of this Contractor in a format ready
+	 * for writing to the database.
 	 * 
 	 * @return A String array containing this Contractors data.
 	 */

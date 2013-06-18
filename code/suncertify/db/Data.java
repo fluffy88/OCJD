@@ -13,7 +13,8 @@ import suncertify.db.io.DBWriter;
 import suncertify.shared.App;
 
 /**
- * This class is responsible for the servers data records. It maintains a write through cache of the database records.
+ * This class is responsible for the servers data records. It maintains a write
+ * through cache of the database records.
  * 
  * @author Sean Dunne
  */
@@ -28,19 +29,21 @@ public class Data implements DBMain {
 	private final String dbLocation;
 
 	/**
-	 * Construct a new instance connected to the passed file. You should not directly construct instances of this class, instead use the
+	 * Construct a new instance connected to the passed file. You should not
+	 * directly construct instances of this class, instead use the
 	 * {@link DAOFactory} to get an instance.
 	 * 
 	 * @param dbLoc
 	 *            The location of the database file.
 	 */
-	Data(String dbLoc) {
+	Data(final String dbLoc) {
 		this.dbLocation = dbLoc;
-		init();
+		this.init();
 	}
 
 	/**
-	 * Initialize the Data instance. This method will create and populate the cache.
+	 * Initialize the Data instance. This method will create and populate the
+	 * cache.
 	 */
 	private void init() {
 		try {
@@ -50,13 +53,14 @@ public class Data implements DBMain {
 			this.createLock = new ReentrantLock();
 
 			this.buildCache(parser);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			App.showErrorAndExit("Cannot open database file for reading.");
 		}
 	}
 
 	/**
-	 * This method will read all the records from the database and populate the cache with them.
+	 * This method will read all the records from the database and populate the
+	 * cache with them.
 	 * 
 	 * @param parser
 	 *            The database parser used to read the database records.
@@ -65,7 +69,7 @@ public class Data implements DBMain {
 		this.contractors = parser.getAllRecords();
 		this.locks = new ArrayList<ReentrantLock>(this.contractors.size());
 		for (int i = 0; i < this.contractors.size(); i++) {
-			locks.add(new ReentrantLock());
+			this.locks.add(new ReentrantLock());
 		}
 	}
 
@@ -73,7 +77,7 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String[] read(int recNo) throws RecordNotFoundException {
+	public String[] read(final int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		final String[] contractor = this.contractors.get(recNo);
 
@@ -84,7 +88,8 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void update(int recNo, String[] data) throws RecordNotFoundException {
+	public void update(final int recNo, final String[] data)
+			throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.write(recNo, data);
@@ -95,7 +100,7 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(int recNo) throws RecordNotFoundException {
+	public void delete(final int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 
 		this.dbWriter.delete(recNo);
@@ -106,10 +111,10 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int[] find(String[] criteria) throws RecordNotFoundException {
+	public int[] find(final String[] criteria) throws RecordNotFoundException {
 		final List<Integer> results = new ArrayList<Integer>();
 		for (int n = 0; n < this.contractors.size(); n++) {
-			if (!isRecordDeleted(n)) {
+			if (!this.isRecordDeleted(n)) {
 				this.lock(n);
 
 				boolean match = true;
@@ -148,12 +153,12 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int create(String[] data) throws DuplicateKeyException {
+	public int create(final String[] data) throws DuplicateKeyException {
 		this.createLock.lock();
 
-		checkCreateData(data);
+		this.checkCreateData(data);
 
-		int deletedPos = this.dbWriter.create(data);
+		final int deletedPos = this.dbWriter.create(data);
 		int recNo = deletedPos;
 
 		if (deletedPos != -1) {
@@ -168,27 +173,34 @@ public class Data implements DBMain {
 	}
 
 	/**
-	 * This method is used to validate that the data passed to {@link #create(String[])} is correct. It checks the primary key of this new
-	 * record isn't already used.
+	 * This method is used to validate that the data passed to
+	 * {@link #create(String[])} is correct. It checks the primary key of this
+	 * new record isn't already used.
 	 * 
 	 * @param data
 	 *            The new record to be created.
 	 * @return true if this record can be created, otherwise false.
 	 * @throws DuplicateKeyException
-	 *             If a record with the primary key of name & location already exists.
+	 *             If a record with the primary key of name & location already
+	 *             exists.
 	 */
-	private boolean checkCreateData(String[] data) throws DuplicateKeyException {
-		if (data == null || data.length < 2 || data[0] == null || data[1] == null || data[0].equals("") || data[1].equals("")) {
+	private boolean checkCreateData(final String[] data)
+			throws DuplicateKeyException {
+		if ((data == null) || (data.length < 2) || (data[0] == null)
+				|| (data[1] == null) || data[0].equals("")
+				|| data[1].equals("")) {
 			this.createLock.unlock();
-			throw new IllegalArgumentException("The Name & Address cannot be empty!");
+			throw new IllegalArgumentException(
+					"The Name & Address cannot be empty!");
 		}
 
 		for (int i = 0; i < this.contractors.size(); i++) {
-			if (!isRecordDeleted(i)) {
-				String[] record = this.contractors.get(i);
+			if (!this.isRecordDeleted(i)) {
+				final String[] record = this.contractors.get(i);
 				if (record[0].equals(data[0]) && record[1].equals(data[1])) {
 					this.createLock.unlock();
-					throw new DuplicateKeyException("A record with this Name & Address already exists.");
+					throw new DuplicateKeyException(
+							"A record with this Name & Address already exists.");
 				}
 			}
 		}
@@ -199,7 +211,7 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void lock(int recNo) throws RecordNotFoundException {
+	public void lock(final int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		this.locks.get(recNo).lock();
 	}
@@ -208,7 +220,7 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void unlock(int recNo) throws RecordNotFoundException {
+	public void unlock(final int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		this.locks.get(recNo).unlock();
 	}
@@ -217,7 +229,7 @@ public class Data implements DBMain {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isLocked(int recNo) throws RecordNotFoundException {
+	public boolean isLocked(final int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		return this.isRecordLocked(recNo);
 	}
@@ -229,7 +241,7 @@ public class Data implements DBMain {
 	 *            The record number to check.
 	 * @return true if the record is locked, otherwise false.
 	 */
-	private boolean isRecordLocked(int recNo) {
+	private boolean isRecordLocked(final int recNo) {
 		return this.locks.get(recNo).isLocked();
 	}
 
@@ -240,7 +252,7 @@ public class Data implements DBMain {
 	 *            The record number to check.
 	 * @return true if the record has been deleted, otherwise false.
 	 */
-	private boolean isRecordDeleted(int recNo) {
+	private boolean isRecordDeleted(final int recNo) {
 		return this.contractors.get(recNo)[0] == null;
 	}
 
@@ -252,15 +264,19 @@ public class Data implements DBMain {
 	 * @throws RecordNotFoundException
 	 *             If the record can't be found in the cache.
 	 */
-	private void checkRecordNumber(int recNo) throws RecordNotFoundException {
+	private void checkRecordNumber(final int recNo)
+			throws RecordNotFoundException {
 		if (recNo < 0) {
-			throw new IllegalArgumentException("The record number cannot be negative.");
+			throw new IllegalArgumentException(
+					"The record number cannot be negative.");
 		}
 		if (this.contractors.size() <= recNo) {
-			throw new RecordNotFoundException("No record found for record number: " + recNo);
+			throw new RecordNotFoundException(
+					"No record found for record number: " + recNo);
 		}
-		if (isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
-			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
+		if (this.isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
+			throw new RecordNotFoundException("Record number " + recNo
+					+ " has been deleted.");
 		}
 	}
 }

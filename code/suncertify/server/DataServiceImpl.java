@@ -32,12 +32,14 @@ public class DataServiceImpl implements DataService {
 	private final Collection<RemoteObserver> observers;
 
 	/**
-	 * Construct a new {@link DataService} object that acts as an adapter for {@link DBMain}.
+	 * Construct a new {@link DataService} object that acts as an adapter for
+	 * {@link DBMain}.
 	 */
 	public DataServiceImpl() {
 		this.data = DAOFactory.getDataService();
 		this.executor = Executors.newFixedThreadPool(5);
-		this.observers = Collections.synchronizedList(new ArrayList<RemoteObserver>());
+		this.observers = Collections
+				.synchronizedList(new ArrayList<RemoteObserver>());
 	}
 
 	/**
@@ -46,7 +48,7 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public Contractor read(final int recNo) throws RecordNotFoundException {
 		this.data.lock(recNo);
-		Contractor record = new Contractor(recNo, this.data.read(recNo));
+		final Contractor record = new Contractor(recNo, this.data.read(recNo));
 		this.data.unlock(recNo);
 
 		return record;
@@ -78,22 +80,23 @@ public class DataServiceImpl implements DataService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Contractor> find(final String[] criteria, final boolean findExactMatches) {
+	public List<Contractor> find(final String[] criteria,
+			final boolean findExactMatches) {
 		final List<Contractor> finalResults = new ArrayList<Contractor>();
 		int[] rawResults = new int[0];
 		try {
 			rawResults = this.data.find(criteria);
-		} catch (RecordNotFoundException e) {
+		} catch (final RecordNotFoundException e) {
 			// cannot happen
 		}
 
-		for (int recNo : rawResults) {
+		for (final int recNo : rawResults) {
 			try {
-				Contractor record = this.read(recNo);
-				if (!findExactMatches || isExactMatch(record, criteria)) {
+				final Contractor record = this.read(recNo);
+				if (!findExactMatches || this.isExactMatch(record, criteria)) {
 					finalResults.add(record);
 				}
-			} catch (RecordNotFoundException e) {
+			} catch (final RecordNotFoundException e) {
 				// record has been deleted, ignore it
 			}
 		}
@@ -101,7 +104,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	/**
-	 * This method is used to determine if a Contractor exactly matches search criteria.
+	 * This method is used to determine if a Contractor exactly matches search
+	 * criteria.
 	 * 
 	 * @param record
 	 *            The Contractor to check.
@@ -109,10 +113,12 @@ public class DataServiceImpl implements DataService {
 	 *            The search criteria used to check the Contractor.
 	 * @return true if the Contractor is an exact match otherwise false.
 	 */
-	private boolean isExactMatch(final Contractor record, final String[] criteria) {
+	private boolean isExactMatch(final Contractor record,
+			final String[] criteria) {
 		final String[] dataArray = record.toArray();
 		for (int i = 0; i < criteria.length; i++) {
-			if (criteria[i] != null && !criteria[i].equals("") && !dataArray[i].equals(criteria[i])) {
+			if ((criteria[i] != null) && !criteria[i].equals("")
+					&& !dataArray[i].equals(criteria[i])) {
 				return false;
 			}
 		}
@@ -124,27 +130,29 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Override
 	public int create(final String[] data) throws DuplicateKeyException {
-		int recNo = this.data.create(data);
+		final int recNo = this.data.create(data);
 		try {
 			this.notifyObservers(this.read(recNo), CREATE);
-		} catch (RecordNotFoundException e) {
+		} catch (final RecordNotFoundException e) {
 			// contractor deleted, no need to update clients
 		}
 		return recNo;
 	}
 
 	/**
-	 * This method is responsible for updating all the clients that registered for updates when an update occurs to the database.
+	 * This method is responsible for updating all the clients that registered
+	 * for updates when an update occurs to the database.
 	 * 
 	 * @param contractor
 	 *            The Contractor object that has been updated.
 	 * @param cmd
-	 *            A String indicating how the Contractor has changed, create, update, delete.
+	 *            A String indicating how the Contractor has changed, create,
+	 *            update, delete.
 	 */
 	private void notifyObservers(final Contractor contractor, final String cmd) {
 		final List<RemoteObserver> staleRefs = new ArrayList<>();
 		for (final RemoteObserver o : this.observers) {
-			executor.execute(new Runnable() {
+			this.executor.execute(new Runnable() {
 				/**
 				 * {@inheritDoc}
 				 */
@@ -152,7 +160,7 @@ public class DataServiceImpl implements DataService {
 				public void run() {
 					try {
 						o.update(contractor, cmd);
-					} catch (RemoteException e) {
+					} catch (final RemoteException e) {
 						App.logWarning("Found an uncontactable Client, removing it from the Server.");
 						staleRefs.add(o);
 					}
@@ -166,7 +174,7 @@ public class DataServiceImpl implements DataService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addObserver(RemoteObserver o) {
+	public void addObserver(final RemoteObserver o) {
 		App.logWarning("Client connected");
 		this.observers.add(o);
 	}
@@ -175,7 +183,7 @@ public class DataServiceImpl implements DataService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteObserver(RemoteObserver o) {
+	public void deleteObserver(final RemoteObserver o) {
 		App.logWarning("Client disconnected");
 		this.observers.remove(o);
 	}

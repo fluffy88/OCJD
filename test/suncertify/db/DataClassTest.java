@@ -47,23 +47,23 @@ public class DataClassTest {
 			 * variable, so it is executed as many times as you want
 			 */
 			for (int i = 0; i < 10; i++) {
-				Thread updatingRandom = new UpdatingRandomRecordThread();
+				final Thread updatingRandom = new UpdatingRandomRecordThread();
 				updatingRandom.setName("UpdatingRandomRecordThread-" + i);
 				updatingRandom.start();
-				Thread updatingRecord1 = new UpdatingRecord1Thread();
+				final Thread updatingRecord1 = new UpdatingRecord1Thread();
 				updatingRecord1.setName("UpdatingRecord1Thread-" + i);
 				updatingRecord1.start();
-				Thread creatingRecord = new CreatingRecordThread();
+				final Thread creatingRecord = new CreatingRecordThread();
 				creatingRecord.setName("CreatingRecordThread-" + i);
 				creatingRecord.start();
-				Thread deletingRecord = new DeletingRecord1Thread();
+				final Thread deletingRecord = new DeletingRecord1Thread();
 				deletingRecord.setName("DeletingRecord1Thread-" + i);
 				deletingRecord.start();
-				Thread findingRecords = new FindingRecordsThread();
+				final Thread findingRecords = new FindingRecordsThread();
 				findingRecords.setName("FindingRecordsThread-" + i);
 				findingRecords.start();
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.out.println(e.getMessage());
 		}
 
@@ -71,6 +71,7 @@ public class DataClassTest {
 
 	private class UpdatingRandomRecordThread extends Thread {
 
+		@Override
 		public void run() {
 			final String[] newRec = new String[] { "Maggi's Gears", "Crazy town", "Cooking, Managing", "4", "$8.65", "00447799" };
 
@@ -85,7 +86,7 @@ public class DataClassTest {
 				 * it is not necessary to call the unlock method in a finally block, but you can customize this code according to your
 				 * reality
 				 */
-				data.lock(recNo);
+				DataClassTest.this.data.lock(recNo);
 				System.out
 						.println(Thread.currentThread().getId() + " trying to update record #" + recNo + " on UpdatingRandomRecordThread");
 
@@ -96,11 +97,11 @@ public class DataClassTest {
 				 * 
 				 * data.update(recNo, new String[] {"Palace", "Smallville", "2", "Y", "$150.00", "2005/07/27", null});
 				 */
-				data.update(recNo, newRec);
+				DataClassTest.this.data.update(recNo, newRec);
 				System.out
 						.println(Thread.currentThread().getId() + " trying to unlock record #" + recNo + " on UpdatingRandomRecordThread");
-				data.unlock(recNo);
-			} catch (Exception e) {
+				DataClassTest.this.data.unlock(recNo);
+			} catch (final Exception e) {
 				System.out.println(e);
 			}
 		}
@@ -108,22 +109,23 @@ public class DataClassTest {
 
 	private class UpdatingRecord1Thread extends Thread {
 
+		@Override
 		public void run() {
 			final String[] record = new String[] { "Jammies", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 
 			try {
 				System.out.println(Thread.currentThread().getId() + " trying to lock record #1 on" + " UpdatingRecord1Thread");
-				data.lock(1);
+				DataClassTest.this.data.lock(1);
 				System.out.println(Thread.currentThread().getId() + " trying to update record #1 on" + " UpdatingRecord1Thread");
-				data.update(1, record);
+				DataClassTest.this.data.update(1, record);
 				System.out.println(Thread.currentThread().getId() + " trying to unlock record #1 on" + "UpdatingRecord1Thread");
 
 				/*
 				 * In order to see the deadlock, this instruction can be commented, and the other Threads, waiting to update/delete record
 				 * #1 will wait forever and the deadlock will occur
 				 */
-				data.unlock(1);
-			} catch (Exception e) {
+				DataClassTest.this.data.unlock(1);
+			} catch (final Exception e) {
 				System.out.println(e);
 			}
 		}
@@ -131,13 +133,14 @@ public class DataClassTest {
 
 	private class CreatingRecordThread extends Thread {
 
+		@Override
 		public void run() {
 			final String[] record = new String[] { "Elephant Inn", "EmeraldCity", "Stuff", "57", "$120", "" };
 
 			try {
 				System.out.println(Thread.currentThread().getId() + " trying to create a record");
-				data.create(record);
-			} catch (Exception e) {
+				DataClassTest.this.data.create(record);
+			} catch (final Exception e) {
 				System.out.println(e);
 			}
 		}
@@ -145,15 +148,16 @@ public class DataClassTest {
 
 	private class DeletingRecord1Thread extends Thread {
 
+		@Override
 		public void run() {
 			try {
 				System.out.println(Thread.currentThread().getId() + " trying to lock record #1 on " + "DeletingRecord1Thread");
-				data.lock(1);
+				DataClassTest.this.data.lock(1);
 				System.out.println(Thread.currentThread().getId() + " trying to delete record #1 on " + "DeletingRecord1Thread");
-				data.delete(1);
+				DataClassTest.this.data.delete(1);
 				System.out.println(Thread.currentThread().getId() + " trying to unlock record #1 on " + "DeletingRecord1Thread");
-				data.unlock(1);
-			} catch (Exception e) {
+				DataClassTest.this.data.unlock(1);
+			} catch (final Exception e) {
 				System.out.println(e);
 			}
 		}
@@ -161,11 +165,12 @@ public class DataClassTest {
 
 	private class FindingRecordsThread extends Thread {
 
+		@Override
 		public void run() {
 			try {
 				System.out.println(Thread.currentThread().getId() + " trying to find records");
 				final String[] criteria = { "Palace", "Smallville", null, null, null, null, null };
-				final int[] results = data.find(criteria);
+				final int[] results = DataClassTest.this.data.find(criteria);
 
 				for (int i = 0; i < results.length; i++) {
 					System.out.println(results.length + " results found.");
@@ -173,10 +178,10 @@ public class DataClassTest {
 						final String message = Thread.currentThread().getId() + " going to read record #" + results[i]
 								+ " in FindingRecordsThread - still " + ((results.length - 1) - i) + " to go.";
 						System.out.println(message);
-						final String[] room = data.read(results[i]);
+						final String[] room = DataClassTest.this.data.read(results[i]);
 						System.out.println("Hotel (FindingRecordsThread): " + room[0]);
 						System.out.println("Has next? " + (i < (results.length - 1)));
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						/*
 						 * In case a record was found during the execution of the find method, but deleted before the execution of the read
 						 * instruction, a RecordNotFoundException will occur, which would be normal then
@@ -185,7 +190,7 @@ public class DataClassTest {
 					}
 				}
 				System.out.println("Exiting for loop");
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				System.out.println(e);
 			}
 		}

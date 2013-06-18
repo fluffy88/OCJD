@@ -31,7 +31,8 @@ import suncertify.shared.Contractor;
 import suncertify.shared.Properties;
 
 /**
- * This class contains all the components responsible for allowing the user to search for data records.
+ * This class contains all the components responsible for allowing the user to
+ * search for data records.
  * 
  * @author Sean Dunne
  */
@@ -66,32 +67,32 @@ public class SearchPanel extends JPanel {
 	private void createSearchArea() {
 		final ActionListener enterAct = new EnterListener();
 		final JLabel nameLabel = new JLabel(CONTRACTOR_NAME + ":");
-		nameField = new JTextField(10);
-		nameField.addActionListener(enterAct);
+		this.nameField = new JTextField(10);
+		this.nameField.addActionListener(enterAct);
 		final JLabel cityLabel = new JLabel(CITY + ":");
-		cityField = new JTextField(10);
-		cityField.addActionListener(enterAct);
+		this.cityField = new JTextField(10);
+		this.cityField.addActionListener(enterAct);
 		final JLabel workLabel = new JLabel(TYPES_OF_WORK + ":");
-		workField = new JTextField(10);
-		workField.addActionListener(enterAct);
+		this.workField = new JTextField(10);
+		this.workField.addActionListener(enterAct);
 		final JLabel staffLabel = new JLabel(NUMBER_OF_STAFF + ":");
-		staffField = new JTextField(10);
-		staffField.addActionListener(enterAct);
+		this.staffField = new JTextField(10);
+		this.staffField.addActionListener(enterAct);
 		final JLabel chargeLabel = new JLabel(HOURLY_CHARGE + ":");
-		chargeField = new JTextField(10);
-		chargeField.addActionListener(enterAct);
+		this.chargeField = new JTextField(10);
+		this.chargeField.addActionListener(enterAct);
 		final JLabel customerLabel = new JLabel(CUSTOMER_ID + ":");
-		customerField = new JTextField(10);
-		customerField.addActionListener(enterAct);
+		this.customerField = new JTextField(10);
+		this.customerField.addActionListener(enterAct);
 
-		boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
-		exactMatch = new JCheckBox("Exact match", state);
-		exactMatch.setMnemonic(KeyEvent.VK_E);
-		exactMatch.addActionListener(new ExactMatchListener());
+		final boolean state = Properties.getBoolean(PROP_EXACT_MATCH, true);
+		this.exactMatch = new JCheckBox("Exact match", state);
+		this.exactMatch.setMnemonic(KeyEvent.VK_E);
+		this.exactMatch.addActionListener(new ExactMatchListener());
 
-		button = new JButton("Search");
-		button.setMnemonic(KeyEvent.VK_S);
-		button.addActionListener(new SearchListener());
+		this.button = new JButton("Search");
+		this.button.setMnemonic(KeyEvent.VK_S);
+		this.button.addActionListener(new SearchListener());
 
 		this.add(nameLabel);
 		this.add(cityLabel);
@@ -100,16 +101,16 @@ public class SearchPanel extends JPanel {
 		this.add(chargeLabel);
 		this.add(customerLabel);
 
-		this.add(exactMatch);
+		this.add(this.exactMatch);
 
-		this.add(nameField);
-		this.add(cityField);
-		this.add(workField);
-		this.add(staffField);
-		this.add(chargeField);
-		this.add(customerField);
+		this.add(this.nameField);
+		this.add(this.cityField);
+		this.add(this.workField);
+		this.add(this.staffField);
+		this.add(this.chargeField);
+		this.add(this.customerField);
 
-		this.add(button);
+		this.add(this.button);
 	}
 
 	/**
@@ -122,13 +123,14 @@ public class SearchPanel extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			button.doClick();
+		public void actionPerformed(final ActionEvent e) {
+			SearchPanel.this.button.doClick();
 		}
 	}
 
 	/**
-	 * This listener persists the state of the exact match checkbox when it's state changes.
+	 * This listener persists the state of the exact match checkbox when it's
+	 * state changes.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -137,41 +139,46 @@ public class SearchPanel extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			Properties.setBoolean(PROP_EXACT_MATCH, exactMatch.isSelected());
+		public void actionPerformed(final ActionEvent e) {
+			Properties.setBoolean(PROP_EXACT_MATCH,
+					SearchPanel.this.exactMatch.isSelected());
 		}
 	}
 
 	/**
-	 * This listener does a search of the server and adds the results to the TableModel when the user clicks the Search button.
+	 * This listener does a search of the server and adds the results to the
+	 * TableModel when the user clicks the Search button.
 	 * 
 	 * @author Sean Dunne
 	 */
 	private class SearchListener implements ActionListener {
 
-		private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+		private final DataService dataService = (DataService) App
+				.getDependancy(DEP_DATASERVICE);
 
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			final String[] searchCriteria = new String[6];
-			searchCriteria[0] = nameField.getText().trim();
-			searchCriteria[1] = cityField.getText().trim();
-			searchCriteria[2] = workField.getText().trim();
-			searchCriteria[3] = staffField.getText().trim();
-			searchCriteria[4] = chargeField.getText().trim();
-			searchCriteria[5] = customerField.getText().trim();
-			boolean exactMatch = Properties.getBoolean(PROP_EXACT_MATCH);
+			searchCriteria[0] = SearchPanel.this.nameField.getText().trim();
+			searchCriteria[1] = SearchPanel.this.cityField.getText().trim();
+			searchCriteria[2] = SearchPanel.this.workField.getText().trim();
+			searchCriteria[3] = SearchPanel.this.staffField.getText().trim();
+			searchCriteria[4] = SearchPanel.this.chargeField.getText().trim();
+			searchCriteria[5] = SearchPanel.this.customerField.getText().trim();
+			final boolean exactMatch = Properties.getBoolean(PROP_EXACT_MATCH);
 
 			try {
-				final SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
-				final List<Contractor> records = dataService.find(searchCriteria, exactMatch);
+				final SearchResultsTableModel tableModel = (SearchResultsTableModel) App
+						.getDependancy(DEP_TABLE_MODEL);
+				final List<Contractor> records = this.dataService.find(
+						searchCriteria, exactMatch);
 
 				tableModel.clearData();
 				tableModel.addAll(records);
-			} catch (RemoteException exp) {
+			} catch (final RemoteException exp) {
 				App.showErrorAndExit("The remote server is no longer available.");
 			}
 		}

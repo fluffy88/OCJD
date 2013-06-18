@@ -50,19 +50,19 @@ public class DBParser {
 			// data
 			this.is.seek(START_OF_RECORDS);
 			while (this.is.getFilePointer() != this.is.length()) {
-				final String[] dataItem = readNextRecord();
+				final String[] dataItem = this.readNextRecord();
 				contractors.add(dataItem);
 			}
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			App.showErrorAndExit("Cannot read from database file.");
 		}
 		return contractors;
 	}
 
 	/**
-	 * This method checks that the value of the magic cookie in the database file matches the cookie value of the database for this
-	 * application.
+	 * This method checks that the value of the magic cookie in the database
+	 * file matches the cookie value of the database for this application.
 	 * 
 	 * @throws IOException
 	 *             If reading the magic cookie value from the file fails.
@@ -75,7 +75,8 @@ public class DBParser {
 	}
 
 	/**
-	 * This method is used to read all the metadata file headers. It stores all the read values in {@link DBSchema}.
+	 * This method is used to read all the metadata file headers. It stores all
+	 * the read values in {@link DBSchema}.
 	 * 
 	 * @throws IOException
 	 *             If reading from the database file fails.
@@ -103,7 +104,8 @@ public class DBParser {
 	}
 
 	/**
-	 * This method is used to read one full record from the database. It assumes the file-pointer is at the beginning of a record.
+	 * This method is used to read one full record from the database. It assumes
+	 * the file-pointer is at the beginning of a record.
 	 * 
 	 * @return An array containing the fields for this record.
 	 * @throws IOException
@@ -119,19 +121,23 @@ public class DBParser {
 			}
 		} else {
 			// skip the next record as it's marked deleted
-			this.is.seek(this.is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
+			this.is.seek((this.is.getFilePointer() + RECORD_LENGTH)
+					- NUM_BYTES_RECORD_DELETED_FLAG);
 		}
 		return dataItem;
 	}
 
 	/**
-	 * Simple implementation of a RandomAccessFile#readString() as it's not included by default.
+	 * Simple implementation of a RandomAccessFile#readString() as it's not
+	 * included by default.
 	 * 
 	 * @param n
 	 *            The number of bytes to be read for the String.
-	 * @return The trimmed result of reading n bytes from the RandomAccessFile and converting to a String.
+	 * @return The trimmed result of reading n bytes from the RandomAccessFile
+	 *         and converting to a String.
 	 * @throws IOException
-	 *             If something goes wrong when reading from the RandomAccessFile.
+	 *             If something goes wrong when reading from the
+	 *             RandomAccessFile.
 	 */
 	private String readString(final int n) throws IOException {
 		final byte[] bytes = new byte[n];

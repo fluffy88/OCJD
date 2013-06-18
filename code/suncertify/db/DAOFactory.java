@@ -6,7 +6,8 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This is a factory class responsible for creating and retrieving an instance of {@link DBMain}.
+ * This is a factory class responsible for creating and retrieving an instance
+ * of {@link DBMain}.
  * 
  * @author Sean Dunne
  */
@@ -28,7 +29,8 @@ public class DAOFactory {
 	}
 
 	/**
-	 * This method is responsible for getting the location of the database file which is used to construct the instance of DBMain.
+	 * This method is responsible for getting the location of the database file
+	 * which is used to construct the instance of DBMain.
 	 * 
 	 * @return The location of the database file.
 	 */

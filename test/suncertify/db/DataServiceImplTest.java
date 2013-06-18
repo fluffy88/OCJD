@@ -38,7 +38,7 @@ public class DataServiceImplTest {
 
 	@Test
 	public void testRead() throws RemoteException, RecordNotFoundException {
-		Contractor record = this.dataService.read(READ_REC_NO);
+		final Contractor record = this.dataService.read(READ_REC_NO);
 		assertThat(record.getName(), is(equalTo("Bitter Homes & Gardens")));
 		assertThat(record.getLocation(), is(equalTo("EmeraldCity")));
 		assertThat(record.getSpecialties(), is(equalTo("Heating, Plumbing, Painting")));
@@ -50,7 +50,7 @@ public class DataServiceImplTest {
 
 	@Test
 	public void testUpdate() throws RemoteException, RecordNotFoundException {
-		Contractor origRecord = this.dataService.read(UPDATE_REC_NO);
+		final Contractor origRecord = this.dataService.read(UPDATE_REC_NO);
 		assertThat(origRecord.getName(), is(equalTo("Hamner & Tong")));
 		assertThat(origRecord.getLocation(), is(equalTo("EmeraldCity")));
 		assertThat(origRecord.getSpecialties(), is(equalTo("Roofing, Electrical")));
@@ -58,9 +58,9 @@ public class DataServiceImplTest {
 		assertThat(origRecord.getRate(), is(equalTo("$45.00")));
 		assertThat(origRecord.getCustomerId(), is(equalTo("")));
 
-		Contractor newRecordData = new Contractor(UPDATE_REC_NO, "Belter", "Greenland", "Green house building", "32", "$53.50", "12");
+		final Contractor newRecordData = new Contractor(UPDATE_REC_NO, "Belter", "Greenland", "Green house building", "32", "$53.50", "12");
 		this.dataService.update(newRecordData);
-		Contractor updatedRecord = this.dataService.read(UPDATE_REC_NO);
+		final Contractor updatedRecord = this.dataService.read(UPDATE_REC_NO);
 		for (int i = 0; i < newRecordData.toArray().length; i++) {
 			assertThat(updatedRecord.toArray()[i], is(equalTo(newRecordData.toArray()[i])));
 		}
@@ -70,7 +70,7 @@ public class DataServiceImplTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDelete() throws RemoteException, RecordNotFoundException, DuplicateKeyException {
-		Contractor record = this.dataService.read(DELETE_REC_NO);
+		final Contractor record = this.dataService.read(DELETE_REC_NO);
 		this.dataService.delete(record);
 		this.dataService.read(DELETE_REC_NO);
 	}
@@ -91,23 +91,23 @@ public class DataServiceImplTest {
 
 	@Test
 	public void testCreate() throws RemoteException, DuplicateKeyException, RecordNotFoundException {
-		String[] newRecord = new String[] { "Hello Kitty", "Japan", "Bags", "12345", "$99.00", "" };
+		final String[] newRecord = new String[] { "Hello Kitty", "Japan", "Bags", "12345", "$99.00", "" };
 		this.dataService.delete(new Contractor(CREATE_REC_NO, "Dogs With Tools", "Smallville", "Roofing", "7", "$35.00", ""));
-		int newRecordNum = this.dataService.create(newRecord);
+		final int newRecordNum = this.dataService.create(newRecord);
 
 		assertThat(newRecordNum, is(equalTo(CREATE_REC_NO)));
 	}
 
 	@Test(expected = DuplicateKeyException.class)
 	public void testCreateDup() throws RemoteException, DuplicateKeyException {
-		String[] newRecord = new String[] { "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE" };
+		final String[] newRecord = new String[] { "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE", "DUPPLICATE" };
 		this.dataService.create(newRecord);
 		this.dataService.create(newRecord);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEmpty() throws RemoteException, DuplicateKeyException {
-		String[] newRecord = new String[] {};
+		final String[] newRecord = new String[] {};
 		this.dataService.create(newRecord);
 	}
 }

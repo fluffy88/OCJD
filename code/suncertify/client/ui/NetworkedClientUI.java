@@ -1,5 +1,6 @@
 package suncertify.client.ui;
 
+import static suncertify.Server.RMI_SERVER;
 import static suncertify.shared.App.DEP_APPLICATION;
 import static suncertify.shared.App.PROP_SERVER_HOSTNAME;
 
@@ -21,14 +22,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import suncertify.Application;
-import suncertify.Server;
 import suncertify.server.DataService;
 import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This class is responsible for creating, displaying and populating the networked client user interface. This UI's purpose is to allow the
- * user specify the hostname of the remote server to connect to.
+ * This class is responsible for creating, displaying and populating the
+ * networked client user interface. This UI's purpose is to allow the user
+ * specify the hostname of the remote server to connect to.
  * 
  * @author Sean Dunne
  */
@@ -49,7 +50,8 @@ public class NetworkedClientUI extends JFrame {
 	}
 
 	/**
-	 * Creates the JFrame, sets it's properties, adds the contents and displays the JFrame.
+	 * Creates the JFrame, sets it's properties, adds the contents and displays
+	 * the JFrame.
 	 */
 	private NetworkedClientUI() {
 		this.setTitle("Server Hostname");
@@ -58,12 +60,13 @@ public class NetworkedClientUI extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		initUIElements();
+		this.initUIElements();
 		this.setVisible(true);
 	}
 
 	/**
-	 * This method is responsible for adding the components of the NetworkedClientUI to the JFrame.
+	 * This method is responsible for adding the components of the
+	 * NetworkedClientUI to the JFrame.
 	 */
 	private void initUIElements() {
 		final GridBagLayout layout = new GridBagLayout();
@@ -78,20 +81,21 @@ public class NetworkedClientUI extends JFrame {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(label, c);
 
-		textField = new JTextField(Properties.get(PROP_SERVER_HOSTNAME, "localhost"));
-		textField.addActionListener(new TextFieldListener());
+		this.textField = new JTextField(Properties.get(PROP_SERVER_HOSTNAME,
+				"localhost"));
+		this.textField.addActionListener(new TextFieldListener());
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(textField, c);
+		panel.add(this.textField, c);
 
-		ok = new JButton("OK");
-		ok.setMnemonic(KeyEvent.VK_O);
-		ok.addActionListener(new OKListener());
+		this.ok = new JButton("OK");
+		this.ok.setMnemonic(KeyEvent.VK_O);
+		this.ok.addActionListener(new OKListener());
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
-		panel.add(ok, c);
+		panel.add(this.ok, c);
 
 		final JButton cancel = new JButton("Cancel");
 		cancel.setMnemonic(KeyEvent.VK_C);
@@ -113,16 +117,18 @@ public class NetworkedClientUI extends JFrame {
 	}
 
 	/**
-	 * Getter for the remote DataService which is created when the user clicks the OK button.
+	 * Getter for the remote DataService which is created when the user clicks
+	 * the OK button.
 	 * 
 	 * @return The remote DataService.
 	 */
 	public DataService getDataService() {
-		return dataService;
+		return this.dataService;
 	}
 
 	/**
-	 * A listener that emulates clicking the OK button when the user presses enter in the hostname text box.
+	 * A listener that emulates clicking the OK button when the user presses
+	 * enter in the hostname text box.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -131,13 +137,14 @@ public class NetworkedClientUI extends JFrame {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			ok.doClick();
+		public void actionPerformed(final ActionEvent e) {
+			NetworkedClientUI.this.ok.doClick();
 		}
 	}
 
 	/**
-	 * Listener to validate server hostname and to attempt to connect to the remote server once the user clicks the OK button.
+	 * Listener to validate server hostname and to attempt to connect to the
+	 * remote server once the user clicks the OK button.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -146,24 +153,27 @@ public class NetworkedClientUI extends JFrame {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent event) {
-			final String hostname = textField.getText();
+		public void actionPerformed(final ActionEvent event) {
+			final String hostname = NetworkedClientUI.this.textField.getText();
 
 			if (hostname.equals("")) {
 				App.showError("You must enter a hostname for the server.");
 			} else {
 				try {
-					final Registry registry = LocateRegistry.getRegistry(hostname);
-					dataService = (DataService) registry.lookup(Server.RMI_SERVER);
+					final Registry registry = LocateRegistry
+							.getRegistry(hostname);
+					NetworkedClientUI.this.dataService = (DataService) registry
+							.lookup(RMI_SERVER);
 					Properties.set(PROP_SERVER_HOSTNAME, hostname);
 
-					Application client = (Application) App.getDependancy(DEP_APPLICATION);
+					final Application client = (Application) App
+							.getDependancy(DEP_APPLICATION);
 					client.start();
 
 					NetworkedClientUI.this.dispose();
-				} catch (RemoteException e) {
+				} catch (final RemoteException e) {
 					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
-				} catch (NotBoundException e) {
+				} catch (final NotBoundException e) {
 					App.showError("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
 				}
 			}
@@ -180,7 +190,7 @@ public class NetworkedClientUI extends JFrame {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			System.exit(0);
 		}
 	}

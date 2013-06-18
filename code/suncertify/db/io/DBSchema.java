@@ -1,8 +1,9 @@
 package suncertify.db.io;
 
 /**
- * This class contains the database file structure. It is also populated with the database metadata headers once the database file is read
- * by {@link DBParser}.
+ * This class contains the database file structure. It is also populated with
+ * the database metadata headers once the database file is read by
+ * {@link DBParser}.
  * 
  * @author Sean Dunne
  */
@@ -14,9 +15,15 @@ public class DBSchema {
 	// File Headers
 	/** The number of bytes used to store the magic cookie value. */
 	public static final int NUM_BYTES_MAGIC_COOKIE = 4;
-	/** The number of bytes used to store the position where the database records begin. */
+	/**
+	 * The number of bytes used to store the position where the database records
+	 * begin.
+	 */
 	public static final int NUM_BYTES_START_OF_RECORDS = 4;
-	/** The number of bytes used to store the number of fields each record contains. */
+	/**
+	 * The number of bytes used to store the number of fields each record
+	 * contains.
+	 */
 	public static final int NUM_BYTES_NUMBER_OF_FIELDS = 2;
 
 	// Describing data structure
@@ -38,7 +45,10 @@ public class DBSchema {
 	public static int EXPECTED_MAGIC_COOKIE = 514;
 	/** The actual magic cookie read from the database file by {@link DBParser}. */
 	public static int MAGIC_COOKIE;
-	/** The position where the records begin in the database file. Read in by {@link DBParser}. */
+	/**
+	 * The position where the records begin in the database file. Read in by
+	 * {@link DBParser}.
+	 */
 	public static int START_OF_RECORDS;
 	/** The number of fields each record has. Read in by {@link DBParser}. */
 	public static int NUMBER_OF_FIELDS;
@@ -46,7 +56,10 @@ public class DBSchema {
 	// Fields
 	/** The headers of each field in the database. Read in by {@link DBParser}. */
 	public static String[] FIELD_HEADERS;
-	/** The length in bytes of each field in the database. Read in by {@link DBParser}. */
+	/**
+	 * The length in bytes of each field in the database. Read in by
+	 * {@link DBParser}.
+	 */
 	public static int[] FIELD_LENGTHS;
 	/** The length of each record in the database. Read in by {@link DBParser}. */
 	public static int RECORD_LENGTH = NUM_BYTES_RECORD_DELETED_FLAG;

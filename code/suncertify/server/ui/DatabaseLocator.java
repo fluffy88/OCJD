@@ -11,24 +11,26 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This class is responsible for prompting the user to enter the location of the database file.
+ * This class is responsible for prompting the user to enter the location of the
+ * database file.
  * 
  * @author Sean Dunne
  */
 public class DatabaseLocator {
 
 	/**
-	 * This method will display a file chooser dialog to the user allowing the user chose a new database file.
+	 * This method will display a file chooser dialog to the user allowing the
+	 * user chose a new database file.
 	 * 
 	 * @return The location of the file the user picked.
 	 */
 	public static String getLocation() {
-		JFileChooser chooser = createDialog();
+		final JFileChooser chooser = createDialog();
 
 		String location = null;
-		int action = chooser.showOpenDialog(null);
+		final int action = chooser.showOpenDialog(null);
 		if (action == JFileChooser.APPROVE_OPTION) {
-			File choice = chooser.getSelectedFile();
+			final File choice = chooser.getSelectedFile();
 			if (choice.getName().endsWith(".db")) {
 				location = choice.getAbsolutePath();
 				Properties.set(PROP_DB_LOCATION, location);
@@ -46,9 +48,11 @@ public class DatabaseLocator {
 	 * @return A JFileChooser allowing selection of .db files.
 	 */
 	private static JFileChooser createDialog() {
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+		final JFileChooser chooser = new JFileChooser(
+				System.getProperty("user.dir"));
 
-		chooser.setFileFilter(new FileNameExtensionFilter(".db files only", "db"));
+		chooser.setFileFilter(new FileNameExtensionFilter(".db files only",
+				"db"));
 		chooser.setDialogTitle("Database location");
 
 		return chooser;

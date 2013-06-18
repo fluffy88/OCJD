@@ -26,7 +26,8 @@ import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
 /**
- * This class is responsible for creating the buttons used to interact with the search results displayed in the JTable.
+ * This class is responsible for creating the buttons used to interact with the
+ * search results displayed in the JTable.
  * 
  * @author Sean Dunne
  */
@@ -38,7 +39,7 @@ public class SearchResultsButtonPanel extends JPanel {
 	private JButton bookBtn;
 	private JButton unbookBtn;
 
-	private JTable table = (JTable) App.getDependancy(DEP_TABLE);
+	private final JTable table = (JTable) App.getDependancy(DEP_TABLE);
 
 	/**
 	 * Create a JPanel with the buttons for interacting with the search results.
@@ -49,14 +50,16 @@ public class SearchResultsButtonPanel extends JPanel {
 		this.add(this.createBookButtonArea());
 		this.add(this.createCRUDButtonArea());
 
-		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
-		table.getModel().addTableModelListener(new TableModelListener());
+		this.table.getSelectionModel().addListSelectionListener(
+				new TableSelectionListener());
+		this.table.getModel().addTableModelListener(new TableModelListener());
 
 		this.setButtonState();
 	}
 
 	/**
-	 * This method creates a JPanel containing the booking and un-booking buttons.
+	 * This method creates a JPanel containing the booking and un-booking
+	 * buttons.
 	 * 
 	 * @return A JPanel containing the booking and un-booking buttons.
 	 */
@@ -65,47 +68,55 @@ public class SearchResultsButtonPanel extends JPanel {
 		final JPanel lPanel = new JPanel(layout);
 		layout.setAlignment(FlowLayout.LEFT);
 
-		bookBtn = new JButton("Book");
-		bookBtn.setMnemonic(KeyEvent.VK_B);
-		bookBtn.addActionListener(new BookListener());
-		unbookBtn = new JButton("Remove Booking");
-		unbookBtn.setMnemonic(KeyEvent.VK_R);
-		unbookBtn.addActionListener(new UnBookListener());
-		lPanel.add(bookBtn);
-		lPanel.add(unbookBtn);
+		this.bookBtn = new JButton("Book");
+		this.bookBtn.setMnemonic(KeyEvent.VK_B);
+		this.bookBtn.addActionListener(new BookListener());
+		this.unbookBtn = new JButton("Remove Booking");
+		this.unbookBtn.setMnemonic(KeyEvent.VK_R);
+		this.unbookBtn.addActionListener(new UnBookListener());
+		lPanel.add(this.bookBtn);
+		lPanel.add(this.unbookBtn);
 
 		return lPanel;
 	}
 
 	/**
-	 * This method creates a JPanel containing the buttons to interact with the Contractors displayed in the search results JTable.
+	 * This method creates a JPanel containing the buttons to interact with the
+	 * Contractors displayed in the search results JTable.
 	 * 
-	 * @return A JPanel with buttons allowing the user interact with search results.
+	 * @return A JPanel with buttons allowing the user interact with search
+	 *         results.
 	 */
 	private JPanel createCRUDButtonArea() {
 		final FlowLayout layout = new FlowLayout();
 		final JPanel rPanel = new JPanel(layout);
 		layout.setAlignment(FlowLayout.RIGHT);
 
-		deleteBtn = new JButton("Delete (0)");
-		deleteBtn.setMnemonic(KeyEvent.VK_D);
-		deleteBtn.addActionListener(new DeleteListener());
-		rPanel.add(deleteBtn);
+		this.deleteBtn = new JButton("Delete (0)");
+		this.deleteBtn.setMnemonic(KeyEvent.VK_D);
+		this.deleteBtn.addActionListener(new DeleteListener());
+		rPanel.add(this.deleteBtn);
 
 		return rPanel;
 	}
 
 	/**
-	 * This method is responsible for setting the state of the buttons based on the selection in the JTable.
+	 * This method is responsible for setting the state of the buttons based on
+	 * the selection in the JTable.
 	 */
 	private void setButtonState() {
-		deleteBtn.setText("Delete (" + table.getSelectedRowCount() + ")");
+		final String deleteText = String.format("Delete (%s)",
+				this.table.getSelectedRowCount());
+		this.deleteBtn.setText(deleteText);
 
-		final String custId = (String) table.getValueAt(table.getSelectedRow(), table.getColumnCount() - 1);
-		boolean isOneRowSelected = table.getSelectedRowCount() == 1;
-		boolean isRecordFree = custId != null && custId.isEmpty();
-		bookBtn.setEnabled(isOneRowSelected && isRecordFree);
-		unbookBtn.setEnabled(isOneRowSelected && !isRecordFree);
+		final String custId = (String) this.table.getValueAt(
+				this.table.getSelectedRow(), this.table.getColumnCount() - 1);
+
+		final boolean isOneRowSelected = this.table.getSelectedRowCount() == 1;
+		final boolean isRecordFree = (custId != null) && custId.isEmpty();
+
+		this.bookBtn.setEnabled(isOneRowSelected && isRecordFree);
+		this.unbookBtn.setEnabled(isOneRowSelected && !isRecordFree);
 	}
 
 	/**
@@ -118,12 +129,20 @@ public class SearchResultsButtonPanel extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			final String id = JOptionPane.showInputDialog(null, "Enter Customer ID", "Book Contractor", JOptionPane.QUESTION_MESSAGE);
+		public void actionPerformed(final ActionEvent e) {
+			final String id = JOptionPane.showInputDialog(null,
+					"Enter Customer ID", "Book Contractor",
+					JOptionPane.QUESTION_MESSAGE);
 			if (id != null) {
 				if (id.matches("^\\d{8}$")) {
-					table.setValueAt(id, table.getSelectedRow(), table.getColumnCount() - 1);
-					table.requestFocus();
+					final int row = SearchResultsButtonPanel.this.table
+							.getSelectedRow();
+					final int col = SearchResultsButtonPanel.this.table
+							.getColumnCount() - 1;
+
+					SearchResultsButtonPanel.this.table
+							.setValueAt(id, row, col);
+					SearchResultsButtonPanel.this.table.requestFocus();
 				} else {
 					App.showError("The Customer ID must be 8 digits.");
 				}
@@ -132,7 +151,8 @@ public class SearchResultsButtonPanel extends JPanel {
 	}
 
 	/**
-	 * This listener removes the booking on the selected Contractor in the JTable.
+	 * This listener removes the booking on the selected Contractor in the
+	 * JTable.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -141,38 +161,46 @@ public class SearchResultsButtonPanel extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			table.setValueAt("", table.getSelectedRow(), table.getColumnCount() - 1);
-			table.requestFocus();
+		public void actionPerformed(final ActionEvent e) {
+			SearchResultsButtonPanel.this.table.setValueAt("",
+					SearchResultsButtonPanel.this.table.getSelectedRow(),
+					SearchResultsButtonPanel.this.table.getColumnCount() - 1);
+			SearchResultsButtonPanel.this.table.requestFocus();
 		}
 	}
 
 	/**
-	 * This listener deletes the data records that are selected in the JTable from the server.
+	 * This listener deletes the data records that are selected in the JTable
+	 * from the server.
 	 * 
 	 * @author Sean Dunne
 	 */
 	private class DeleteListener implements ActionListener {
 
-		private SearchResultsTableModel tableModel = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
-		private DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+		private final SearchResultsTableModel tableModel = (SearchResultsTableModel) App
+				.getDependancy(DEP_TABLE_MODEL);
+		private final DataService dataService = (DataService) App
+				.getDependancy(DEP_DATASERVICE);
 
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent event) {
-			final ArrayList<Contractor> deletedContractors = new ArrayList<>();
-			for (int i : table.getSelectedRows()) {
+		public void actionPerformed(final ActionEvent event) {
+			final ArrayList<Contractor> deletedContractors = new ArrayList<Contractor>();
+			final int[] selectedRows = SearchResultsButtonPanel.this.table
+					.getSelectedRows();
+
+			for (final int i : selectedRows) {
 				deletedContractors.add(this.tableModel.getContractorAt(i));
 			}
 
-			for (Contractor contractor : deletedContractors) {
+			for (final Contractor contractor : deletedContractors) {
 				try {
 					this.dataService.delete(contractor);
-				} catch (RecordNotFoundException e) {
+				} catch (final RecordNotFoundException e) {
 					App.showError(e.getMessage());
-				} catch (RemoteException e) {
+				} catch (final RemoteException e) {
 					App.showErrorAndExit("The remote server is no longer available.");
 				}
 			}
@@ -180,7 +208,8 @@ public class SearchResultsButtonPanel extends JPanel {
 	}
 
 	/**
-	 * This listener sets the state of the buttons when the user changes the selection on the JTable.
+	 * This listener sets the state of the buttons when the user changes the
+	 * selection on the JTable.
 	 * 
 	 * @author Sean Dunne
 	 */
@@ -189,23 +218,25 @@ public class SearchResultsButtonPanel extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			setButtonState();
+		public void valueChanged(final ListSelectionEvent e) {
+			SearchResultsButtonPanel.this.setButtonState();
 		}
 	}
 
 	/**
-	 * This listener sets the state of the buttons when the TableModel data changes.
+	 * This listener sets the state of the buttons when the TableModel data
+	 * changes.
 	 * 
 	 * @author Sean Dunne
 	 */
-	private class TableModelListener implements javax.swing.event.TableModelListener {
+	private class TableModelListener implements
+			javax.swing.event.TableModelListener {
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void tableChanged(TableModelEvent e) {
-			setButtonState();
+		public void tableChanged(final TableModelEvent e) {
+			SearchResultsButtonPanel.this.setButtonState();
 		}
 	}
 }

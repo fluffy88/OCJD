@@ -33,9 +33,9 @@ public class DataTest {
 
 	@Test
 	public void testRead() throws RecordNotFoundException, RemoteException {
-		dataService.lock(READ_NO);
-		String[] record = dataService.read(READ_NO);
-		dataService.unlock(READ_NO);
+		this.dataService.lock(READ_NO);
+		final String[] record = this.dataService.read(READ_NO);
+		this.dataService.unlock(READ_NO);
 
 		assertThat(record, is(notNullValue()));
 		assertThat(record.length, is(equalTo(6)));
@@ -49,30 +49,30 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testReadException() throws RecordNotFoundException, RemoteException {
-		dataService.lock(500000);
-		dataService.read(500000);
-		dataService.unlock(500000);
+		this.dataService.lock(500000);
+		this.dataService.read(500000);
+		this.dataService.unlock(500000);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testReadNegativeException() throws RecordNotFoundException, RemoteException {
-		dataService.lock(-1);
-		dataService.read(-1);
-		dataService.unlock(-1);
+		this.dataService.lock(-1);
+		this.dataService.read(-1);
+		this.dataService.unlock(-1);
 	}
 
 	@Test
 	public void testUpdate() throws RecordNotFoundException, RemoteException {
-		int recNo = 5;
+		final int recNo = 5;
 
-		String[] newRec = new String[] { "Slappers Plasters", "In your head", "Plastering", "13", "$15.50", "" };
+		final String[] newRec = new String[] { "Slappers Plasters", "In your head", "Plastering", "13", "$15.50", "" };
 
-		dataService.lock(recNo);
-		dataService.update(recNo, newRec);
-		dataService.unlock(recNo);
-		dataService.lock(recNo);
-		String[] afterRec = dataService.read(recNo);
-		dataService.unlock(recNo);
+		this.dataService.lock(recNo);
+		this.dataService.update(recNo, newRec);
+		this.dataService.unlock(recNo);
+		this.dataService.lock(recNo);
+		final String[] afterRec = this.dataService.read(recNo);
+		this.dataService.unlock(recNo);
 
 		assertThat(afterRec[0], is(equalTo(newRec[0])));
 		assertThat(afterRec[1], is(equalTo(newRec[1])));
@@ -84,62 +84,62 @@ public class DataTest {
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDelete() throws RecordNotFoundException, RemoteException {
-		dataService.lock(2);
-		dataService.delete(2);
-		dataService.unlock(2);
-		dataService.lock(2);
-		dataService.read(2);
-		dataService.unlock(2);
+		this.dataService.lock(2);
+		this.dataService.delete(2);
+		this.dataService.unlock(2);
+		this.dataService.lock(2);
+		this.dataService.read(2);
+		this.dataService.unlock(2);
 	}
 
 	@Test(expected = RecordNotFoundException.class)
 	public void testDeleteTwice() throws RecordNotFoundException, RemoteException {
-		dataService.lock(DELETE_TWICE_NO);
-		dataService.delete(DELETE_TWICE_NO);
-		dataService.unlock(DELETE_TWICE_NO);
-		dataService.lock(DELETE_TWICE_NO);
-		dataService.delete(DELETE_TWICE_NO);
-		dataService.unlock(DELETE_TWICE_NO);
+		this.dataService.lock(DELETE_TWICE_NO);
+		this.dataService.delete(DELETE_TWICE_NO);
+		this.dataService.unlock(DELETE_TWICE_NO);
+		this.dataService.lock(DELETE_TWICE_NO);
+		this.dataService.delete(DELETE_TWICE_NO);
+		this.dataService.unlock(DELETE_TWICE_NO);
 	}
 
 	@Test
 	public void testFindEmptyCriteria() throws RecordNotFoundException, RemoteException {
 		String[] criteria = new String[] { null, null, null, null, null, null };
-		int[] results = dataService.find(criteria);
+		int[] results = this.dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
 
 		criteria = new String[] { "", "", "", "", "", "" };
-		results = dataService.find(criteria);
+		results = this.dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
 	}
 
 	@Test
 	public void testFindCriteriaShort() throws RecordNotFoundException, RemoteException {
-		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS - 2];
-		int[] results = dataService.find(criteria);
+		final String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS - 2];
+		final int[] results = this.dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
 	}
 
 	@Test
 	public void testFindNoResults() throws RecordNotFoundException, RemoteException {
-		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
+		final String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "A fake name that doesn't exist in the database";
-		int[] empty = dataService.find(criteria);
+		final int[] empty = this.dataService.find(criteria);
 
 		assertArrayEquals(new int[] {}, empty);
 	}
 
 	@Test
 	public void testFindResults() throws RecordNotFoundException, RemoteException {
-		String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
+		final String[] criteria = new String[DBSchema.NUMBER_OF_FIELDS];
 		criteria[0] = "M";
-		int[] results = dataService.find(criteria);
+		final int[] results = this.dataService.find(criteria);
 		assertThat(results.length, is(not(0)));
 
-		for (int recNo : results) {
-			dataService.lock(recNo);
-			String[] record = dataService.read(recNo);
-			dataService.unlock(recNo);
+		for (final int recNo : results) {
+			this.dataService.lock(recNo);
+			final String[] record = this.dataService.read(recNo);
+			this.dataService.unlock(recNo);
 			assertThat(record, is(notNullValue()));
 			assertThat(record.length, is(equalTo(6)));
 			assertThat(record[0], is(not(equalTo(""))));
@@ -152,23 +152,23 @@ public class DataTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEmpty() throws DuplicateKeyException {
-		dataService.create(null);
+		this.dataService.create(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEmptyArray() throws DuplicateKeyException {
-		dataService.create(new String[] {});
+		this.dataService.create(new String[] {});
 	}
 
 	@Test
 	public void testCreate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
-		String streetNo = Integer.toString((int) (Math.random() * 100000));
-		String[] data = new String[] { "Jammies", String.format("The Shire %s", streetNo), "Door stop making/fitting", "57", "$0", "" };
-		int newRecNo = dataService.create(data);
+		final String streetNo = Integer.toString((int) (Math.random() * 100000));
+		final String[] data = new String[] { "Jammies", String.format("The Shire %s", streetNo), "Door stop making/fitting", "57", "$0", "" };
+		final int newRecNo = this.dataService.create(data);
 
-		dataService.lock(newRecNo);
-		String[] results = dataService.read(newRecNo);
-		dataService.unlock(newRecNo);
+		this.dataService.lock(newRecNo);
+		final String[] results = this.dataService.read(newRecNo);
+		this.dataService.unlock(newRecNo);
 		for (int i = 0; i < data.length; i++) {
 			assertSame(data[i], results[i]);
 		}
@@ -176,44 +176,44 @@ public class DataTest {
 
 	@Test(expected = DuplicateKeyException.class)
 	public void testCreateDuplicate() throws DuplicateKeyException, RecordNotFoundException, RemoteException {
-		String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
+		final String[] data = new String[] { "Jammies_DUPPED", "The Shire", "Door stop making/fitting", "57", "$0", "" };
 
-		int recNo = dataService.create(data);
-		dataService.lock(recNo);
-		String[] results = dataService.read(recNo);
-		dataService.unlock(recNo);
+		final int recNo = this.dataService.create(data);
+		this.dataService.lock(recNo);
+		final String[] results = this.dataService.read(recNo);
+		this.dataService.unlock(recNo);
 		for (int i = 0; i < data.length; i++) {
 			assertSame(data[i], results[i]);
 		}
 
-		dataService.create(data);
+		this.dataService.create(data);
 	}
 
 	@Test
 	public void testLock() throws RemoteException, RecordNotFoundException {
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
-		dataService.lock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(true)));
-		dataService.unlock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
+		this.dataService.lock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(true)));
+		this.dataService.unlock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
 	}
 
 	@Test
 	public void testUnlock() throws RemoteException, RecordNotFoundException {
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
-		dataService.lock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(true)));
-		dataService.unlock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
+		this.dataService.lock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(true)));
+		this.dataService.unlock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
 	}
 
 	@Test
 	public void testIsLocked() throws RemoteException, RecordNotFoundException {
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
-		dataService.lock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(true)));
-		dataService.unlock(18);
-		assertThat(dataService.isLocked(18), is(equalTo(false)));
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
+		this.dataService.lock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(true)));
+		this.dataService.unlock(18);
+		assertThat(this.dataService.isLocked(18), is(equalTo(false)));
 	}
 
 }

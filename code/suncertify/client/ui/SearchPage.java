@@ -5,7 +5,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /**
- * This class contains all the client search components, including the search boxes and the result table.
+ * This class contains all the client search components, including the search
+ * boxes and the result table.
  * 
  * @author Sean Dunne
  */

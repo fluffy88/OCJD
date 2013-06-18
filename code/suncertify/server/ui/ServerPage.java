@@ -23,7 +23,8 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This class contains all the UI components that make up the server user interface.
+ * This class contains all the UI components that make up the server user
+ * interface.
  * 
  * @author Sean Dunne
  */
@@ -39,43 +40,44 @@ public class ServerPage extends JPanel {
 	 * Create a Page containing the server ui components.
 	 */
 	public ServerPage() {
-		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
+		final BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
 
-		createDBLocationPanel();
-		createServerButtons();
+		this.createDBLocationPanel();
+		this.createServerButtons();
 	}
 
 	/**
-	 * This method will create the ui to display and change the database location.
+	 * This method will create the ui to display and change the database
+	 * location.
 	 */
 	private void createDBLocationPanel() {
-		JPanel middle = new JPanel();
-		GridBagLayout middleLayout = new GridBagLayout();
+		final JPanel middle = new JPanel();
+		final GridBagLayout middleLayout = new GridBagLayout();
 		middle.setLayout(middleLayout);
 
-		JLabel dbFileLocLbl = new JLabel("Database file:");
+		final JLabel dbFileLocLbl = new JLabel("Database file:");
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.insets = new Insets(5, 5, 5, 5);
 		middle.add(dbFileLocLbl, c);
 
-		dbFileLocTxt = new JTextField(Properties.get(PROP_DB_LOCATION));
-		dbFileLocTxt.setEditable(false);
+		this.dbFileLocTxt = new JTextField(Properties.get(PROP_DB_LOCATION));
+		this.dbFileLocTxt.setEditable(false);
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.insets = new Insets(5, 0, 5, 0);
-		middle.add(dbFileLocTxt, c);
+		middle.add(this.dbFileLocTxt, c);
 
-		browseBtn = new JButton("Locate");
-		browseBtn.setMnemonic(KeyEvent.VK_L);
-		browseBtn.addActionListener(new BrowseListener());
+		this.browseBtn = new JButton("Locate");
+		this.browseBtn.setMnemonic(KeyEvent.VK_L);
+		this.browseBtn.addActionListener(new BrowseListener());
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.insets = new Insets(5, 5, 5, 5);
-		middle.add(browseBtn, c);
+		middle.add(this.browseBtn, c);
 		this.add(middle);
 	}
 
@@ -83,20 +85,20 @@ public class ServerPage extends JPanel {
 	 * This method creates a servers buttons, start and stop.
 	 */
 	private void createServerButtons() {
-		JPanel bottom = new JPanel();
-		FlowLayout layout = new FlowLayout();
+		final JPanel bottom = new JPanel();
+		final FlowLayout layout = new FlowLayout();
 		layout.setAlignment(FlowLayout.RIGHT);
 		bottom.setLayout(layout);
 
-		startBtn = new JButton("Start");
-		startBtn.setMnemonic(KeyEvent.VK_S);
-		startBtn.addActionListener(new StartListener());
-		bottom.add(startBtn);
+		this.startBtn = new JButton("Start");
+		this.startBtn.setMnemonic(KeyEvent.VK_S);
+		this.startBtn.addActionListener(new StartListener());
+		bottom.add(this.startBtn);
 
-		shutdownBtn = new JButton("Shutdown");
-		shutdownBtn.setMnemonic(KeyEvent.VK_D);
-		shutdownBtn.addActionListener(new ShutdownListener());
-		bottom.add(shutdownBtn);
+		this.shutdownBtn = new JButton("Shutdown");
+		this.shutdownBtn.setMnemonic(KeyEvent.VK_D);
+		this.shutdownBtn.addActionListener(new ShutdownListener());
+		bottom.add(this.shutdownBtn);
 		this.add(bottom);
 	}
 
@@ -110,10 +112,10 @@ public class ServerPage extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			String location = DatabaseLocator.getLocation();
+		public void actionPerformed(final ActionEvent arg0) {
+			final String location = DatabaseLocator.getLocation();
 			if (location != null) {
-				dbFileLocTxt.setText(location);
+				ServerPage.this.dbFileLocTxt.setText(location);
 			}
 		}
 	}
@@ -128,15 +130,16 @@ public class ServerPage extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (dbFileLocTxt.getText().equals("")) {
+		public void actionPerformed(final ActionEvent e) {
+			if (ServerPage.this.dbFileLocTxt.getText().equals("")) {
 				App.showError("You must choose a database file before the server can start.");
 			} else {
-				Application server = (Application) App.getDependancy(DEP_APPLICATION);
+				final Application server = (Application) App
+						.getDependancy(DEP_APPLICATION);
 				server.start();
 
-				startBtn.setEnabled(false);
-				browseBtn.setEnabled(false);
+				ServerPage.this.startBtn.setEnabled(false);
+				ServerPage.this.browseBtn.setEnabled(false);
 			}
 		}
 	}
@@ -151,7 +154,7 @@ public class ServerPage extends JPanel {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			System.exit(0);
 		}
 	}

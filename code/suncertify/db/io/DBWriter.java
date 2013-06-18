@@ -22,8 +22,8 @@ import suncertify.shared.App;
  */
 public class DBWriter {
 
-	private RandomAccessFile is;
-	private ReentrantLock lock = new ReentrantLock();
+	private final RandomAccessFile is;
+	private final ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * Create new instance of the database writer.
@@ -31,7 +31,7 @@ public class DBWriter {
 	 * @param is
 	 *            The file which to write too.
 	 */
-	public DBWriter(RandomAccessFile is) {
+	public DBWriter(final RandomAccessFile is) {
 		this.is = is;
 	}
 
@@ -44,67 +44,71 @@ public class DBWriter {
 	 *            The fields of the record to be written.
 	 * @return true if the write succeeded otherwise false.
 	 */
-	public boolean write(int recNo, String[] data) {
+	public boolean write(final int recNo, final String[] data) {
 		try {
-			int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
+			final int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 
 			this.lock.lock();
 			this.writeRecord(pos, data);
 			this.lock.unlock();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}
 
 	/**
-	 * Delete a record in the database. This will only mark a record as deleted, it does not remove the records data from the file.
+	 * Delete a record in the database. This will only mark a record as deleted,
+	 * it does not remove the records data from the file.
 	 * 
 	 * @param recNo
 	 *            The record number of the record to be deleted.
 	 * @return true if the delete succeeded otherwise false.
 	 */
-	public boolean delete(int recNo) {
-		int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
+	public boolean delete(final int recNo) {
+		final int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
 		try {
 			this.lock.lock();
-			is.seek(pos);
-			is.writeShort(RECORD_DELETED);
+			this.is.seek(pos);
+			this.is.writeShort(RECORD_DELETED);
 			this.lock.unlock();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}
 
 	/**
-	 * Create a new record in the database. This is reuse a deleted record if it finds a record marked as deleted.
+	 * Create a new record in the database. This is reuse a deleted record if it
+	 * finds a record marked as deleted.
 	 * 
 	 * @param data
 	 *            The fields of the new record to be created.
 	 * @return The record number of the newly created record.
 	 */
-	public int create(String[] data) {
+	public int create(final String[] data) {
 		try {
 			this.lock.lock();
-			is.seek(START_OF_RECORDS);
+			this.is.seek(START_OF_RECORDS);
 
-			while (is.getFilePointer() != is.length()) {
-				long recordPos = is.getFilePointer();
-				int flag = is.readShort();
+			while (this.is.getFilePointer() != this.is.length()) {
+				final long recordPos = this.is.getFilePointer();
+				final int flag = this.is.readShort();
 				if (flag != RECORD_VALID) {
 					this.writeRecord(recordPos, data);
 
-					long recordIndex = (recordPos - START_OF_RECORDS) / RECORD_LENGTH;
+					final long recordIndex = (recordPos - START_OF_RECORDS)
+							/ RECORD_LENGTH;
 					return (int) recordIndex;
 				}
 				// skip the record
-				is.seek(is.getFilePointer() + RECORD_LENGTH - NUM_BYTES_RECORD_DELETED_FLAG);
+				this.is.seek((this.is.getFilePointer() + RECORD_LENGTH)
+						- NUM_BYTES_RECORD_DELETED_FLAG);
 			}
 
-			this.writeRecord(is.getFilePointer(), data);
+			this.writeRecord(this.is.getFilePointer(), data);
 			this.lock.unlock();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			App.showErrorAndExit("Cannot write to database file.");
 		}
 		return -1;
@@ -120,14 +124,16 @@ public class DBWriter {
 	 * @throws IOException
 	 *             If the method fails to write to the database file.
 	 */
-	private void writeRecord(long pos, String[] data) throws IOException {
-		is.seek(pos);
+	private void writeRecord(final long pos, final String[] data)
+			throws IOException {
+		this.is.seek(pos);
 
 		// write 2 byte flag to indicate not deleted
-		is.writeShort(RECORD_VALID);
+		this.is.writeShort(RECORD_VALID);
 		for (int i = 0; i < data.length; i++) {
-			byte[] updatedData = Arrays.copyOf(data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
-			is.write(updatedData);
+			final byte[] updatedData = Arrays.copyOf(
+					data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
+			this.is.write(updatedData);
 		}
 	}
 }

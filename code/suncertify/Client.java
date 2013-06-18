@@ -27,7 +27,7 @@ public class Client implements Application {
 	 */
 	@Override
 	public void launch() {
-		hostnameDialog = NetworkedClientUI.start();
+		this.hostnameDialog = NetworkedClientUI.start();
 		App.publish(DEP_APPLICATION, this);
 	}
 
@@ -36,16 +36,16 @@ public class Client implements Application {
 	 */
 	@Override
 	public void start() {
-		final DataService dataService = hostnameDialog.getDataService();
+		final DataService dataService = this.hostnameDialog.getDataService();
 		App.publish(DEP_DATASERVICE, dataService);
 
 		ClientUI.start();
 
 		try {
-			rmiCallback = new ServerUpdateObserver();
-			UnicastRemoteObject.exportObject(rmiCallback);
-			dataService.addObserver(rmiCallback);
-		} catch (RemoteException e) {
+			this.rmiCallback = new ServerUpdateObserver();
+			UnicastRemoteObject.exportObject(this.rmiCallback);
+			dataService.addObserver(this.rmiCallback);
+		} catch (final RemoteException e) {
 			App.showErrorAndExit("Could not subscribe to Server.");
 		}
 
@@ -53,8 +53,8 @@ public class Client implements Application {
 	}
 
 	/**
-	 * This method is a simple method to add a shutdown hook that is responsible for cleaning up before this application is ready to
-	 * shutdown.
+	 * This method is a simple method to add a shutdown hook that is responsible
+	 * for cleaning up before this application is ready to shutdown.
 	 */
 	private void setShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -63,10 +63,11 @@ public class Client implements Application {
 			 */
 			@Override
 			public void run() {
-				final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+				final DataService dataService = (DataService) App
+						.getDependancy(DEP_DATASERVICE);
 				try {
-					dataService.deleteObserver(rmiCallback);
-				} catch (RemoteException e) {
+					dataService.deleteObserver(Client.this.rmiCallback);
+				} catch (final RemoteException e) {
 					App.logError("Could not contact the Server when attempting to unsubscribe.");
 				}
 			}

@@ -1,17 +1,20 @@
 package suncertify;
 
 /**
- * A factory class used to create an instance of {@link Application} based on the start mode of the application.
+ * A factory class used to create an instance of {@link Application} based on
+ * the start mode of the application.
  * 
  * @author Sean Dunne
  */
 public class ApplicationFactory {
 
 	/**
-	 * This is the factory method responsible for creating new instances of {@link Application}. Start mode can be one of
+	 * This is the factory method responsible for creating new instances of
+	 * {@link Application}. Start mode can be one of
 	 * <ul>
 	 * <li>'server' - creates a networked {@link Server}</li>
-	 * <li>'alone' - creates a {@link StandAlone} that completely bypasses networking</li>
+	 * <li>'alone' - creates a {@link StandAlone} that completely bypasses
+	 * networking</li>
 	 * <li>'' - an empty string creates a networked {@link Client}</li>
 	 * </ul>
 	 * 

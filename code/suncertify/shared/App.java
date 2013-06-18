@@ -10,8 +10,9 @@ import javax.swing.JOptionPane;
 import suncertify.Application;
 
 /**
- * This class is a utility class for the overall application. Providing convenience methods for dependency injection, logging and displaying
- * error messages.
+ * This class is a utility class for the overall application. Providing
+ * convenience methods for dependency injection, logging and displaying error
+ * messages.
  * 
  * @author Sean Dunne
  */
@@ -24,7 +25,10 @@ public class App {
 
 	/** The name used to publish the DataService instance. */
 	public static final String DEP_DATASERVICE = "dataservice";
-	/** The name used to publish the currently running instance of {@link Application}. */
+	/**
+	 * The name used to publish the currently running instance of
+	 * {@link Application}.
+	 */
 	public static final String DEP_APPLICATION = "application";
 	/** The name used to publish the JTable instance. */
 	public static final String DEP_TABLE = "search.results.table";
@@ -35,11 +39,15 @@ public class App {
 	public static final String PROP_SERVER_HOSTNAME = "server.hostname";
 	/** The name used to persist the location of the database file. */
 	public static final String PROP_DB_LOCATION = "database.location";
-	/** The name used to persist the whether the state of the Exact match checkbox on the Client UI. */
+	/**
+	 * The name used to persist the whether the state of the Exact match
+	 * checkbox on the Client UI.
+	 */
 	public static final String PROP_EXACT_MATCH = "exact.match.enabled";
 
 	/**
-	 * This method globally publishes objects that can be used by any other classes in the application.
+	 * This method globally publishes objects that can be used by any other
+	 * classes in the application.
 	 * 
 	 * @param key
 	 *            The String used to identify the published object.
@@ -51,7 +59,8 @@ public class App {
 	}
 
 	/**
-	 * The method is used to get an object that has been published via the {@link #publish(String, Object)} method.
+	 * The method is used to get an object that has been published via the
+	 * {@link #publish(String, Object)} method.
 	 * 
 	 * @param key
 	 *            The key used to publish the object.
@@ -69,25 +78,30 @@ public class App {
 	 */
 	public static void showError(final String msg) {
 		logWarning(msg);
-		JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
-	 * As with {@link #showError(String)} this method is a convenience method to show an error dialog to the user. However once the user
-	 * dismisses the error dialog this method will then exit the application with an error code of 1.
+	 * As with {@link #showError(String)} this method is a convenience method to
+	 * show an error dialog to the user. However once the user dismisses the
+	 * error dialog this method will then exit the application with an error
+	 * code of 1.
 	 * 
 	 * @param msg
 	 *            The message you wish to display before exiting.
 	 */
 	public static void showErrorAndExit(final String msg) {
 		logError(msg);
-		JOptionPane.showMessageDialog(null, msg + "\nApplication will now exit!", "Fatal error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg
+				+ "\nApplication will now exit!", "Fatal error",
+				JOptionPane.ERROR_MESSAGE);
 		System.exit(2);
 	}
 
 	/**
-	 * This is a convenience method to log a warning message to the application log. It uses the {@link Level#WARNING} as it's logging
-	 * level.
+	 * This is a convenience method to log a warning message to the application
+	 * log. It uses the {@link Level#WARNING} as it's logging level.
 	 * 
 	 * @param msg
 	 *            The message to log.
@@ -97,8 +111,8 @@ public class App {
 	}
 
 	/**
-	 * This is a convenience method to log an application error to the application log. It uses the {@link Level#SEVERE} as it's logging
-	 * level.
+	 * This is a convenience method to log an application error to the
+	 * application log. It uses the {@link Level#SEVERE} as it's logging level.
 	 * 
 	 * @param msg
 	 *            The message to log.
@@ -108,7 +122,8 @@ public class App {
 	}
 
 	/**
-	 * This is a convenience method to log a message with the specified log severity to the application log.
+	 * This is a convenience method to log a message with the specified log
+	 * severity to the application log.
 	 * 
 	 * @param msg
 	 *            The message to log.

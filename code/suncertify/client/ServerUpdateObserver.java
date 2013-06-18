@@ -6,7 +6,8 @@ import suncertify.shared.App;
 import suncertify.shared.Contractor;
 
 /**
- * Class to handle the updating of the client when an update occurs to the server database.
+ * Class to handle the updating of the client when an update occurs to the
+ * server database.
  * 
  * @author Sean Dunne
  */
@@ -17,7 +18,8 @@ public class ServerUpdateObserver implements RemoteObserver {
 	 */
 	@Override
 	public void update(final Contractor contractor, final String cmd) {
-		final SearchResultsTableModel model = (SearchResultsTableModel) App.getDependancy(DEP_TABLE_MODEL);
+		final SearchResultsTableModel model = (SearchResultsTableModel) App
+				.getDependancy(DEP_TABLE_MODEL);
 
 		switch (cmd) {
 		case CREATE:

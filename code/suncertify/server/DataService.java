@@ -10,7 +10,8 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.shared.Contractor;
 
 /**
- * This is the main interface of the server side. It specifies how clients can interact with the server.
+ * This is the main interface of the server side. It specifies how clients can
+ * interact with the server.
  * 
  * @author Sean Dunne
  */
@@ -23,11 +24,13 @@ public interface DataService extends Remote {
 	 *            The record number of the Contractor.
 	 * @return The Contractor object.
 	 * @throws RecordNotFoundException
-	 *             When no Contractor was found with the specified record number.
+	 *             When no Contractor was found with the specified record
+	 *             number.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	Contractor read(final int recNo) throws RecordNotFoundException, RemoteException;
+	Contractor read(final int recNo) throws RecordNotFoundException,
+			RemoteException;
 
 	/**
 	 * This method will update the Contractor in the database.
@@ -35,11 +38,13 @@ public interface DataService extends Remote {
 	 * @param record
 	 *            The Contractor object to update.
 	 * @throws RecordNotFoundException
-	 *             When no Contractor was found that matches the record number of the specified Contractor object.
+	 *             When no Contractor was found that matches the record number
+	 *             of the specified Contractor object.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	void update(final Contractor record) throws RecordNotFoundException, RemoteException;
+	void update(final Contractor record) throws RecordNotFoundException,
+			RemoteException;
 
 	/**
 	 * This method deletes a Contractor from the database.
@@ -47,24 +52,30 @@ public interface DataService extends Remote {
 	 * @param record
 	 *            The Contractor object to delete.
 	 * @throws RecordNotFoundException
-	 *             When no Contractor was found that matches the record number of the specified Contractor object.
+	 *             When no Contractor was found that matches the record number
+	 *             of the specified Contractor object.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	void delete(final Contractor record) throws RecordNotFoundException, RemoteException;
+	void delete(final Contractor record) throws RecordNotFoundException,
+			RemoteException;
 
 	/**
-	 * This method searches the database for records that match the given search criteria.
+	 * This method searches the database for records that match the given search
+	 * criteria.
 	 * 
 	 * @param criteria
-	 *            An array with the search criteria for each field of a Contractor.
+	 *            An array with the search criteria for each field of a
+	 *            Contractor.
 	 * @param exactMatch
-	 *            If the results should only contain Contractors whose fields exactly match the search criteria.
+	 *            If the results should only contain Contractors whose fields
+	 *            exactly match the search criteria.
 	 * @return All the Contractor objects that match the criteria.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	List<Contractor> find(final String[] criteria, boolean exactMatch) throws RemoteException;
+	List<Contractor> find(final String[] criteria, boolean exactMatch)
+			throws RemoteException;
 
 	/**
 	 * This method will create a new Contractor in the database.
@@ -77,10 +88,12 @@ public interface DataService extends Remote {
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	int create(final String[] data) throws DuplicateKeyException, RemoteException;
+	int create(final String[] data) throws DuplicateKeyException,
+			RemoteException;
 
 	/**
-	 * This method allows clients register to receive updates when the database records are changed.
+	 * This method allows clients register to receive updates when the database
+	 * records are changed.
 	 * 
 	 * @param o
 	 *            The client object that will be informed of database changes.
@@ -90,7 +103,8 @@ public interface DataService extends Remote {
 	void addObserver(RemoteObserver o) throws RemoteException;
 
 	/**
-	 * This method allows clients removed themselves for receiving updates for the server.
+	 * This method allows clients removed themselves for receiving updates for
+	 * the server.
 	 * 
 	 * @param o
 	 *            The client object that is registered with the server.

@@ -21,11 +21,13 @@ import suncertify.shared.Properties;
  * 
  * @author Sean Dunne
  */
-public class SearchResultsTableModel extends AbstractTableModel implements TableModel {
+public class SearchResultsTableModel extends AbstractTableModel implements
+		TableModel {
 
 	private static final long serialVersionUID = -6527725876159983929L;
 
-	private final DataService dataService = (DataService) App.getDependancy(DEP_DATASERVICE);
+	private final DataService dataService = (DataService) App
+			.getDependancy(DEP_DATASERVICE);
 	private final ArrayList<Contractor> data = new ArrayList<Contractor>();
 
 	private final ArrayList<String> columns = new ArrayList<>();
@@ -47,19 +49,22 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 * Create and populate the table model.
 	 */
 	public SearchResultsTableModel() {
-		columns.add(CONTRACTOR_NAME);
-		columns.add(CITY);
-		columns.add(TYPES_OF_WORK);
-		columns.add(NUMBER_OF_STAFF);
-		columns.add(HOURLY_CHARGE);
-		columns.add(CUSTOMER_ID);
+		this.columns.add(CONTRACTOR_NAME);
+		this.columns.add(CITY);
+		this.columns.add(TYPES_OF_WORK);
+		this.columns.add(NUMBER_OF_STAFF);
+		this.columns.add(HOURLY_CHARGE);
+		this.columns.add(CUSTOMER_ID);
 
 		try {
-			final List<Contractor> contractors = dataService.find(new String[1], Properties.getBoolean(PROP_EXACT_MATCH));
+			final List<Contractor> contractors = this.dataService.find(
+					new String[1], Properties.getBoolean(PROP_EXACT_MATCH));
 			this.addAll(contractors);
-		} catch (RemoteException e) {
-			// could not get records, add empty data so table headers show up and can be resized.
-			this.data.add(new Contractor(0, null, null, null, null, null, null));
+		} catch (final RemoteException e) {
+			// could not get records, add empty data so table headers show up
+			// and can be resized.
+			this.data
+					.add(new Contractor(0, null, null, null, null, null, null));
 		}
 	}
 
@@ -79,7 +84,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 */
 	public void add(final Contractor rec) {
 		this.data.add(rec);
-		int index = this.getContractorIndex(rec);
+		final int index = this.getContractorIndex(rec);
 		this.fireTableRowsInserted(index, index);
 	}
 
@@ -103,7 +108,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 *            The Contractor to remove.
 	 */
 	public void remove(final Contractor rec) {
-		int index = this.getContractorIndex(rec);
+		final int index = this.getContractorIndex(rec);
 		this.data.remove(index);
 		this.fireTableRowsDeleted(index, index);
 	}
@@ -115,7 +120,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 *            The Contractor to update.
 	 */
 	public void update(final Contractor rec) {
-		int index = this.getContractorIndex(rec);
+		final int index = this.getContractorIndex(rec);
 		this.data.set(index, rec);
 		this.fireTableRowsUpdated(index, index);
 	}
@@ -127,7 +132,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 *            The table row.
 	 * @return The Contractor displayed at this row in the table.
 	 */
-	public Contractor getContractorAt(int row) {
+	public Contractor getContractorAt(final int row) {
 		return this.data.get(row);
 	}
 
@@ -140,7 +145,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 */
 	private int getContractorIndex(final Contractor rec) {
 		for (int index = 0; index < this.data.size(); index++) {
-			Contractor c = this.data.get(index);
+			final Contractor c = this.data.get(index);
 			if (c.getRecordId() == rec.getRecordId()) {
 				return index;
 			}
@@ -177,7 +182,7 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 */
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		if (rowIndex >= 0 && rowIndex < this.data.size()) {
+		if ((rowIndex >= 0) && (rowIndex < this.data.size())) {
 			return this.data.get(rowIndex).toArray()[columnIndex];
 		}
 		return null;
@@ -188,19 +193,20 @@ public class SearchResultsTableModel extends AbstractTableModel implements Table
 	 */
 	@Override
 	public void setValueAt(final Object value, final int row, final int column) {
-		if (this.data != null && row < this.data.size()) {
+		if ((this.data != null) && (row < this.data.size())) {
 			final Contractor contractor = this.data.get(row);
 			final String updatedValue = ((String) value).trim();
 
 			final String[] record = contractor.toArray();
 			record[column] = updatedValue;
-			final Contractor updatedContractor = new Contractor(contractor.getRecordId(), record);
+			final Contractor updatedContractor = new Contractor(
+					contractor.getRecordId(), record);
 
 			try {
-				dataService.update(updatedContractor);
-			} catch (RecordNotFoundException e) {
+				this.dataService.update(updatedContractor);
+			} catch (final RecordNotFoundException e) {
 				App.showError(e.getMessage());
-			} catch (RemoteException e) {
+			} catch (final RemoteException e) {
 				App.showErrorAndExit("The remote server is no longer available.");
 			}
 		}

@@ -26,7 +26,7 @@ public class StandAlone implements Application {
 	 */
 	@Override
 	public void launch() {
-		serverUI = ServerUI.start();
+		this.serverUI = ServerUI.start();
 
 		App.publish(DEP_APPLICATION, this);
 	}
@@ -39,19 +39,20 @@ public class StandAlone implements Application {
 		final DataService dataService = new DataServiceImpl();
 		this.publish(dataService);
 
-		serverUI.dispose();
+		this.serverUI.dispose();
 		ClientUI.start();
 
 		try {
 			final ServerUpdateObserver callback = new ServerUpdateObserver();
 			dataService.addObserver(callback);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			// will not be thrown in StandAlone mode
 		}
 	}
 
 	/**
-	 * This method is responsible for publishing the {@link DataService} interface via dependency injection for the local client to use.
+	 * This method is responsible for publishing the {@link DataService}
+	 * interface via dependency injection for the local client to use.
 	 * 
 	 * @param dataService
 	 *            The local server interface to be published.

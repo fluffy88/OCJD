@@ -41,17 +41,19 @@ public class Server implements Application {
 	}
 
 	/**
-	 * This method is responsible for publishing the {@link DataService} interface via RMI for networked clients to connect to.
+	 * This method is responsible for publishing the {@link DataService}
+	 * interface via RMI for networked clients to connect to.
 	 * 
 	 * @param dataService
 	 *            The remote server interface to be published.
 	 */
 	private void publish(final DataService dataService) {
 		try {
-			final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService, Registry.REGISTRY_PORT);
+			final DataService rmiStub = (DataService) UnicastRemoteObject
+					.exportObject(dataService, Registry.REGISTRY_PORT);
 			final Registry registry = this.getRMIRegistry();
 			registry.rebind(RMI_SERVER, rmiStub);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			App.showErrorAndExit("Cannot publish the RMI server, check no other applications are using the default RMI port 1099.");
 		}
 	}
@@ -59,9 +61,11 @@ public class Server implements Application {
 	/**
 	 * This method is responsible for creating a new RMI registry.
 	 * 
-	 * @return A reference to an RMI registry that can be used to publish objects over RMI.
+	 * @return A reference to an RMI registry that can be used to publish
+	 *         objects over RMI.
 	 * @throws RemoteException
-	 *             If an RMI registry is already started on the default RMI port.
+	 *             If an RMI registry is already started on the default RMI
+	 *             port.
 	 */
 	private Registry getRMIRegistry() throws RemoteException {
 		return LocateRegistry.createRegistry(Registry.REGISTRY_PORT);

@@ -10,7 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * This class is responsible for persisting properties of the application between launches.
+ * This class is responsible for persisting properties of the application
+ * between launches.
  * 
  * @author Sean Dunne
  */
@@ -34,31 +35,35 @@ public class Properties {
 	}
 
 	/**
-	 * This method is responsible for initializing the instance. It should read up all the persisted properties and make them available for
-	 * use by the application.
+	 * This method is responsible for initializing the instance. It should read
+	 * up all the persisted properties and make them available for use by the
+	 * application.
 	 */
 	private void init() {
 		this.props = new java.util.Properties();
 
-		File propsFile = new File(PROPS_FILE);
+		final File propsFile = new File(PROPS_FILE);
 		if (propsFile.exists()) {
-			try (InputStream stream = new BufferedInputStream(new FileInputStream(propsFile))) {
+			try (InputStream stream = new BufferedInputStream(
+					new FileInputStream(propsFile))) {
 				this.props.load(stream);
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				App.showError("Cannot read the properties file, it is corrupted.\nTherefore all application settings will return to default.");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				App.showError("Cannot open the properties file for reading.\nTherefore all application settings will return to default.");
 			}
 		}
 	}
 
 	/**
-	 * This method can be called to force the properties in memory to be written to disk.
+	 * This method can be called to force the properties in memory to be written
+	 * to disk.
 	 */
 	public static void save() {
-		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(PROPS_FILE))) {
+		try (OutputStream stream = new BufferedOutputStream(
+				new FileOutputStream(PROPS_FILE))) {
 			instance.props.store(stream, null);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			App.showError("Could not write to the properties file.\nNo changes to application properties will be recorded.");
 		}
 	}
@@ -70,20 +75,22 @@ public class Properties {
 	 *            The string used to identify this property.
 	 * @return The property value.
 	 */
-	public static String get(String key) {
+	public static String get(final String key) {
 		return instance.props.getProperty(key);
 	}
 
 	/**
-	 * Get the value of a saved property. If the property does not exist set the supplied value as the default value.
+	 * Get the value of a saved property. If the property does not exist set the
+	 * supplied value as the default value.
 	 * 
 	 * @param key
 	 *            The string used to identify this property.
 	 * @param defaultValue
-	 *            If the property has no value, set this as it's value and return it.
+	 *            If the property has no value, set this as it's value and
+	 *            return it.
 	 * @return The property value.
 	 */
-	public static String get(String key, String defaultValue) {
+	public static String get(final String key, final String defaultValue) {
 		String value = instance.props.getProperty(key);
 		if (value == null) {
 			set(key, defaultValue);
@@ -100,7 +107,7 @@ public class Properties {
 	 * @param value
 	 *            The value to set for this property.
 	 */
-	public static void set(String key, String value) {
+	public static void set(final String key, final String value) {
 		instance.props.setProperty(key, value);
 		save();
 	}
@@ -112,21 +119,24 @@ public class Properties {
 	 *            The string used to identify this property.
 	 * @return A boolean representing this property.
 	 */
-	public static boolean getBoolean(String key) {
+	public static boolean getBoolean(final String key) {
 		return Boolean.parseBoolean(get(key));
 	}
 
 	/**
-	 * Get the boolean value of a property. If the property does not exist set the supplied value as the default value.
+	 * Get the boolean value of a property. If the property does not exist set
+	 * the supplied value as the default value.
 	 * 
 	 * @param key
 	 *            The string used to identify this property.
 	 * @param defaultValue
-	 *            If the property has no value, set this as it's value and return it.
+	 *            If the property has no value, set this as it's value and
+	 *            return it.
 	 * @return A boolean representing this property.
 	 */
-	public static boolean getBoolean(String key, boolean defaultValue) {
-		String value = get(key, Boolean.toString(defaultValue));
+	public static boolean getBoolean(final String key,
+			final boolean defaultValue) {
+		final String value = get(key, Boolean.toString(defaultValue));
 		return Boolean.parseBoolean(value);
 	}
 
@@ -138,7 +148,7 @@ public class Properties {
 	 * @param value
 	 *            The value to set for this property.
 	 */
-	public static void setBoolean(String key, boolean value) {
+	public static void setBoolean(final String key, final boolean value) {
 		set(key, Boolean.toString(value));
 	}
 }
