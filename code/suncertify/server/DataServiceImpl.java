@@ -35,7 +35,7 @@ public class DataServiceImpl implements DataService {
 	 * Construct a new {@link DataService} object that acts as an adapter for {@link DBMain}.
 	 */
 	public DataServiceImpl() {
-		this.data = DAOFactory.getInstance().getDataService();
+		this.data = DAOFactory.getDataService();
 		this.executor = Executors.newFixedThreadPool(5);
 		this.observers = Collections.synchronizedList(new ArrayList<RemoteObserver>());
 	}

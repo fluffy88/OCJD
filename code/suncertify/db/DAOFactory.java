@@ -6,54 +6,41 @@ import suncertify.shared.App;
 import suncertify.shared.Properties;
 
 /**
- * This is a factory class responsible for creating and retrieving an instance of DBMain.java.
+ * This is a factory class responsible for creating and retrieving an instance of {@link DBMain}.
  * 
  * @author Sean Dunne
  */
-public enum DAOFactory {
+public class DAOFactory {
 
-	instance;
-
-	private final DBMain dataService;
-	private String location;
+	private static DBMain dataService;
 
 	/**
-	 * This class is a singleton therefore it's an enum with a private constructor.
-	 */
-	private DAOFactory() {
-		this.getDBLocation();
-		dataService = new Data(location);
-	}
-
-	/**
-	 * This is the factory method to get the instance of the Data factory.
-	 * 
-	 * @return The factory instance.
-	 */
-	public static DAOFactory getInstance() {
-		return instance;
-	}
-
-	/**
-	 * Getter for the instance of the Data class DBMain.
+	 * Factory method for getting an instance of {@link DBMain}.
 	 * 
 	 * @return An instance of DBMain.
 	 */
-	public DBMain getDataService() {
-		return this.dataService;
+	public static DBMain getDataService() {
+		if (dataService == null) {
+			final String location = getDBLocation();
+			dataService = new Data(location);
+		}
+		return dataService;
 	}
 
 	/**
-	 * This method is responsible for getting to location of the database file, used to construct the instance of DBMain.
+	 * This method is responsible for getting the location of the database file which is used to construct the instance of DBMain.
+	 * 
+	 * @return The location of the database file.
 	 */
-	private void getDBLocation() {
-		this.location = Properties.get(PROP_DB_LOCATION);
+	private static String getDBLocation() {
+		String location = Properties.get(PROP_DB_LOCATION);
 
-		if (this.location == null) {
-			this.location = DatabaseLocator.getLocation();
-			if (this.location == null) {
+		if (location == null) {
+			location = DatabaseLocator.getLocation();
+			if (location == null) {
 				App.showErrorAndExit("You did not select a database location.");
 			}
 		}
+		return location;
 	}
 }

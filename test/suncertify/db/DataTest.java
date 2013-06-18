@@ -24,7 +24,7 @@ public class DataTest {
 	private static final int READ_NO = 11;
 	private static final int DELETE_TWICE_NO = 27;
 
-	private final DBMain dataService = DAOFactory.getInstance().getDataService();
+	private final DBMain dataService = DAOFactory.getDataService();
 
 	@BeforeClass
 	public static void setupClass() {

@@ -32,7 +32,7 @@ import suncertify.shared.Properties;
  */
 public class DataClassTest {
 
-	private final DBMain data = DAOFactory.getInstance().getDataService();
+	private final DBMain data = DAOFactory.getDataService();
 
 	@BeforeClass
 	public static void setupClass() {

@@ -5,18 +5,7 @@ package suncertify;
  * 
  * @author Sean Dunne
  */
-public enum ApplicationFactory {
-
-	instance;
-
-	/**
-	 * A static getter for getting the single instance of this factory class.
-	 * 
-	 * @return The ApplicationFactory singleton.
-	 */
-	public static ApplicationFactory getInstance() {
-		return instance;
-	}
+public class ApplicationFactory {
 
 	/**
 	 * This is the factory method responsible for creating new instances of {@link Application}. Start mode can be one of
@@ -30,7 +19,7 @@ public enum ApplicationFactory {
 	 *            The start mode of the application entered on the command line.
 	 * @return A new instance of {@link Application} based on start mode.
 	 */
-	public Application createApplication(final String mode) {
+	public static Application createApplication(final String mode) {
 		final String appMode = mode.toLowerCase();
 		final Application app;
 
