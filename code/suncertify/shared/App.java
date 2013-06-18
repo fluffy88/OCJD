@@ -82,7 +82,7 @@ public class App {
 	public static void showErrorAndExit(final String msg) {
 		logError(msg);
 		JOptionPane.showMessageDialog(null, msg + "\nApplication will now exit!", "Fatal error", JOptionPane.ERROR_MESSAGE);
-		System.exit(1);
+		System.exit(2);
 	}
 
 	/**
