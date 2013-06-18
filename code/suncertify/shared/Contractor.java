@@ -155,7 +155,7 @@ public class Contractor implements Serializable {
 	/**
 	 * Set the Contractors location.
 	 * 
-	 * @param name
+	 * @param location
 	 *            The new location of this Contractor.
 	 */
 	public void setLocation(final String location) {
@@ -165,7 +165,7 @@ public class Contractor implements Serializable {
 	/**
 	 * Set the Contractors specialties.
 	 * 
-	 * @param name
+	 * @param specialties
 	 *            The new specialties of this Contractor.
 	 */
 	public void setSpecialites(final String specialties) {
@@ -175,7 +175,7 @@ public class Contractor implements Serializable {
 	/**
 	 * Set the number of staff this Contractor has.
 	 * 
-	 * @param name
+	 * @param noStaff
 	 *            The new number of staff for this Contractor.
 	 */
 	public void setNoStaff(final String noStaff) {
@@ -185,7 +185,7 @@ public class Contractor implements Serializable {
 	/**
 	 * Set the Contractors hourly rate.
 	 * 
-	 * @param name
+	 * @param rate
 	 *            The new hourly rate of this Contractor.
 	 */
 	public void setRate(final String rate) {
@@ -195,7 +195,7 @@ public class Contractor implements Serializable {
 	/**
 	 * Set the ID of the customer holding this Contractor.
 	 * 
-	 * @param name
+	 * @param custId
 	 *            The ID new of the new customer holding this Contractor.
 	 */
 	public void setCustomerId(final String custId) {

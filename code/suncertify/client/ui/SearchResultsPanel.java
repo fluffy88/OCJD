@@ -37,7 +37,7 @@ public class SearchResultsPanel extends JPanel {
 	/**
 	 * This method creates a JTable to display the search results.
 	 * 
-	 * @return
+	 * @return A {@link JScrollPane} containing the JTable.
 	 */
 	private JScrollPane createTableArea() {
 		final SearchResultsTableModel tableModel = new SearchResultsTableModel();

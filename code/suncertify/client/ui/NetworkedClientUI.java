@@ -128,7 +128,6 @@ public class NetworkedClientUI extends JDialog {
 	 * @author Sean Dunne
 	 */
 	private class TextFieldListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
@@ -144,7 +143,6 @@ public class NetworkedClientUI extends JDialog {
 	 * @author Sean Dunne
 	 */
 	private class OKListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
@@ -179,7 +177,6 @@ public class NetworkedClientUI extends JDialog {
 	 * @author Sean Dunne
 	 */
 	private class CancelListener implements ActionListener {
-
 		/**
 		 * {@inheritDoc}
 		 */
